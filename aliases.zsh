@@ -26,7 +26,7 @@ alias imagefirstshell='USE_POSTGRES=1 python manage.py shell_plus'
 
 # PyCharm Aliases
 #######################################
-alias rmpycache='find . -name *.pyc -delete && echo pycache files removed'
+alias rmpycache='find . -name "*.pyc" -delete && echo pycache files removed'
 
 # SSH aliases
 #######################################
@@ -38,10 +38,6 @@ alias v2_connect='ssh ubuntu@134.158.74.47'
 
 #mini ssh
 alias mini_ssh='ssh minikeith@keith-mini.local'
-
-#ubuntu machine
-alias ubuntu_connect='ssh jimmy@192.168.1.145'
-alias office_connect='ssh jimmy@205.173.78.34'
 
 # CKC Blog Aliase
 alias run_blog='bundle exec jekyll serve --future --drafts'
