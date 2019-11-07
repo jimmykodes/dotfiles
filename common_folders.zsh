@@ -1,1 +1,1 @@
-codalab=~/Code/codalab
+codalab=~/ckc/codalab
