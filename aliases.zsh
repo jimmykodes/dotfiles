@@ -28,6 +28,10 @@ alias imagefirstshell='USE_POSTGRES=1 python manage.py shell_plus'
 #######################################
 alias rmpycache='find . -name *.pyc -delete && echo pycache files removed'
 
+# Script Aliases
+#######################################
+alias harvest_hours='python ~/Code/harvest/app.py'
+
 # SSH aliases
 #######################################
 alias piconnect='ssh pi@192.168.1.148'
