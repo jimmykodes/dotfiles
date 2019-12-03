@@ -9,7 +9,8 @@ alias ll='ls -alFh'
 alias django-bash='docker-compose exec django bash'
 alias dcud='docker-compose up -d'
 alias docker-shell-plus='docker-compose exec django python manage.py shell_plus'
-alias docker-migrate='docker-compose exec django bash -c "python manage.py makemigrations && python manage.py migrate"'
+alias dcm='docker-compose exec django python manage.py migrate'
+alias dcmm='docker-compose exec django python manage.py makemigrations'
 
 # Convenience Aliases
 ######################################
