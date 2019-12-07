@@ -27,3 +27,7 @@ alias imagefirstshell='USE_POSTGRES=1 python manage.py shell_plus'
 # PyCharm Aliases
 #######################################
 alias rmpycache='find . -name *.pyc -delete && echo pycache files removed'
+
+# Script Aliases
+#######################################
+alias harvest_hours='python ~/Code/harvest/app.py'
