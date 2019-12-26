@@ -1,8 +1,8 @@
 # ls Aliases
 #######################################
-alias ls='ls -GF --color'
-alias la='ls -AF --color'
-alias ll='ls -alFh --color'
+alias ls='ls -GF'
+alias la='ls -AF'
+alias ll='ls -alFh'
 
 # Docker Aliases
 #######################################
