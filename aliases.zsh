@@ -1,8 +1,8 @@
 # ls Aliases
 #######################################
-alias ls='ls -GF'
-alias la='ls -AF'
-alias ll='ls -alFh'
+alias ls='ls -GF --color'
+alias la='ls -AF --color'
+alias ll='ls -alFh --color'
 
 # Docker Aliases
 #######################################
@@ -11,6 +11,7 @@ alias dcud='docker-compose up -d'
 alias docker-shell-plus='docker-compose exec django python manage.py shell_plus'
 alias dcm='docker-compose exec django python manage.py migrate'
 alias dcmm='docker-compose exec django python manage.py makemigrations'
+alias dcl='docker-compose logs'
 
 # Convenience Aliases
 ######################################
