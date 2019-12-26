@@ -1,8 +1,8 @@
 # ls Aliases
 #######################################
-alias ls='ls -GF'
-alias la='ls -AF'
-alias ll='ls -alFh'
+alias ls='ls -GF --color'
+alias la='ls -AF --color'
+alias ll='ls -alFh --color'
 
 # Docker Aliases
 #######################################
@@ -11,6 +11,7 @@ alias dcud='docker-compose up -d'
 alias docker-shell-plus='docker-compose exec django python manage.py shell_plus'
 alias dcm='docker-compose exec django python manage.py migrate'
 alias dcmm='docker-compose exec django python manage.py makemigrations'
+alias dcl='docker-compose logs'
 
 # Convenience Aliases
 ######################################
@@ -23,15 +24,4 @@ alias imagefirstshell='USE_POSTGRES=1 python manage.py shell_plus'
 
 # PyCharm Aliases
 #######################################
-alias rmpycache='find . -name "*.pyc" -delete && echo pycache files removed'
-
-# SSH aliases
-#######################################
-# raspberry pi
-alias piconnect='ssh pi@192.168.1.148'
-
-# V2 staging server connection
-alias v2_connect='ssh ubuntu@134.158.74.47'
-
-#mini ssh
-alias mini_ssh='ssh minikeith@keith-mini.local'
+alias rmpycache='find . -name *.pyc -delete && echo pycache files removed'
