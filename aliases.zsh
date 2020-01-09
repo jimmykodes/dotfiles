@@ -7,12 +7,13 @@ alias l='ls -alFh'
 
 # Docker Aliases
 #######################################
-alias dcdb='docker-compose exec django bash'
 alias dcd='docker-compose down'
 alias dcr='docker-compose restart'
 alias dcs='docker-compose stop'
 alias dst='docker stats'
 alias dcud='docker-compose up -d'
+alias dce='docker-compose exec'
+alias dcdb='docker-compose exec django bash'
 alias dcsp='docker-compose exec django python manage.py shell_plus'
 alias dcm='docker-compose exec django python manage.py migrate'
 alias dcmm='docker-compose exec django python manage.py makemigrations'
