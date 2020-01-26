@@ -1,17 +1,24 @@
 # ls Aliases
 #######################################
-alias ls='ls -GF --color'
-alias la='ls -AF --color'
-alias ll='ls -alFh --color'
+alias ls='ls -GF'
+alias la='ls -AF'
+alias ll='ls -alFh'
+alias l='ls -alFh'
 
 # Docker Aliases
 #######################################
-alias django-bash='docker-compose exec django bash'
+alias dcd='docker-compose down'
+alias dcr='docker-compose restart'
+alias dcs='docker-compose stop'
+alias dst='docker stats'
 alias dcud='docker-compose up -d'
-alias docker-shell-plus='docker-compose exec django python manage.py shell_plus'
+alias dce='docker-compose exec'
+alias dcdb='docker-compose exec django bash'
+alias dcsp='docker-compose exec django python manage.py shell_plus'
 alias dcm='docker-compose exec django python manage.py migrate'
 alias dcmm='docker-compose exec django python manage.py makemigrations'
 alias dcl='docker-compose logs'
+alias dclf='docker-compose logs -f'
 
 # Convenience Aliases
 ######################################
@@ -24,4 +31,4 @@ alias imagefirstshell='USE_POSTGRES=1 python manage.py shell_plus'
 
 # PyCharm Aliases
 #######################################
-alias rmpycache='find . -name *.pyc -delete && echo pycache files removed'
+alias rmpc='find . -name *.pyc -delete && echo pycache files removed'
