@@ -1,1 +1,1 @@
-export PATH=$ZSH/custom/scripts:$PATH
+export PATH=$custom/scripts:$PATH
