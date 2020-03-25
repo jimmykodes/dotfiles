@@ -20,3 +20,12 @@ alias dclf='docker-compose logs -f'
 alias dst='docker stats'
 alias dps='docker ps'
 alias dpsa='docker ps -a'
+alias dk='docker kill'
+alias dka='docker kill $(docker ps -aq)'
+alias drm='docker rm'
+alias drma='docker rm $(docker ps -aq)'
+alias dcln='docker kill $(docker ps -aq) && docker rm $(docker ps -aq)'
+
+dccb() {
+  docker-compose exec $1 bash
+}
