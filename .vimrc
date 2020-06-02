@@ -29,3 +29,4 @@ Plugin 'VundleVim/Vundle.vim'
 call vundle#end()
 filetype plugin indent on
 
+com! FormatJSON %!python -m json.tool

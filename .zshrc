@@ -68,8 +68,9 @@ ZSH_THEME="jimmy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git golang pyenv)
+plugins=(git golang common-aliases colorize)
 ZSH_DISABLE_COMPFIX=true
+ZSH_COLORIZE_TOOL=pygmentize
 source $ZSH/oh-my-zsh.sh
 
 # User configuration

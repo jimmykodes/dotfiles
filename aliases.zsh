@@ -8,6 +8,8 @@ alias l='ls -alFh'
 # Convenience Aliases
 ######################################
 alias pip-uninstall-all='pip freeze | xargs pip uninstall -y'
+alias cat=ccat
+alias less=cless
 
 # PyCharm Aliases
 #######################################
