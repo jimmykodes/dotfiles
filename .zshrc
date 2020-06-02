@@ -69,8 +69,13 @@ ZSH_THEME="jimmy"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git golang common-aliases colorize)
+
+# Fix "insecure directories and files" warning on terminal start
 ZSH_DISABLE_COMPFIX=true
+
+# Select tool to use for colorize plugin. options: pygmentize, chroma
 ZSH_COLORIZE_TOOL=pygmentize
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -94,8 +99,8 @@ source $ZSH/oh-my-zsh.sh
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Override alias rm='rm -i' from common-aliases plugin
+unalias rm
+
 figlet "GET SHIT DONE"| lolcat
