@@ -25,8 +25,14 @@ set showmatch
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'preservim/nerdtree'
+Plugin 'tpope/vim-surround'
+Plugin 'terryma/vim-multiple-cursors'
 
 call vundle#end()
 filetype plugin indent on
 
 com! FormatJSON %!python -m json.tool
+map <C-t> :NERDTreeToggle<CR>
