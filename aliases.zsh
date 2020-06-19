@@ -14,3 +14,9 @@ alias less=cless
 # PyCharm Aliases
 #######################################
 alias rmpc='find . -name *.pyc -delete && echo pycache files removed'
+
+# Functions
+#######################################
+cdt(){
+    cd ${PWD//$1*/$1}
+}

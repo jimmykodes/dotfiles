@@ -104,4 +104,3 @@ source $ZSH/oh-my-zsh.sh
 unalias rm
 
 figlet "GET SHIT DONE"| lolcat
-
