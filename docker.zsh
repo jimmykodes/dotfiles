@@ -33,20 +33,18 @@ alias dk='docker kill'
 alias drm='docker rm'
 
 drma() {
-  containers=$(docker ps -aq)
-  if [ -f $containers ]; then
+  if [ -f "$(docker ps -aq)" ]; then
     echo 'No containers to remove'
   else
-    docker rm $containers
+    docker rm $(docker ps -aq)
   fi
 }
 
 dka() {
-  containers=$(docker ps -q)
-  if [ -f $containers ]; then
+  if [ -f "$(docker ps -q)" ]; then
     echo 'No running containers'
   else
-    docker kill $containers
+    docker kill $(docker ps -q)
   fi
 }
 dcln() {
