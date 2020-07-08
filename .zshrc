@@ -68,7 +68,7 @@ ZSH_THEME="jimmy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git golang common-aliases colorize)
+plugins=(git kubectl golang common-aliases colorize)
 
 # Fix "insecure directories and files" warning on terminal start
 ZSH_DISABLE_COMPFIX=true
