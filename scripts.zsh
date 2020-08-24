@@ -1,1 +1,1 @@
-export PATH=$custom/scripts:$PATH
+export PATH=$custom/scripts:$custom/scripts/private:$PATH
