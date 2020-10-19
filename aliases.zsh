@@ -10,6 +10,7 @@ alias l='ls -alFh'
 alias pip-uninstall-all='pip freeze | xargs pip uninstall -y'
 alias cat=ccat
 alias less=cless
+alias mod_host='sudo vim /etc/hosts'
 
 # PyCharm Aliases
 #######################################
