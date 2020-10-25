@@ -7,6 +7,6 @@ koch=$gosrc/github.com/Kochava
 [ -d "$koch" ] && export koch=$koch
 if [ -d "$HOME/Code" ]; then
         export code=$HOME/Code
-else if [ -d "$HOME/code" ] then
+elif [ -d "$HOME/code" ]; then
         export code=$HOME/code
 fi

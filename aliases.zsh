@@ -1,6 +1,14 @@
 # ls Aliases
 #######################################
-alias ls='ls -GF'
+platform=$(uname)
+case $platform in
+    Darwin )
+        alias ls='ls -GF'
+        ;;
+    Linux )
+        alias ls='ls -F --color'
+        ;;
+esac
 alias la='ls -AF'
 alias ll='ls -alFh'
 alias l='ls -alFh'
