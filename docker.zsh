@@ -9,11 +9,6 @@ alias dcud='docker-compose up -d'
 alias dcudb='docker-compose up -d --build'
 
 alias dce='docker-compose exec'
-alias dcdb='docker-compose exec django bash'
-alias dcsp='docker-compose exec django python manage.py shell_plus'
-alias dcm='docker-compose exec django python manage.py migrate'
-alias dcmm='docker-compose exec django python manage.py makemigrations'
-alias dcgd='docker-compose exec django python manage.py generate_data'
 alias dcl='docker-compose logs'
 alias dclf='docker-compose logs -f'
 
@@ -32,8 +27,12 @@ alias dpsa='docker ps -a'
 alias dk='docker kill'
 alias drm='docker rm'
 
+dcudblf() {
+  docker-compose up -d --build $1 && docker-compose logs -f $1
+}
+
 drma() {
-  if [ -f "$(docker ps -aq)" ]; then
+  if [ -z "$(docker ps -aq)" ]; then
     echo 'No containers to remove'
   else
     docker rm $(docker ps -aq)
@@ -41,7 +40,7 @@ drma() {
 }
 
 dka() {
-  if [ -f "$(docker ps -q)" ]; then
+  if [ -z "$(docker ps -q)" ]; then
     echo 'No running containers'
   else
     docker kill $(docker ps -q)

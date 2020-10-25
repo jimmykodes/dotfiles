@@ -102,9 +102,5 @@ source $ZSH/oh-my-zsh.sh
 # Override alias rm='rm -i' from common-aliases plugin
 unalias rm
 
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
