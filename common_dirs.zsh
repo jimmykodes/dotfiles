@@ -1,10 +1,8 @@
 export custom=$ZSH/custom
-gosrc=$HOME/go/src
-dev=$gosrc/git.dev.kochava.com
-koch=$gosrc/github.com/Kochava
-[ -d "$dev" ] && export dev=$dev
-[ -d "$gosrc" ] && export gosrc=$gosrc
-[ -d "$koch" ] && export koch=$koch
+[ -d "$HOME/go/src" ] && export gosrc=$HOME/go/src
+[ -d "$HOME/go/src/git.dev.kochava.com" ] && export dev=$HOME/go/src/git.dev.kochava.com
+[ -d "$HOME/go/src/github.com/Kochava" ] && export koch=$HOME/go/src/github.com/Kochava
+
 if [ -d "$HOME/Code" ]; then
         export code=$HOME/Code
 elif [ -d "$HOME/code" ]; then
