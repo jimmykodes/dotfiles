@@ -75,7 +75,6 @@ ZSH_DISABLE_COMPFIX=true
 
 # Select tool to use for colorize plugin. options: pygmentize, chroma
 ZSH_COLORIZE_TOOL=pygmentize
-
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -102,8 +101,6 @@ source $ZSH/oh-my-zsh.sh
 
 # Override alias rm='rm -i' from common-aliases plugin
 unalias rm
-
-figlet "GET SHIT DONE"| lolcat
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
