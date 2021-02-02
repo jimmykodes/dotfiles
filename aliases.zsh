@@ -16,9 +16,9 @@ alias l='ls -alFh'
 # Convenience Aliases
 ######################################
 alias pip-uninstall-all='pip freeze | xargs pip uninstall -y'
-alias cat=ccat
-alias less=cless
 alias mod_host='sudo vim /etc/hosts'
+alias flush_dns='pgrep mDNSResponder | xargs sudo kill'
+alias gdb='git diff master...$(git_current_branch)'
 
 # PyCharm Aliases
 #######################################
