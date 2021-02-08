@@ -3,4 +3,5 @@ if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -
 
 alias mkvenv='pyenv virtualenv'
 alias rmvenv='pyenv virtualenv-delete'
-alias workon='pyenv activate'
+alias acvenv='pyenv activate'
+alias devenv='. deactivate'

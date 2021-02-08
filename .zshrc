@@ -5,8 +5,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 COMPLETION_WAITING_DOTS="true"
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+ZSH_CUSTOM=${HOME}/Code/zsh-custom
 
 plugins=(git golang common-aliases colorize npm)
 
