@@ -8,4 +8,5 @@ elif [ -d "$HOME/code" ]; then
         export code=$HOME/code
 fi
 
+export kodes=$gosrc/github.com/jimmykodes
 export custom=$code/zsh-custom
