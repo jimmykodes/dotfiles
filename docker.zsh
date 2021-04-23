@@ -1,16 +1,16 @@
 # Docker Aliases
 #######################################
-alias dc='docker-compose'
-alias dcd='docker-compose down'
-alias dcr='docker-compose restart'
-alias dcs='docker-compose stop'
+alias dc='docker compose'
+alias dcd='docker compose down'
+alias dcr='docker compose restart'
+alias dcs='docker compose stop'
 
-alias dcud='docker-compose up -d'
-alias dcudb='docker-compose up -d --build'
+alias dcud='docker compose up -d'
+alias dcudb='docker compose up -d --build'
 
-alias dce='docker-compose exec'
-alias dcl='docker-compose logs'
-alias dclf='docker-compose logs -f'
+alias dce='docker compose exec'
+alias dcl='docker compose logs'
+alias dclf='docker compose logs -f'
 
 alias dl='docker logs'
 alias dlf='docker logs -f'
@@ -28,7 +28,7 @@ alias dk='docker kill'
 alias drm='docker rm'
 
 dcudblf() {
-  docker-compose up -d --build $1 && docker-compose logs -f $1
+  docker compose up -d --build $1 && docker compose logs -f $1
 }
 
 drma() {
@@ -51,9 +51,9 @@ dcln() {
   drma
 }
 dccb() {
-  docker-compose exec $1 bash
+  docker compose exec $1 bash
 }
 
 dccs() {
-  docker-compose exec $1 sh
+  docker compose exec $1 sh
 }
