@@ -27,6 +27,10 @@ alias dpsa='docker ps -a'
 alias dk='docker kill'
 alias drm='docker rm'
 
+docker_services() {
+  docker compose ps --format json | jq -cr '.[].Service'
+}
+
 dcudblf() {
   docker compose up -d --build $1 && docker compose logs -f $1
 }

@@ -1,0 +1,7 @@
+#compdef dccb
+
+_dccb() {
+    _arguments "1: :($(docker_services))"
+}
+
+_dccb
