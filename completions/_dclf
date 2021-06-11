@@ -1,0 +1,7 @@
+#compdef dclf
+
+_dclf() {
+    _arguments "*: :($(docker_services))"
+}
+
+_dclf

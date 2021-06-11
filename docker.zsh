@@ -1,16 +1,10 @@
 # Docker Aliases
 #######################################
 alias dc='docker compose'
-alias dcd='docker compose down'
-alias dcr='docker compose restart'
-alias dcs='docker compose stop'
+alias dcd='dc down'
 
-alias dcud='docker compose up -d'
-alias dcudb='docker compose up -d --build'
-
-alias dce='docker compose exec'
-alias dcl='docker compose logs'
-alias dclf='docker compose logs -f'
+alias dce='dc exec'
+alias dcl='dc logs'
 
 alias dl='docker logs'
 alias dlf='docker logs -f'
@@ -28,11 +22,31 @@ alias dk='docker kill'
 alias drm='docker rm'
 
 docker_services() {
-  docker compose ps --format json | jq -cr '.[].Service'
+  docker compose ps --services
+}
+
+dcr() {
+  dc restart "$@"
+}
+
+dcs() {
+  dc stop "$@"
+}
+
+dcud() {
+  dc up -d "$@"
+}
+
+dcudb() {
+  dcud --build "$@"
+}
+
+dclf() {
+  dcl -f "$@"
 }
 
 dcudblf() {
-  docker compose up -d --build $1 && docker compose logs -f $1
+  dcudb "$@" && dclf "$@"
 }
 
 drma() {
@@ -50,14 +64,16 @@ dka() {
     docker kill $(docker ps -q)
   fi
 }
+
 dcln() {
   dka
   drma
 }
+
 dccb() {
-  docker compose exec $1 bash
+  dc exec $1 bash
 }
 
 dccs() {
-  docker compose exec $1 sh
+  dc exec $1 sh
 }

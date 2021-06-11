@@ -1,0 +1,7 @@
+#compdef dcr
+
+_dcr() {
+    _arguments "*: :($(docker_services))"
+}
+
+_dcr

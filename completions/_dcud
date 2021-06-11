@@ -1,0 +1,7 @@
+#compdef dcud
+
+_dcud() {
+    _arguments "*: :($(docker_services))"
+}
+
+_dcud

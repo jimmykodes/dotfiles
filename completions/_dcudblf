@@ -1,0 +1,7 @@
+#compdef dcudblf
+
+_dcudblf() {
+    _arguments "*: :($(docker_services))"
+}
+
+_dcudblf
