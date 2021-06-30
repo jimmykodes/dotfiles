@@ -45,6 +45,10 @@ dclf() {
   dcl -f "$@"
 }
 
+dcudlf() {
+  dcud "$@" && dclf "$@"
+}
+
 dcudblf() {
   dcudb "$@" && dclf "$@"
 }
