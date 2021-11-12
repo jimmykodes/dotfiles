@@ -13,6 +13,7 @@ colorscheme delek
 set rtp+=~/.vim/bundle/Vundle.vim
 set tabstop=4
 set softtabstop=4
+set shiftwidth=4
 set expandtab
 
 set number
@@ -29,7 +30,6 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'preservim/nerdtree'
 Plugin 'tpope/vim-surround'
-Plugin 'terryma/vim-multiple-cursors'
 
 call vundle#end()
 filetype plugin indent on

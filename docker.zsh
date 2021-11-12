@@ -81,3 +81,7 @@ dccb() {
 dccs() {
   dc exec $1 sh
 }
+
+temp_mysql() {
+  docker run --rm -d -p ${1:-3306}:3306 --env MARIADB_ALLOW_EMPTY_ROOT_PASSWORD="yes" mariadb:10.5
+}
