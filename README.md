@@ -1,1 +1,1 @@
-# zsh custome files
+# zsh custom files
