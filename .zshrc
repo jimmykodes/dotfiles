@@ -25,3 +25,7 @@ unalias rm
 # Default location for appliation default credentials for google cloud services
 # run `gcloud auth application-default login` to generate these credentials
 export GOOGLE_APPLICATION_CREDENTIALS="$HOME/.config/gcloud/application_default_credentials.json"
+
+if [[ -n $(command -v watch-dot) ]]; then
+    watch-dot check
+fi
