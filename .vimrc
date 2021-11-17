@@ -2,12 +2,8 @@ set nocompatible
 filetype off
 
 imap jj <Esc>
-nnoremap B ^
-nnoremap E $
 
 syntax on
-nnoremap j gj
-nnoremap k gk
 colorscheme delek 
 
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -22,17 +18,22 @@ set wildmenu
 set lazyredraw
 set showmatch
 
-
+" Vundle Plugins
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'preservim/nerdtree'
+Plugin 'preservim/nerdcommenter'
 Plugin 'tpope/vim-surround'
+Plugin 'fatih/vim-go'
 
 call vundle#end()
+
 filetype plugin indent on
 
-com! FormatJSON %!python -m json.tool
-map <C-t> :NERDTreeToggle<CR>
+"NERD Settings
+map <leader>t :NERDTreeToggle<CR>
+let NERDTreeQuitOnOpen=1
+let g:NERDCreateDefaultMappings=1
