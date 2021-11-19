@@ -5,3 +5,4 @@ export GOPATH=$HOME/go
 alias ggclip='go get $(pbpaste | sed "s/http[s]*:\/\///")'
 alias gmv='go mod vendor'
 alias gmt='go mod tidy'
+alias gorm='go run main.go'
