@@ -29,6 +29,7 @@ Plugin 'preservim/nerdtree'
 Plugin 'preservim/nerdcommenter'
 Plugin 'tpope/vim-surround'
 Plugin 'fatih/vim-go'
+Plugin 'junegunn/fzf'
 
 call vundle#end()
 
@@ -38,3 +39,6 @@ filetype plugin indent on
 map <leader>t :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen=1
 let g:NERDCreateDefaultMappings=1
+
+"fzf
+set rtp+=/usr/local/opt/fzf
