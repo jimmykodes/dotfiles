@@ -3,9 +3,9 @@
 [ -d "$HOME/go/src/github.com/Kochava" ] && export koch=$HOME/go/src/github.com/Kochava
 
 if [ -d "$HOME/Code" ]; then
-        export code=$HOME/Code
+	export code=$HOME/Code
 elif [ -d "$HOME/code" ]; then
-        export code=$HOME/code
+	export code=$HOME/code
 fi
 
 export kodes=$gosrc/github.com/jimmykodes

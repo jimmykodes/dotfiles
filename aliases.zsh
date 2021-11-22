@@ -2,12 +2,12 @@
 #######################################
 platform=$(uname)
 case $platform in
-    Darwin )
-        alias ls='ls -GF'
-        ;;
-    Linux )
-        alias ls='ls -F --color'
-        ;;
+Darwin)
+	alias ls='ls -GF'
+	;;
+Linux)
+	alias ls='ls -F --color'
+	;;
 esac
 alias la='ls -AF'
 alias ll='ls -alFh'
@@ -26,6 +26,6 @@ alias rmpc='find . -name *.pyc -delete && echo pycache files removed'
 
 # Functions
 #######################################
-cdt(){
-    cd ${PWD//$1*/$1}
+cdt() {
+	cd ${PWD//$1*/$1}
 }

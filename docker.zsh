@@ -14,7 +14,6 @@ alias drn='docker run'
 alias drrm='docker run --rm'
 alias dp='docker pull'
 
-
 alias dst='docker stats'
 alias dps='docker ps'
 alias dpsa='docker ps -a'
@@ -22,66 +21,66 @@ alias dk='docker kill'
 alias drm='docker rm'
 
 docker_services() {
-  docker compose ps --services
+	docker compose ps --services
 }
 
 dcr() {
-  dc restart "$@"
+	dc restart "$@"
 }
 
 dcs() {
-  dc stop "$@"
+	dc stop "$@"
 }
 
 dcud() {
-  dc up -d "$@"
+	dc up -d "$@"
 }
 
 dcudb() {
-  dcud --build "$@"
+	dcud --build "$@"
 }
 
 dclf() {
-  dcl -f "$@"
+	dcl -f "$@"
 }
 
 dcudlf() {
-  dcud "$@" && dclf "$@"
+	dcud "$@" && dclf "$@"
 }
 
 dcudblf() {
-  dcudb "$@" && dclf "$@"
+	dcudb "$@" && dclf "$@"
 }
 
 drma() {
-  if [ -z "$(docker ps -aq)" ]; then
-    echo 'No containers to remove'
-  else
-    docker rm $(docker ps -aq)
-  fi
+	if [ -z "$(docker ps -aq)" ]; then
+		echo 'No containers to remove'
+	else
+		docker rm $(docker ps -aq)
+	fi
 }
 
 dka() {
-  if [ -z "$(docker ps -q)" ]; then
-    echo 'No running containers'
-  else
-    docker kill $(docker ps -q)
-  fi
+	if [ -z "$(docker ps -q)" ]; then
+		echo 'No running containers'
+	else
+		docker kill $(docker ps -q)
+	fi
 }
 
 dcln() {
-  dka
-  drma
+	dka
+	drma
 }
 
 dccb() {
-  dc exec $1 bash
+	dc exec $1 bash
 }
 
 dccs() {
-  dc exec $1 sh
+	dc exec $1 sh
 }
 
 temp_mysql() {
-  docker run --rm -d -p ${1:-3306}:3306 --env MARIADB_ALLOW_EMPTY_ROOT_PASSWORD="yes" mariadb:10.5
+	docker run --rm -d -p ${1:-3306}:3306 --env MARIADB_ALLOW_EMPTY_ROOT_PASSWORD="yes" mariadb:10.5
 }
