@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
+# alias stuff
 unalias gcl
+alias gdb='git diff $(git_main_branch)...$(git_current_branch)'
+
+# functions
 gcl() {
 	follow=
 	repo=
