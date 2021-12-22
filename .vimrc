@@ -2,8 +2,6 @@ set nocompatible
 filetype off
 
 imap jj <Esc>
-nnoremap <leader>b <C-b>
-nnoremap <leader>f <C-f>
 syntax on
 colorscheme delek 
 
