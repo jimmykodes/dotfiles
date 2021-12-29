@@ -2,6 +2,8 @@
 # alias stuff
 unalias gcl
 alias gdb='git diff $(git_main_branch)...$(git_current_branch)'
+alias gcnvm='git commit --no-verify -m'
+
 
 # functions
 gcl() {
@@ -14,12 +16,9 @@ gcl() {
 			follow=1
 			;;
 		*)
-			echo "setting var"
 			if [[ -z "$repo" ]]; then
-				echo "setting repo $1"
 				repo=$1
 			elif [[ -z "$dir" ]]; then
-				echo "setting dir $1"
 				dir=$1
 			fi
 			;;
@@ -43,10 +42,10 @@ gcl() {
 	fi
 }
 
-jk_clone() {
+jkcln() {
 	gcl "jimmykodes/$1" "$kodes/$1" "$@"
 }
 
-ko_clone() {
+kocln() {
 	gcl "Kochava/$1" "$koch/$1" "$@"
 }
