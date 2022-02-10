@@ -7,7 +7,7 @@ COMPLETION_WAITING_DOTS="true"
 
 ZSH_CUSTOM=${HOME}/Code/zsh-custom
 
-plugins=(git golang common-aliases colorize npm)
+plugins=(git golang common-aliases colorize npm kubectl)
 
 # Fix "insecure directories and files" warning on terminal start
 ZSH_DISABLE_COMPFIX=true

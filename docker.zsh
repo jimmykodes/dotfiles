@@ -82,5 +82,22 @@ dccs() {
 }
 
 temp_mysql() {
-	docker run --rm -d -p ${1:-3306}:3306 --env MARIADB_ALLOW_EMPTY_ROOT_PASSWORD="yes" mariadb:10.5
+	docker run \
+        --rm \
+        -d \
+        -p ${1:-3306}:3306 \
+        --env MARIADB_ALLOW_EMPTY_ROOT_PASSWORD="yes" \
+        --name temp_mysql \
+        mariadb:10.5
+}
+
+temp_mysql_init() {
+    docker run \
+        --rm \
+        -d \
+        -p ${1}:3306 \
+        -v ${2}:/docker-entrypoint-initdb.d \
+        --env MARIADB_ROOT_PASSWORD="password" \
+        --name temp_mysql \
+        mariadb:10.5
 }
