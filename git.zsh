@@ -4,8 +4,15 @@ unalias gcl
 alias gdb='git diff $(git_main_branch)...$(git_current_branch)'
 alias gcnvm='git commit --no-verify -m'
 
-
 # functions
+gitcc() {
+    if [[ -z $(command -v convco) ]]; then
+        echo 'convco not installed. Run `go install github.com/jimmykodes/convco@latest`'
+    else
+        convco "$@"
+    fi
+}
+
 gcl() {
 	follow=
 	repo=
@@ -48,4 +55,18 @@ jkcln() {
 
 kocln() {
 	gcl "Kochava/$1" "$koch/$1" "$@"
+}
+
+git_develop_branch() {
+    command git rev-parse --git-dir &> /dev/null || return
+	local branch
+	for branch in initial_dev dev devel development
+	do
+		if command git show-ref -q --verify refs/heads/$branch
+		then
+			echo $branch
+			return
+		fi
+	done
+	echo develop
 }

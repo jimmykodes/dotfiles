@@ -2,7 +2,9 @@
 export PATH=$HOME/go/bin:$PATH
 export GOPATH=$HOME/go
 
-alias ggclip='go get $(pbpaste | sed "s/http[s]*:\/\///")'
+unalias gog
+alias gog='go get -d'
+alias ggclip='go get -d $(pbpaste | sed "s/http[s]*:\/\///")'
 alias gmi='go mod init'
 alias gmv='go mod vendor'
 alias gmt='go mod tidy'
