@@ -29,3 +29,8 @@ export GOOGLE_APPLICATION_CREDENTIALS="$HOME/.config/gcloud/application_default_
 if [[ -n $(command -v watch-dot) ]]; then
     watch-dot check
 fi
+
+local zsyh=/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ -e "$zsyh" ]]; then
+    source "${zsyh}"
+fi
