@@ -34,3 +34,6 @@ local zsyh=/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 if [[ -e "$zsyh" ]]; then
     source "${zsyh}"
 fi
+
+# for signing git commits
+export GPG_TTY=$(tty)

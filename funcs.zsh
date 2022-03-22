@@ -1,3 +1,7 @@
+cdt() {
+	cd ${PWD//$1*/$1}
+}
+
 uuid() {
 	python -c "import uuid; print(uuid.uuid4())"
 }
