@@ -1,14 +1,14 @@
+# brew
+export PATH="$PATH:/usr/local/sbin"
+
 # go
 export PATH="$HOME/go/bin:$PATH"
 
-# brew
-export PATH="$PATH:/usr/local/sbin:/usr/local/bin"
-
-# python
-export PATH="/usr/local/opt/python@3.9/libexec/bin:$PATH"
-
 # lvim
 export PATH="$PATH:$HOME/.local/bin/"
+
+# python
+export PATH="/usr/local/opt/python@3.9/libexec/bin:/usr/local/bin:$PATH"
 
 # rust
 export PATH="$PATH:$HOME/.cargo/bin"
