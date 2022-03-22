@@ -23,8 +23,6 @@ alias flush_dns='pgrep mDNSResponder | xargs sudo kill'
 #######################################
 alias rmpc='find . -name *.pyc -delete && echo pycache files removed'
 
-# Functions
+# Other Aliases
 #######################################
-cdt() {
-	cd ${PWD//$1*/$1}
-}
+alias insomnia='open -a Insomnia.app'
