@@ -7,13 +7,17 @@ COMPLETION_WAITING_DOTS="true"
 
 ZSH_CUSTOM=${HOME}/Code/zsh-custom
 
-plugins=(git golang common-aliases colorize npm kubectl)
+plugins=(git golang common-aliases colorize npm kubectl source)
 
 # Fix "insecure directories and files" warning on terminal start
 ZSH_DISABLE_COMPFIX=true
 
 # Select tool to use for colorize plugin. options: pygmentize, chroma
-ZSH_COLORIZE_TOOL=pygmentize
+ZSH_COLORIZE_TOOL=chroma
+ZSH_COLORIZE_STYLE=dracula
+ZSH_COLORIZE_CHROMA_FORMATTER=terminal256
+
+
 source $ZSH/oh-my-zsh.sh
 
 # Override alias rm='rm -i' from common-aliases plugin

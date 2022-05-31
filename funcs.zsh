@@ -14,3 +14,7 @@ envup() {
 	fi
 	export $(grep -v '^#' $f | xargs)
 }
+
+ipaddr() {
+  echo $(ipconfig getifaddr en0)
+}
