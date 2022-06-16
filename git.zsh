@@ -70,3 +70,8 @@ git_develop_branch() {
 	done
 	echo develop
 }
+
+ghrc() {
+  local git_cb=$(git_current_branch)
+  gh release create $1 --target ${2:-"$git_cb"} --prerelease --generate-notes
+}
