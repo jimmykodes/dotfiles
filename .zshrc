@@ -41,3 +41,6 @@ fi
 
 # for signing git commits
 export GPG_TTY=$(tty)
+if [[ -n $(command -v lvim) ]]; then
+  export EDITOR=lvim
+fi

@@ -3,7 +3,7 @@ filetype off
 
 imap jj <Esc>
 syntax on
-colorscheme delek 
+colorscheme default
 
 set rtp+=~/.vim/bundle/Vundle.vim
 set tabstop=4
