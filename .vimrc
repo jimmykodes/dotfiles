@@ -1,6 +1,7 @@
 set nocompatible
 filetype off
 
+let mapleader = ' '
 imap jj <Esc>
 syntax on
 colorscheme default
@@ -34,9 +35,13 @@ call vundle#end()
 filetype plugin indent on
 
 "NERD Settings
-map <leader>t :NERDTreeToggle<CR>
+map <leader>e :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen=1
 let g:NERDCreateDefaultMappings=1
+
+"leader commands
+map <leader>w :w<CR>
+map <leader>q :q<CR>
 
 "fzf
 set rtp+=/usr/local/opt/fzf
