@@ -5,6 +5,13 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 COMPLETION_WAITING_DOTS="true"
 
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 ZSH_CUSTOM=${HOME}/Code/zsh-custom
 
 plugins=(git golang common-aliases colorize npm kubectl source)
@@ -40,7 +47,8 @@ if [[ -e "$zsyh" ]]; then
 fi
 
 # for signing git commits
-export GPG_TTY=$(tty)
+export GPG_TTY=$TTY
+
 if [[ -n $(command -v lvim) ]]; then
   export EDITOR=lvim
 fi
