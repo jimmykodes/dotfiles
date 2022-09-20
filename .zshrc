@@ -14,7 +14,7 @@ fi
 
 ZSH_CUSTOM=${HOME}/Code/zsh-custom
 
-plugins=(git golang common-aliases colorize npm kubectl source)
+plugins=(git golang common-aliases colorize npm kubectl source zsh-syntax-highlighting)
 
 # Fix "insecure directories and files" warning on terminal start
 ZSH_DISABLE_COMPFIX=true
@@ -39,11 +39,6 @@ export GOOGLE_APPLICATION_CREDENTIALS="$HOME/.config/gcloud/application_default_
 
 if [[ -n $(command -v watch-dot) ]]; then
     watch-dot check
-fi
-
-local zsyh=/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-if [[ -e "$zsyh" ]]; then
-    source "${zsyh}"
 fi
 
 # for signing git commits
