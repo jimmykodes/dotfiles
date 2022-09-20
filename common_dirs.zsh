@@ -1,6 +1,5 @@
 [ -d "$HOME/go/src" ] && export gosrc=$HOME/go/src
-[ -d "$HOME/go/src/git.dev.kochava.com" ] && export dev=$HOME/go/src/git.dev.kochava.com
-[ -d "$HOME/go/src/github.com/Kochava" ] && export koch=$HOME/go/src/github.com/Kochava
+[ -d "$HOME/go/src/github.com/Khan" ] && export khan=$HOME/go/src/github.com/Khan
 
 if [ -d "$HOME/Code" ]; then
 	export code=$HOME/Code

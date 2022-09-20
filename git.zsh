@@ -53,8 +53,8 @@ jkcln() {
 	gcl "jimmykodes/$1" "$kodes/$1" "$@"
 }
 
-kocln() {
-	gcl "Kochava/$1" "$koch/$1" "$@"
+kcln() {
+	gcl "Khan/$1" "$khan/$1" "$@"
 }
 
 git_develop_branch() {
