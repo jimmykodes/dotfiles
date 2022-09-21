@@ -7,7 +7,9 @@ else
   alias brewthon="/usr/local/bin/python3"
 fi
 
-alias brewthon2='/usr/local/bin/python2'
+if [[ -f "/usr/local/bin/python2" ]]; then
+  alias brewthon2='/usr/local/bin/python2'
+fi
 
 mkvenv() {
   python -m venv ${1:-venv}
