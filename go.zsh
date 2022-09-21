@@ -1,7 +1,6 @@
 # Path to local go bin
 export GOPATH=$HOME/go
 
-unalias gog
 alias gog='go get -d'
 alias ggclip='go get -d $(pbpaste | sed "s/http[s]*:\/\///")'
 alias gmi='go mod init'
