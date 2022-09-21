@@ -13,16 +13,10 @@ alias la='ls -AF'
 alias ll='ls -alFh'
 alias l='ls -alFh'
 
-# Convenience Aliases
+# Other Aliases
 ######################################
-alias pip-uninstall-all='pip freeze | xargs pip uninstall -y'
+alias X="arch -x86_64"
+alias Xbrew="X /usr/local/bin/brew"
 alias mod_host='sudo vim /etc/hosts'
 alias flush_dns='pgrep mDNSResponder | xargs sudo kill'
-
-# PyCharm Aliases
-#######################################
-alias rmpc='find . -name *.pyc -delete && echo pycache files removed'
-
-# Other Aliases
-#######################################
 alias insomnia='open -a Insomnia.app'
