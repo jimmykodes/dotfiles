@@ -33,6 +33,8 @@ unalias rm
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+export XDG_CONFIG_HOME="$HOME/.config"
+
 # Default location for appliation default credentials for google cloud services
 # run `gcloud auth application-default login` to generate these credentials
 export GOOGLE_APPLICATION_CREDENTIALS="$HOME/.config/gcloud/application_default_credentials.json"
