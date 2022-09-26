@@ -101,3 +101,13 @@ temp_mysql_init() {
         --name temp_mysql \
         mariadb:10.5
 }
+
+temp_psql() {
+	docker run \
+        --rm \
+        -d \
+        -p ${1:-5432}:5432 \
+        --env POSTGRES_PASSWORD=password \
+        --name temp_psql \
+        postgres:14
+}
