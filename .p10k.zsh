@@ -46,6 +46,7 @@
   # last prompt line gets hidden if it would overlap with left prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
+    arch                    # arch identifier
     status                  # exit code of the last command
     command_execution_time  # duration of the last command
     background_jobs         # presence of background jobs
@@ -1524,6 +1525,9 @@
   # Type `p10k help segment` for documentation and a more sophisticated example.
   function prompt_example() {
     p10k segment -f 208 -i '⭐' -t 'hello, %n'
+  }
+  function prompt_arch() {
+    p10k segment -t "$(uname -m)"  -f white
   }
 
   # User-defined prompt segments may optionally provide an instant_prompt_* function. Its job

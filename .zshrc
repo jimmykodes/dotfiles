@@ -56,3 +56,7 @@ export GPG_TTY=$TTY
 if [[ -n $(command -v lvim) ]]; then
   export EDITOR=lvim
 fi
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/jimmykeith/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)

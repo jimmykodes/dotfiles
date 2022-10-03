@@ -54,7 +54,7 @@ jkcln() {
 }
 
 kcln() {
-	gcl "Khan/$1" "$khan/$1" "$@"
+	gcl "Khan/$1" "$k/$1" "$@"
 }
 
 git_develop_branch() {
