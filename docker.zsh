@@ -111,3 +111,13 @@ temp_psql() {
         --name temp_psql \
         postgres:14
 }
+
+temp_datastore() {
+  docker run \
+    --rm \
+    -d \
+    -p ${1:-8081}:8081 \
+    --name temp_datastore \
+    gcr.io/google.com/cloudsdktool/google-cloud-cli:latest \
+    gcloud beta emulators datastore start --project local-test --host-port 0.0.0.0:8081
+}

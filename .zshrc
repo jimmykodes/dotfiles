@@ -14,7 +14,7 @@ fi
 
 ZSH_CUSTOM=${HOME}/Code/zsh-custom
 
-plugins=(git common-aliases colorize kubectl source )
+plugins=(git common-aliases colorize kubectl)
 
 # Fix "insecure directories and files" warning on terminal start
 ZSH_DISABLE_COMPFIX=true

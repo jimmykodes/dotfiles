@@ -29,6 +29,9 @@ fi
 # go
 export PATH="$HOME/go/bin:$PATH"
 
+#java
+export PATH="/usr/local/opt/openjdk@8/bin:$PATH"
+
 # lvim
 export PATH="$PATH:$HOME/.local/bin/"
 
