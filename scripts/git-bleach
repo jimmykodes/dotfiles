@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+current_branch() {
+  echo $(git rev-parse --abbrev-ref HEAD)
+}
+
+dev_branch() {
+  local branch
+  for branch in initial_dev devel develop development dev
+  do
+    if command git show-ref -q --verify refs/heads/$branch
+    then
+      echo $branch
+      return
+    fi
+  done
+  echo $branch
+}
+
+main_branch() {
+  # todo: maybe eventually make this smart and not just return "main" but since the vast majority of my repos
+  #   use `main` as the main branch, I'm not going to be clever until I need to be
+  echo "main"
+}
+
+check_and_delete() {
+  echo $1
+}
+
+# make sure this is a git repo before doing anything
+if ! command git rev-parse --git-dir &> /dev/null; then 
+  echo "Not a git repo"
+  exit 1
+fi
+
+current=$(current_branch)
+main=$(main_branch)
+dev=$(dev_branch)
+
+if [[ $current != $main && $current != $dev ]]; then
+  echo "must be on main or dev branch to run this command"
+  exit 2
+fi
+
+echo "Pruning remote branches"
+git fetch --prune
+
+echo "Removing merged branches"
+git branch --no-color --merged | command grep -vE "^([+*]|\s*($main|$dev))\s*$)" | command xargs git branch -d 2>/dev/null
+
+echo "Removing squashed and merged branches"
+for branch in $(git branch --no-color | command grep -vE "^([+*]|\s*($main|$dev)\s*$)"); do
+  ancestor=$(git merge-base $main $branch)
+  temp_tree=$(git commit-tree $(git rev-parse $branch^{tree}) -p $ancestor -m _)
+  if [[ $(git cherry $main $temp_tree) == "-"* ]]; then
+    git branch -D $branch
+  fi
+done
+
+check_and_clean() {
+  local branch=$1
+  local upstream=$2
+  if [[ -z $upstream ]]; then
+    # no upstream, do nothing
+    return
+  fi
+  if ! git show-ref -q --verify refs/remotes/$upstream ; then
+    git branch -D $branch
+  fi
+ }
+
+echo "Removing branches with missing upstream"
+git for-each-ref --format='%(refname:short) %(upstream:short)' refs/heads | while read branch; do
+  check_and_clean $branch
+done
+
