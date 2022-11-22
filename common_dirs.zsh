@@ -11,9 +11,5 @@ if [ -d "$HOME/.venv" ]; then
   export venv=$HOME/.venv
 fi
 
-if [ -d "$HOME/DBs" ]; then
-  export dbs=$HOME/DBs
-fi
-
 export kodes=$gosrc/github.com/jimmykodes
 export custom=$code/zsh-custom

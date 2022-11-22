@@ -33,7 +33,7 @@ export PATH="$HOME/go/bin:$PATH"
 export PATH="/usr/local/opt/openjdk@8/bin:$PATH"
 
 # lvim
-export PATH="$PATH:$HOME/.local/bin/"
+export PATH="$PATH:$HOME/.local/bin"
 
 # rust
 export PATH="$PATH:$HOME/.cargo/bin"
