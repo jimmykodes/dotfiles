@@ -11,9 +11,25 @@ if [[ -f "/usr/local/bin/python2" ]]; then
   alias brewthon2='/usr/local/bin/python2'
 fi
 
+lsvenv() {
+  local max=0
+  local bn
+  local count
+  for i in $venv/*; do
+    bn=$(basename $i)
+    count=${#bn}
+    if [[ $count -gt $max ]]; then
+      max=$count
+    fi
+  done
+  for i in $venv/*; do
+    padding=$((max + 1))
+    printf "%-${padding}s %s\n" "$(basename $i)" "$($i/bin/python -V | sed 's/Python //')"
+  done
+}
+
 mkvenv() {
   local global=0
-  local bn
   while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
   -g | --global )
     global=1
@@ -32,6 +48,8 @@ acvenv() {
     . ${1:-venv}/bin/activate
   elif [[ -e $venv/${1:-$(basename $PWD)}/bin/activate ]]; then
     . $venv/${1:-$(basename $PWD)}/bin/activate
+  elif [[ -e .venv && -e $venv/$(cat .venv)/bin/activate ]]; then
+    . $venv/$(cat .venv)/bin/activate
   else
     echo "could not determine venv to activate"
     return 1
