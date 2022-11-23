@@ -12,9 +12,39 @@ if [[ -f "/usr/local/bin/python2" ]]; then
 fi
 
 mkvenv() {
-  python -m venv ${1:-venv}
+  local global=0
+  local bn
+  while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
+  -g | --global )
+    global=1
+    ;;
+  esac; shift; done
+  if [[ "$1" == '--' ]]; then shift; fi
+  if [[ $global != 0 ]]; then
+    python -m venv "$venv/${1:-$(basename $PWD)}"
+  else
+    python -m venv ${1:-venv}
+  fi
 }
 
 acvenv() {
-  source ${1:-venv}/bin/activate
+  if [[ -e ${1:-venv}/bin/activate ]]; then
+    . ${1:-venv}/bin/activate
+  elif [[ -e $venv/${1:-$(basename $PWD)}/bin/activate ]]; then
+    . $venv/${1:-$(basename $PWD)}/bin/activate
+  else
+    echo "could not determine venv to activate"
+    return 1
+  fi
+}
+
+rmvenv () {
+  if [[ -e ${1:-venv}/bin/activate ]]; then
+    rm -rf ${1:-venv}
+  elif [[ -e $venv/${1:-$(basename $PWD)}/bin/activate ]]; then
+    rm -rf $venv/${1:-$(basename $PWD)}
+  else
+    echo "could not determine venv to remove"
+    return 1
+  fi
 }
