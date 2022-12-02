@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # alias stuff
 unalias gcl
+unalias gcb
+
 alias gdb='git diff $(git_main_branch)...$(git_current_branch)'
 alias gcnvm='git commit --no-verify -m'
 
@@ -74,4 +76,27 @@ git_develop_branch() {
 ghrc() {
   local git_cb=$(git_current_branch)
   gh release create $1 --target ${2:-"$git_cb"} --prerelease --generate-notes
+}
+
+gcb() {
+  local branch=$1
+  if [[ -z $branch ]]; then
+    echo "branch required"
+    return 1
+  fi
+  git config --add branch.lastcreated $branch
+  git checkout -b $branch
+}
+
+gcol() {
+  local branch=$(git config --get branch.lastcreated)
+  if [[ -z $branch ]]; then
+    echo "no previously created branch to checkout"
+    return 1
+  fi
+  if [[ $branch == $(git rev-parse --abbrev-ref HEAD) ]]; then
+    echo "last created branch already checked out"
+    return
+  fi
+  git checkout $branch
 }
