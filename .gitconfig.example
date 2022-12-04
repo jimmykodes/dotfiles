@@ -1,0 +1,10 @@
+[user]
+  name = jimmykodes
+  email = james.keith.92@gmail.com
+  signingKey = <signing key here>
+
+[commit]
+  gpgsign = true
+
+[url "git@github.com:"]
+  insteadOf = https://github.com/
