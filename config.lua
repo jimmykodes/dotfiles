@@ -11,7 +11,6 @@ lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
-lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
@@ -37,7 +36,6 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- make sure server will always be installed even if the server is in skipped_servers list
 lvim.lsp.installer.setup.ensure_installed = {
-  "sumeko_lua",
   "jsonls",
   "gopls",
 }
@@ -53,4 +51,10 @@ formatters.setup {
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
   { command = "flake8", filetypes = { "python" } },
+}
+lvim.plugins = {
+  {
+    "ggandor/lightspeed.nvim",
+    event = "BufRead",
+  },
 }
