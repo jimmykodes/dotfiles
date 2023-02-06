@@ -1,8 +1,10 @@
 .idea/
+.fleet/
 node_modules/
 .DS_Store
 .env
 venv/
 .source
+.terraform
 
 *.swp

@@ -121,3 +121,12 @@ temp_datastore() {
     gcr.io/google.com/cloudsdktool/google-cloud-cli:latest \
     gcloud beta emulators datastore start --project local-test --host-port 0.0.0.0:8081
 }
+temp_pubsub() {
+  docker run \
+    --rm \
+    -d \
+    -p ${1:-8085}:8085 \
+    --name temp_pubsub \
+    gcr.io/google.com/cloudsdktool/google-cloud-cli:latest \
+    gcloud beta emulators pubsub start --project local-test --host-port 0.0.0.0:8085
+}
