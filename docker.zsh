@@ -102,6 +102,17 @@ temp_mysql_init() {
         mariadb:10.5
 }
 
+temp_psql_init() {
+	docker run \
+        --rm \
+        -d \
+        -p 5432:5432 \
+        -v ${1}:/docker-entrypoint-initdb.d \
+        --env POSTGRES_PASSWORD=password \
+        --name temp_psql \
+        postgres:14
+}
+
 temp_psql() {
 	docker run \
         --rm \
@@ -121,6 +132,7 @@ temp_datastore() {
     gcr.io/google.com/cloudsdktool/google-cloud-cli:latest \
     gcloud beta emulators datastore start --project local-test --host-port 0.0.0.0:8081
 }
+
 temp_pubsub() {
   docker run \
     --rm \

@@ -14,7 +14,7 @@ fi
 
 ZSH_CUSTOM=${HOME}/Code/zsh-custom
 
-plugins=(git common-aliases colorize kubectl)
+plugins=(git common-aliases colorize gcloud kubectl)
 
 # Fix "insecure directories and files" warning on terminal start
 ZSH_DISABLE_COMPFIX=true
@@ -60,3 +60,9 @@ fi
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/jimmykeith/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+fpath=(/opt/homebrew/share/zsh/site-functions $custom/completions $fpath)
+# The following lines were added by compinstall
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall

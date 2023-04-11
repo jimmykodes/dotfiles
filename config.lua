@@ -18,18 +18,18 @@ lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 
 -- if you don't want all the parsers change this to a table of the ones you want
 lvim.builtin.treesitter.ensure_installed = {
-    "bash",
-    "javascript",
-    "json",
-    "lua",
-    "python",
-    "typescript",
-    "tsx",
-    "css",
-    "rust",
-    "yaml",
-    "go",
-    "hcl",
+  "bash",
+  "javascript",
+  "json",
+  "lua",
+  "python",
+  "typescript",
+  "tsx",
+  "css",
+  "rust",
+  "yaml",
+  "go",
+  "hcl",
 }
 
 lvim.builtin.treesitter.highlight.enabled = true
@@ -38,34 +38,46 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- make sure server will always be installed even if the server is in skipped_servers list
 lvim.lsp.installer.setup.ensure_installed = {
-    "jsonls",
-    "gopls",
+  "jsonls",
+  "gopls",
 }
 
 -- set a formatter, this will override the language server formatting capabilities (if it exists)
-local formatters = require "lvim.lsp.null-ls.formatters"
-formatters.setup {
-    { command = "black",    filetypes = { "python" } },
-    { command = "goimports" },
-}
+-- local formatters = require "lvim.lsp.null-ls.formatters"
+-- formatters.setup {
+--   { command = "gofumpt" },
+-- }
 
 -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-    { command = "flake8",     filetypes = { "python" } },
-    { command = "shellcheck", filetypes = { "zsh" } }
+  { command = "flake8",     filetypes = { "python" } },
+  { command = "shellcheck", filetypes = { "zsh" } }
 }
+
 lvim.plugins = {
-    {
-        "ggandor/lightspeed.nvim",
-        event = "BufRead",
-    },
-    {
-        "terryma/vim-multiple-cursors",
-    },
-    {
-        "ray-x/lsp_signature.nvim",
-        event = "BufRead",
-        config = function() require "lsp_signature".on_attach() end,
-    },
+  {
+    "ggandor/lightspeed.nvim",
+    event = "BufRead",
+  },
+  {
+    "terryma/vim-multiple-cursors",
+  },
+  {
+    "ray-x/lsp_signature.nvim",
+    event = "BufRead",
+    config = function() require "lsp_signature".on_attach() end,
+  },
+  {
+    "towolf/vim-helm"
+  },
+  {
+    "crispgm/nvim-go"
+  }
 }
+
+require('go').setup({
+  auto_lint = false,
+  linter = 'golangci-lint',
+  formatter = 'gofumpt',
+})
