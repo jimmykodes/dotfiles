@@ -1,16 +1,6 @@
 alias pip-uninstall-all='pip freeze | xargs pip uninstall -y'
 alias rmpc='find . -name *.pyc -delete && echo pycache files removed'
 
-if [[ -d "/opt/homebrew" ]]; then
-  alias python="/opt/homebrew/bin/python3"
-else
-  alias python="/usr/local/bin/python3"
-fi
-
-if [[ -f "/usr/local/bin/python2" ]]; then
-  alias brewthon2='/usr/local/bin/python2'
-fi
-
 lsvenv() {
   local max=0
   local bn
@@ -30,16 +20,23 @@ lsvenv() {
 
 mkvenv() {
   local global=0
+  local version=3
+
   while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
   -g | --global )
     global=1
     ;;
+  -v | --version )
+    shift
+    version=$1
+    ;;
   esac; shift; done
   if [[ "$1" == '--' ]]; then shift; fi
+
   if [[ $global != 0 ]]; then
-    python -m venv "$venv/${1:-$(basename $PWD)}"
+    eval "python$version -m venv $venv/${1:-$(basename $PWD)}"
   else
-    python -m venv ${1:-venv}
+    eval "python$version -m venv ${1:-venv}"
   fi
 }
 
