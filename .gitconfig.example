@@ -5,6 +5,8 @@
 
 [commit]
   gpgsign = true
+  messageStore = <add path to obsidian commits file here>
 
 [url "git@github.com:"]
   insteadOf = https://github.com/
+

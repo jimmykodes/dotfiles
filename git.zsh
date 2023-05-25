@@ -99,7 +99,10 @@ gcmsg() {
     echo "message required"
     return 1
   fi
-  local project=$(basename $(project-root))
-  echo "$(date +%D): $project: $message" >> $obsidian/Work/commits.md
   git commit --message $message
+  local project=$(basename $(project-root))
+  local messageStore=$(git config --get commit.messageStore)
+  if [[ -n "$messageStore" ]]; then
+      echo "$(date +%D): $project: $message" >> "$messageStore"
+  fi
 }
