@@ -2,18 +2,10 @@
 # alias stuff
 unalias gcl
 unalias gcb
+unalias gcmsg
 
 alias gdb='git diff $(git_main_branch)...$(git_current_branch)'
 alias gcnvm='git commit --no-verify -m'
-
-# functions
-gitcc() {
-    if [[ -z $(command -v convco) ]]; then
-        echo 'convco not installed. Run `go install github.com/jimmykodes/convco@latest`'
-    else
-        convco "$@"
-    fi
-}
 
 gcl() {
 	follow=
@@ -99,4 +91,15 @@ gcol() {
     return
   fi
   git checkout $branch
+}
+
+gcmsg() {
+  local message=$1
+  if [[ -z $message ]]; then
+    echo "message required"
+    return 1
+  fi
+  local project=$(basename $(project-root))
+  echo "$(date +%D): $project: $message" >> $obsidian/Work/commits.md
+  git commit --message $message
 }
