@@ -18,3 +18,14 @@ envup() {
 ipaddr() {
   echo $(ipconfig getifaddr en0)
 }
+
+dark() {
+  isDark=$(osascript -e 'tell application "System Events" to tell appearance preferences to set darkMode to dark mode
+darkMode as text')
+  osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to not dark mode'
+  if [[ $isDark == "true" ]]; then
+    echo -e "\033]50;SetProfile=Light Mode\a"
+  else
+    echo -e "\033]50;SetProfile=One Dark\a"
+  fi
+}
