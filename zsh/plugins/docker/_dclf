@@ -3,5 +3,3 @@
 _dclf() {
     _arguments "*: :($(docker_services))"
 }
-
-_dclf

@@ -2,9 +2,7 @@
 #######################################
 alias dc='docker compose'
 alias dcd='dc down'
-
 alias dce='dc exec'
-alias dcl='dc logs'
 
 alias dl='docker logs'
 alias dlf='docker logs -f'
@@ -38,6 +36,10 @@ dcud() {
 
 dcudb() {
 	dcud --build "$@"
+}
+
+dcl() {
+  dc logs "$@"
 }
 
 dclf() {

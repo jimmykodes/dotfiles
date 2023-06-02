@@ -20,7 +20,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 COMPLETION_WAITING_DOTS="true"
 ZSH_CUSTOM="$HOME/go/src/github.com/jimmykodes/dotfiles/zsh"
 
-plugins=(git colorize gcloud kubectl)
+plugins=(git colorize docker gcloud kubectl)
 
 # Fix "insecure directories and files" warning on terminal start
 ZSH_DISABLE_COMPFIX=true
