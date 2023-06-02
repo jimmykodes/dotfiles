@@ -3,5 +3,3 @@
 _cdt() {
   _arguments "1: :($(pwd | sed 's/\// /g'))"
 }
-
-_cdt

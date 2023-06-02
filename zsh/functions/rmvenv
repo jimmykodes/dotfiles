@@ -1,0 +1,9 @@
+#!/bin/bash
+if [[ -e "${1:-venv}/bin/activate" ]]; then
+  rm -rf "${1:-venv}"
+elif [[ -e $venv/${1:-$(basename "$PWD")}/bin/activate ]]; then
+  rm -rf "$venv/${1:-$(basename "$PWD")}"
+else
+  echo "could not determine venv to remove"
+  return 1
+fi

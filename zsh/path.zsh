@@ -39,4 +39,4 @@ export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
 
 # scripts
-export PATH="$custom/scripts:$custom/scripts/private:$PATH"
+export PATH="$DOT_FILES/zsh/functions:$DOT_FILES/bin:$PATH"

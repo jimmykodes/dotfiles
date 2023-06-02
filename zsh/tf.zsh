@@ -1,24 +1,5 @@
 #!/bin/bash
 
-project-root() {
-  local wd
-  local i=0
-  wd=$(pwd)
-  while true; do
-    i=$((i+1))
-    if [ $i -gt 15 ]; then
-      echo "max recursion depth reached"
-      return 1
-    fi
-    if stat -q "$wd"/.git > /dev/null; then
-      echo "$wd"
-      break
-    else
-      wd=$(dirname "$wd")
-    fi
-  done
-}
-
 relpath() {
   local from=$1
   local to=$2

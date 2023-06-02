@@ -1,0 +1,23 @@
+#!/bin/bash
+if [ -z "$venv" ]; then 
+  echo "no venv defined"
+  return 1
+fi
+if [ -z "$(ls -A $venv)" ]; then
+  echo "venv is empty"
+  return 1
+fi
+max=0
+bn=
+count=
+for i in $venv/*; do
+  bn=$(basename $i)
+  count=${#bn}
+  if [[ $count -gt $max ]]; then
+    max=$count
+  fi
+done
+for i in $venv/*; do
+  padding=$((max + 1))
+  printf "%-${padding}s %s\n" $(basename $i) $($i/bin/python -V | sed 's/Python //')
+done
