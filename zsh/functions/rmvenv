@@ -1,4 +1,4 @@
-#!/bin/bash
+# vim:ft=zsh
 if [[ -e "${1:-venv}/bin/activate" ]]; then
   rm -rf "${1:-venv}"
 elif [[ -e $venv/${1:-$(basename "$PWD")}/bin/activate ]]; then

@@ -1,2 +1,2 @@
-#!/bin/bash
+# vim:ft=zsh
 cd $CODE_DIR/$1

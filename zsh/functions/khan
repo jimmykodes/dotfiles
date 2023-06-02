@@ -1,4 +1,4 @@
-#!/bin/bash
+# vim:ft=zsh
 if [ -z $KHAN ]; then
   echo "KHAN not found"
   return 1

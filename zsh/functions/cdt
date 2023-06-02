@@ -1,2 +1,2 @@
-#!/bin/bash
+# vim:ft=zsh
 cd "${PWD//$1*/$1}"

@@ -1,4 +1,4 @@
-#!/bin/bash
+# vim:ft=zsh
 for i in $path; do
   echo $i
 done

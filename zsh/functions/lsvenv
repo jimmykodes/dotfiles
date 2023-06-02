@@ -1,4 +1,4 @@
-#!/bin/bash
+# vim:ft=zsh
 if [ -z "$venv" ]; then 
   echo "no venv defined"
   return 1

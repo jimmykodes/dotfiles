@@ -1,0 +1,8 @@
+# vim:ft=zsh
+if [[ -e ".tf-version" ]]; then
+  cat .tf-version
+elif [[ -e $HOME/.tf-version ]]; then
+  cat "$HOME/.tf-version"
+else
+  echo "latest"
+fi

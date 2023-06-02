@@ -1,6 +1,6 @@
-#!/bin/bash
-global=0
-version=3
+# vim:ft=zsh
+local global=0
+local version=3
 
 while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
 -g | --global )

@@ -1,4 +1,4 @@
-#!/bin/bash
+# vim:ft=zsh
 [[ ! -d "$1" ]] && return
 
 path=(
