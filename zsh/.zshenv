@@ -2,6 +2,7 @@ export gosrc=$HOME/go/src
 export venv=$HOME/.venv
 export CODE_DIR=$gosrc/github.com/jimmykodes
 export DOTFILES=$CODE_DIR/dotfiles
+export JARVIS_FILE="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Work/Jarvis.md"
 
 [ -d $gosrc/github.com/Khan ] && export KHAN=$gosrc/github.com/Khan
 
@@ -21,4 +22,3 @@ fpath=(
   $DOTFILES/zsh/functions
   $fpath
 )
-
