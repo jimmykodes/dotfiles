@@ -3,7 +3,7 @@ if [ -z "$venv" ]; then
   echo "no venv defined"
   return 1
 fi
-if [ -z "$(ls -A $venv)" ]; then
+if [ -z "$(ls $venv)" ]; then
   echo "venv is empty"
   return 1
 fi
@@ -18,6 +18,11 @@ for i in $venv/*; do
   fi
 done
 for i in $venv/*; do
+  if [ -e $i/bin/python ]; then
+    version=$($i/bin/python -V | sed 's/Python //')
+  else
+    version="N/A"
+  fi
   padding=$((max + 1))
-  printf "%-${padding}s %s\n" $(basename $i) $($i/bin/python -V | sed 's/Python //')
+  printf "%-${padding}s %s\n" $(basename $i) $version
 done
