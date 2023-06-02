@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+declare -A formulae
+
+for cask in $(brew list -1 --formula); do
+  formulae["$cask"]=$(brew uses "$cask" --installed)
+done
+
+echo "graph LR;"
+for key in "${!formulae[@]}"; do
+  for val in ${formulae["$key"]}; do
+    echo -e "\t$val-->$key"
+  done
+done
