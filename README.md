@@ -1,4 +1,3 @@
-# zsh custom files
+# Dotfiles
 
-A collection of zsh files, intended to be used with Oh My Zsh as the `$ZSH/custom` dir.
-
+A dumping ground for my configs.

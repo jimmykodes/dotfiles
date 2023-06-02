@@ -11,8 +11,7 @@ compinit
 # PATH
 prepend_path $HOME/go/bin
 prepend_path $HOME/.local/bin
-prepend_path $DOT_FILES/zsh/functions
-prepend_path $DOT_FILES/bin
+prepend_path $DOTFILES/bin
 prepend_path /usr/local/opt/openjdk@8/bin
 
 # oh my zsh
