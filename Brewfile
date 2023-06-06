@@ -10,6 +10,7 @@ if OS.mac?
   cask "font-jetbrains-mono-nerd-font"
 end
 
+cask "alacritty"
 brew "chroma"
 brew "docker"
 brew "exa"
@@ -26,6 +27,7 @@ brew "python"
 brew "ripgrep"
 brew "shellcheck"
 brew "tree"
+brew "tmux"
 brew "yq"
 brew "zsh"
 brew "zsh-syntax-highlighting"

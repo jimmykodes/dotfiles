@@ -23,6 +23,7 @@ lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without f
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
 -- -- Change theme settings
+vim.o.termguicolors = true
 lvim.colorscheme = "onedarker"
 
 lvim.builtin.alpha.active = true
