@@ -1,16 +1,17 @@
 # vim:ft=ruby
 
-if OS.mac?
-  tap "homebrew/cask-fonts"
+tap "homebrew/cask-fonts"
 
-  # Applications
-  cask "1password/tap/1password-cli"
+# Applications
+cask "wezterm"
+cask "iterm2"
+cask "1password/tap/1password-cli"
 
-  # font
-  cask "font-jetbrains-mono-nerd-font"
-end
+# font
+cask "font-jetbrains-mono-nerd-font"
 
-cask "alacritty"
+
+# tools
 brew "chroma"
 brew "docker"
 brew "exa"
@@ -25,9 +26,7 @@ brew "k9s"
 brew "neovim"
 brew "python"
 brew "ripgrep"
-brew "shellcheck"
 brew "tree"
-brew "tmux"
 brew "yq"
 brew "zsh"
 brew "zsh-syntax-highlighting"
