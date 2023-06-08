@@ -47,6 +47,11 @@ header() {
 
 homebrew() {
   header "Checking Homebrew"
+  if [ "$(uname)" != "Darwin" ]; then
+    # todo: detect if we can install linux brew
+    warn "Not a mac, cannot install Homebrew"
+    return 0
+  fi
   if command -v brew > /dev/null; then
     info "Homebrew already installed"
   else
@@ -59,6 +64,14 @@ homebrew() {
 
 lunarVim() {
   header "Checking LunarVim"
+  if  ! command -v nvim > /dev/null ; then
+    warn "Neovim not installed. Skipping LunarVim"
+    return 0
+  fi
+  if [ "$(nvim --version | head -n 1 | grep -o "[0-9].[0-9]")" != "0.9" ]; then
+    warn "Invalid version of neovim installed. Skipping LunarVim"
+    return 0
+  fi
   if command -v lvim > /dev/null; then
     info "LunarVim already installed"
   else
@@ -70,7 +83,6 @@ lunarVim() {
 create_link() {
   local src=$1
   local dst=$2
-
 
   if [ -L "$HOME/$dst" ]; then
     # file is symlink
