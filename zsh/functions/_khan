@@ -1,0 +1,2 @@
+#compdef khan
+_files -W $KHAN -/

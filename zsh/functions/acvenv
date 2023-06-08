@@ -1,0 +1,11 @@
+# vim:ft=zsh
+if [[ -e ${1:-venv}/bin/activate ]]; then
+  . "${1:-venv}/bin/activate"
+elif [[ -e $venv/${1:-$(basename "$PWD")}/bin/activate ]]; then
+  . "$venv/${1:-$(basename "$PWD")}/bin/activate"
+elif [[ -e .venv && -e $venv/$(cat .venv)/bin/activate ]]; then
+  . "$venv/$(cat .venv)/bin/activate"
+else
+  echo "could not determine venv to activate"
+  return 1
+fi

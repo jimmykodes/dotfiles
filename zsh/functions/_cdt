@@ -1,0 +1,5 @@
+#compdef cdt
+
+_cdt() {
+  _arguments "1: :($(pwd | sed 's/\// /g'))"
+}

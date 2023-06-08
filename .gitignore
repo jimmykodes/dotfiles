@@ -3,3 +3,4 @@ example.zsh-theme
 ssh.zsh
 ignore.zsh
 scripts/private
+Brewfile.lock.json

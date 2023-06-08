@@ -1,0 +1,36 @@
+[colors]
+ansi = [
+   '#111316',
+   '#f07178',
+   '#98c379',
+   '#c5a66b',
+   '#61aeef',
+   '#c679dd',
+   '#73ad95',
+   '#c7c7c7',
+]
+brights = [
+   '#676767',
+   '#ff6d67',
+   '#5ff967',
+   '#fefb67',
+   '#6871ff',
+   '#ff76ff',
+   '#79e2b7',
+   '#fffeff',
+]
+
+background = '#282c34'
+foreground = '#c7c7c7'
+
+cursor_bg = '#d0d0d0'
+cursor_border = '#d0d0d0'
+cursor_fg = '#151515'
+
+selection_bg = '#61aeef'
+selection_fg = '#282c34'
+
+[colors.indexed]
+
+[metadata]
+name = 'OneDark'

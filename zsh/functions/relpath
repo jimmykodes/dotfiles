@@ -1,0 +1,9 @@
+# vim:ft=zsh
+local from=$1
+local to=$2
+local rel
+while [ "$to" != "$from" ]; do
+  rel="$(basename "$from")/${rel}"
+  from=$(dirname "$from")
+done
+echo "$rel"
