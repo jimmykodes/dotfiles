@@ -43,6 +43,7 @@ export GPG_TTY=$TTY
 zsyh=/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f "/usr/local/share/$zsyh" ] && source "/usr/local/share/${zsyh}"
 [ -f "/opt/homebrew/share/$zsyh" ] && source "/opt/homebrew/share/${zsyh}"
+[ -f "/usr/share/$zsyh" ] && source "/usr/share/${zsyh}"
 
 [ -x $(command -v lvim) ] && export EDITOR=lvim
 

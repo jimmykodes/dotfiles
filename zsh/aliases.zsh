@@ -13,8 +13,12 @@ esac
 
 alias ls="ls ${colorflag}"
 if [[ -x "$(command -v exa)" ]]; then
-  alias l="exa --icons --git --long"
-  alias la="exa --icons --git --all --long"
+  iconflag=""
+  if exa --icons > /dev/null 2>&1; then
+    iconsflag="--icons"
+  fi
+  alias l="exa ${iconsflag} --git --long"
+  alias la="exa ${iconsflag} --git --all --long"
 else
   alias l='ls -lFh'
   alias la='ls -alFh'
