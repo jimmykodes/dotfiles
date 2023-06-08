@@ -103,6 +103,6 @@ gcmsg() {
   local project=$(basename $(project-root))
   local messageStore=$(git config --get commit.messageStore)
   if [[ -n "$messageStore" ]]; then
-      echo "$(date +%D): $project: $message" >> "$messageStore"
+      echo "$(date +%Y-%m-%d): $project: $message" >> "$messageStore"
   fi
 }
