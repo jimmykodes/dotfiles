@@ -2,6 +2,9 @@
 
 set -e
 
+# had to brew install coreutils for this to work on my mbp.
+# can I automate that some other way? or do I need to use something
+# other than realpath for this?
 BASE_DIR=$(realpath "$(dirname "$0")")
 
 colReset="\e[0m"
