@@ -26,4 +26,5 @@ config.keys = {
 
 config.color_scheme = 'OneDark'
 config.font = wezterm.font 'JetBrainsMonoNL Nerd Font Mono'
+config.font_size = 15
 return config

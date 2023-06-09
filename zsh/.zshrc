@@ -41,16 +41,12 @@ export GPG_TTY=$TTY
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 zsyh=/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-[ -f "/usr/local/share/$zsyh" ] && source "/usr/local/share/${zsyh}"
-[ -f "/opt/homebrew/share/$zsyh" ] && source "/opt/homebrew/share/${zsyh}"
-[ -f "/usr/share/$zsyh" ] && source "/usr/share/${zsyh}"
+[ -f "/usr/local/share/${zsyh}" ] && source "/usr/local/share/${zsyh}"
+[ -f "/opt/homebrew/share/${zsyh}" ] && source "/opt/homebrew/share/${zsyh}"
+[ -f "/usr/share/${zsyh}" ] && source "/usr/share/${zsyh}"
 
-[ -x $(command -v lvim) ] && export EDITOR=lvim
+[ -x $(command -v lvim) ] && export EDITOR=lvim || export EDITOR=vim
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-
-### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/jimmykeith/.rd/bin:$PATH"
-### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
