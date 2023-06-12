@@ -4,3 +4,4 @@ ssh.zsh
 ignore.zsh
 scripts/private
 Brewfile.lock.json
+lazy-lock.json
