@@ -13,6 +13,7 @@ prepend_path $HOME/go/bin
 prepend_path $HOME/.local/bin
 prepend_path $DOTFILES/bin
 prepend_path /usr/local/opt/openjdk@8/bin
+[[ -n "$(command -v gcloud)" ]] && prepend_path "$(gcloud info --format="value(installation.sdk_root)")/bin"
 
 # oh my zsh
 export ZSH="$HOME/.oh-my-zsh"
