@@ -56,7 +56,8 @@ homebrew() {
     return 0
   fi
   if command -v brew > /dev/null; then
-    info "Homebrew already installed"
+    info "Homebrew already installed - updating"
+    brew update
   else
     info "Installing Homebrew"
     # todo: maybe detect os and install linuxbrew, too?
