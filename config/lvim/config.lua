@@ -98,6 +98,8 @@ lvim.plugins = {
   "towolf/vim-helm",
   "olexsmir/gopher.nvim",
   "leoluz/nvim-dap-go",
+  "jimmykodes/strman.nvim",
+  "jimmykodes/gink.nvim",
 }
 
 vim.api.nvim_create_autocmd("FileType", {
