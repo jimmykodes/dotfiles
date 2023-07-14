@@ -17,7 +17,8 @@ prepend_path /usr/local/opt/openjdk@8/bin
 
 # oh my zsh
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="jimple/jimple"
 COMPLETION_WAITING_DOTS="true"
 ZSH_CUSTOM="$HOME/go/src/github.com/jimmykodes/dotfiles/zsh"
 
