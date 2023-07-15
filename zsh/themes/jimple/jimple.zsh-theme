@@ -53,7 +53,7 @@ _jimple_wd() {
   local icon="HOME_SUB_ICON"
 
   [[ $wd == "~" ]] && icon="HOME_ICON"
-  echo "%{$fg[blue]%}${icons[$icon]} ${wd}"
+  echo "%{$fg[blue]%}${icons[$icon]} ${wd}%{$reset_color%}"
 }
 
 _jimple_venv() {
