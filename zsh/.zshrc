@@ -9,11 +9,16 @@ autoload -Uz compinit
 compinit
 
 # PATH
+# prepend_path will only add to path if the dir exists
 prepend_path $HOME/go/bin
 prepend_path $HOME/.local/bin
+prepend_path $HOME/.rd/bin
 prepend_path $DOTFILES/bin
 prepend_path /usr/local/opt/openjdk@8/bin
 [[ -n "$(command -v gcloud)" ]] && prepend_path "$(gcloud info --format="value(installation.sdk_root)")/bin"
+# rasbperry pi
+prepend_path /snap/bin
+prepend_path /usr/local/go/bin
 
 # oh my zsh
 export ZSH="$HOME/.oh-my-zsh"
