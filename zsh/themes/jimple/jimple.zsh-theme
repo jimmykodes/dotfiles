@@ -21,6 +21,8 @@ icons=(
   VCS_STASH_ICON                 '\uF01C'             # 
 
   PYTHON_ICON                    '\UE73C'             # 
+  KUBERNETES_ICON                '\U2388'             # ⎈
+
   MULTILINE_FIRST_PROMPT_PREFIX  '\u256D\U2500'       # ╭─
   MULTILINE_LAST_PROMPT_PREFIX   '\u2570\U2500'       # ╰─
 )
@@ -46,6 +48,13 @@ _jimple_arch() {
   esac
 
   echo "${icons[ARCH_ICON]} $ret"
+}
+
+_jimple_k_ctx() {
+  if ! command -v kubectl &> /dev/null; then
+    return 0
+  fi
+  echo "%{$fg[yellow]%}${icons[KUBERNETES_ICON]} $(kubectl config current-context | sed 's/_/ /g' | awk '{print $(NF)}')%{$reset_color%} ${DELIM} "
 }
 
 _jimple_wd() {
@@ -86,6 +95,7 @@ PROMPT+='$(_jimple_start)'
 PROMPT+='$(_jimple_wd) '
 PROMPT+='$(git_prompt_info)'
 PROMPT+='$(_jimple_venv)'
+PROMPT+='$(_jimple_k_ctx)'
 PROMPT+='$(_jimple_arch)'
 PROMPT+="${NEWLINE}"
 PROMPT+='$(_jimple_end)'
