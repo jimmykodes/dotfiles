@@ -51,10 +51,12 @@ _jimple_arch() {
 }
 
 _jimple_k_ctx() {
-  if ! command -v kubectl &> /dev/null; then
+  if [[ ! -e "$HOME/.kube/config" ]]; then
     return 0
   fi
-  echo "%{$fg[yellow]%}${icons[KUBERNETES_ICON]} $(kubectl config current-context | sed 's/_/ /g' | awk '{print $(NF)}')%{$reset_color%} ${DELIM} "
+  local ctx=$(grep current-context "$HOME/.kube/config" | awk "{print $2}")
+  local cluster=$(sed 's/_/ /g' <<< $ctx | awk '{print $NF}')
+  echo "%{$fg[yellow]%}${icons[KUBERNETES_ICON]} $cluster%{$reset_color%} ${DELIM} "
 }
 
 _jimple_wd() {
