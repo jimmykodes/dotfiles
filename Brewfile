@@ -12,6 +12,7 @@ cask "font-jetbrains-mono-nerd-font"
 
 
 # tools
+brew "coreutils"
 brew "chroma"
 brew "docker"
 brew "exa"

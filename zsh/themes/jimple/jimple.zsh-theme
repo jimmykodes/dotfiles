@@ -71,7 +71,8 @@ _jimple_venv() {
   local venv="$VIRTUAL_ENV"
   [[ -z $venv ]] && return
   venv=$(basename $venv)
-  local version=$(python -V | awk '{ print $2 }')
+  local version=$(python -V 2>/dev/null | awk '{ print $2 }')
+  [[ -z $version ]] && version=$(python -V 2>&1 | awk '{ print $2 }')
   local machine=$(python -c "import platform; print(platform.machine())")
   echo "%F{magenta}${icons[PYTHON_ICON]} $venv($version)[$machine]%f ${DELIM} "
 }
@@ -101,3 +102,4 @@ PROMPT+='$(_jimple_k_ctx)'
 PROMPT+='$(_jimple_arch)'
 PROMPT+="${NEWLINE}"
 PROMPT+='$(_jimple_end)'
+PROMPT+="%{$reset_color%}"

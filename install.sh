@@ -119,7 +119,7 @@ create_link() {
 
 symlinks() {
   header "Checking symlinks"
-  files=("zsh/.p10k.zsh" "zsh/.zprofile" "zsh/.zshenv" "zsh/.zshrc" "config/wezterm/.wezterm.lua" "config/git/.global_gitignore")
+  files=("zsh/.p10k.zsh" "zsh/.zprofile" "zsh/.profile" "zsh/.zshenv" "zsh/.zshrc" "config/wezterm/.wezterm.lua" "config/git/.global_gitignore")
   for f in "${files[@]}"
   do
     create_link "$f" "$(basename "$f")"
