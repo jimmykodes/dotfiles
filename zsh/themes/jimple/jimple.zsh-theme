@@ -19,6 +19,8 @@ icons=(
   VCS_UNSTAGED_ICON              '\uF06A'             # 
   VCS_STAGED_ICON                '\uF055'             # 
   VCS_STASH_ICON                 '\uF01C'             # 
+  VCS_INCOMING_CHANGES_ICON      '\u2193'             # ↓
+  VCS_OUTGOING_CHANGES_ICON      '\u2191'             # ↑
 
   PYTHON_ICON                    '\UE73C'             # 
   KUBERNETES_ICON                '\U2388'             # ⎈
@@ -81,6 +83,8 @@ parse_git_dirty() {
   local git_status="$(git status 2> /dev/null)"
   local stash="$(git stash list 2> /dev/null)"
   out=""
+  [[ "$git_status" =~ "branch is ahead" ]] && out+="%F{magenta}${icons[VCS_OUTGOING_CHANGES_ICON]}%f"
+  [[ "$git_status" =~ "branch is behind" ]] && out+="%F{magenta}${icons[VCS_INCOMING_CHANGES_ICON]}%f"
   [[ -n $stash ]] && out+="%F{white}${icons[VCS_STASH_ICON]}%f"
   [[ "$git_status" =~ "Changes to be committed:" ]] && out+="%F{cyan}${icons[VCS_STAGED_ICON]}%f"
   [[ "$git_status" =~ "Changes not staged for commit:" ]] && out+="%F{yellow}${icons[VCS_UNSTAGED_ICON]}%f"
