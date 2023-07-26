@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 NEWLINE=$'\n'
-DELIM="%{$fg_bold[grey]%}|%{$reset_color%}"
+DELIM=" %{$fg_bold[grey]%}|%{$reset_color%} "
 PROMPT=""
 
 declare -gA icons
@@ -58,7 +58,7 @@ _jimple_k_ctx() {
   fi
   local ctx=$(grep current-context "$HOME/.kube/config" | awk "{print $2}")
   local cluster=$(sed 's/_/ /g' <<< $ctx | awk '{print $NF}')
-  echo "%{$fg[yellow]%}${icons[KUBERNETES_ICON]} $cluster%{$reset_color%} ${DELIM} "
+  echo "%{$fg[yellow]%}${icons[KUBERNETES_ICON]} $cluster%{$reset_color%}${DELIM}"
 }
 
 _jimple_wd() {
@@ -66,7 +66,7 @@ _jimple_wd() {
   local icon="HOME_SUB_ICON"
 
   [[ $wd == "~" ]] && icon="HOME_ICON"
-  echo "%{$fg[blue]%}${icons[$icon]} ${wd}%{$reset_color%}"
+  echo "%{$fg[blue]%}${icons[$icon]} ${wd}%{$reset_color%}${DELIM}"
 }
 
 _jimple_venv() {
@@ -76,7 +76,7 @@ _jimple_venv() {
   local version=$(python -V 2>/dev/null | awk '{ print $2 }')
   [[ -z $version ]] && version=$(python -V 2>&1 | awk '{ print $2 }')
   local machine=$(python -c "import platform; print(platform.machine())")
-  echo "%F{magenta}${icons[PYTHON_ICON]} $venv($version)[$machine]%f ${DELIM} "
+  echo "%F{magenta}${icons[PYTHON_ICON]} $venv($version)[$machine]%f${DELIM}"
 }
 
 parse_git_dirty() {
@@ -94,12 +94,12 @@ parse_git_dirty() {
   echo $out
 }
 
-ZSH_THEME_GIT_PROMPT_PREFIX="${DELIM} %{$fg[green]%}%{$icons[VCS_BRANCH_ICON]%} "
-ZSH_THEME_GIT_PROMPT_SUFFIX=" ${DELIM} "
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}%{$icons[VCS_BRANCH_ICON]%} "
+ZSH_THEME_GIT_PROMPT_SUFFIX="${DELIM}"
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
 PROMPT+='$(_jimple_start)'
-PROMPT+='$(_jimple_wd) '
+PROMPT+='$(_jimple_wd)'
 PROMPT+='$(git_prompt_info)'
 PROMPT+='$(_jimple_venv)'
 PROMPT+='$(_jimple_k_ctx)'
