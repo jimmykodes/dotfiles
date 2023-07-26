@@ -71,7 +71,6 @@ formatters.setup {
 -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  { command = "flake8",     filetypes = { "python" }, args = { "--max-line-length", "120" } },
   { command = "shellcheck", filetypes = { "zsh" } },
   { command = "cspell" },
 }
@@ -79,9 +78,7 @@ linters.setup {
 -- code actions
 local code_actions = require "lvim.lsp.null-ls.code_actions"
 code_actions.setup {
-  {
-    name = "cspell",
-  }
+  { name = "cspell", }
 }
 
 lvim.plugins = {
