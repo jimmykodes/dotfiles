@@ -6,10 +6,10 @@ tap "homebrew/cask-fonts"
 cask "wezterm"
 cask "iterm2"
 cask "1password/tap/1password-cli"
+cask "hammerspoon"
 
 # font
 cask "font-jetbrains-mono-nerd-font"
-
 
 # tools
 brew "coreutils"
