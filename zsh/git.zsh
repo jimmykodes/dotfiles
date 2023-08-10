@@ -44,11 +44,11 @@ gcl() {
 }
 
 jkcln() {
-	gcl "jimmykodes/$1" "$kodes/$1" "$@"
+	gcl "jimmykodes/$1" "$CODE_DIR/$1" "$@"
 }
 
 kcln() {
-	gcl "Khan/$1" "$k/$1" "$@"
+	gcl "Khan/$1" "$KHAN/$1" "$@"
 }
 
 git_develop_branch() {

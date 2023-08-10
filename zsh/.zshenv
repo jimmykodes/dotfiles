@@ -11,10 +11,6 @@ export DAILY_DIR="$OBSIDIAN/Work/daily"
 
 export XDG_CONFIG_HOME="$HOME/.config"
 
-# Default location for appliation default credentials for google cloud services
-# run `gcloud auth application-default login` to generate these credentials
-[[ -e "$HOME/.config/gcloud/application_default_credentials.json" ]] && export GOOGLE_APPLICATION_CREDENTIALS="$HOME/.config/gcloud/application_default_credentials.json"
-
 . "$HOME/.cargo/env"
 
 [[ -d "$gosrc" ]] || mkdir -p "$gosrc"

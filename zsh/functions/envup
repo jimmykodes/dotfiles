@@ -4,4 +4,6 @@ if [[ ! -e $f ]]; then
   echo "${f} could not be found"
   return
 fi
-export "$(grep -v '^#' "$f" | xargs)"
+grep -v '^#' "$f" | while read -r e; do
+  export "${e?}"
+done
