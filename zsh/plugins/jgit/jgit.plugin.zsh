@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
-# alias stuff
-unalias gcl
-unalias gcb
-unalias gcmsg
 
 alias gdb='git diff $(git_main_branch)...$(git_current_branch)'
 alias gcnvm='git commit --no-verify -m'
+alias gp='git push'
+alias "gp!"="git push --force"
+alias gpsup='git push --set-upstream origin $(git_current_branch)'
+alias gl="git pull"
+alias gst='git status'
+alias gapa='git add --patch'
+alias ga='git add'
+alias gaa='git add .'
 
 gcl() {
 	follow=
@@ -52,7 +56,7 @@ kcln() {
 }
 
 git_develop_branch() {
-    command git rev-parse --git-dir &> /dev/null || return
+  command git rev-parse --git-dir &> /dev/null || return
 	local branch
 	for branch in initial_dev dev devel development
 	do
@@ -63,11 +67,6 @@ git_develop_branch() {
 		fi
 	done
 	echo develop
-}
-
-ghrc() {
-  local git_cb=$(git_current_branch)
-  gh release create $1 --target ${2:-"$git_cb"} --prerelease --generate-notes
 }
 
 gcb() {
@@ -110,3 +109,56 @@ gcmsg() {
       echo "$(date +%Y-%m-%d): $project: $message" >> "$messageStore"
   fi
 }
+
+git_current_issue() {
+  git config --get "branch.$(git_current_branch).issue"
+}
+
+git_add_issue() {
+  git config --add "branch.$(git_current_branch).issue" "$1"
+}
+
+## GitHub Functions
+
+ghrc() {
+  local git_cb=$(git_current_branch)
+  gh release create $1 --target ${2:-"$git_cb"} --prerelease --generate-notes
+}
+
+escape() {
+  sed 's/\//\\\//g' <<< "$1"
+}
+
+ghpr() {
+  tmpl() {
+    for location in "." "docs" ".github" "$HOME/.config/git-templates"; do
+      for ft in md txt; do
+        local file="$location/pull_request_template.${ft}"
+        if [[ -e "$file" ]]; then
+          echo "$file"
+          return
+        fi
+      done
+    done
+  }
+
+  local t
+  local args
+  local body_file
+  local issue
+
+  t=$(tmpl)
+  if [[ -n $t ]]; then
+    body_file="$(mktemp -d)/body.md"
+    issue=$(git_current_issue)
+    if [[ -n $issue ]]; then
+      issue="Issue: [$issue]($JIRA_ADDRESS/browse/$issue)"
+    fi
+    sed "s/{{issue}}/$(escape "$issue")/" "$t" > "$body_file"
+    eval "$EDITOR \"$body_file\""
+    args="-F=$body_file"
+  fi
+
+  gh pr create "$args" "$@"
+}
+
