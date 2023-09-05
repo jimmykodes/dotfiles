@@ -65,7 +65,7 @@ local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   { command = "goimports" },
   { command = "gofumpt" },
-  { command = "autopep8" }
+  { command = "autopep8", args = { "--max-line-length", "120" } }
 }
 
 -- set additional linters
