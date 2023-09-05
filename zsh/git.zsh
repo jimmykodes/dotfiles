@@ -72,12 +72,16 @@ ghrc() {
 
 gcb() {
   local branch=$1
+  local issue=$2
   if [[ -z $branch ]]; then
     echo "branch required"
     return 1
   fi
-  git config --add branch.lastcreated $branch
+  git config --replace-all branch.lastcreated $branch
   git checkout -b $branch
+  if [[ -n $issue ]]; then
+    git config --add branch.$branch.issue $issue
+  fi
 }
 
 gcol() {
