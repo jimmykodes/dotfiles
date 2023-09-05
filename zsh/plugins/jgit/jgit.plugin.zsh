@@ -110,11 +110,23 @@ gcmsg() {
   fi
 }
 
+git_current_issue() {
+  git config --get "branch.$(git_current_branch).issue"
+}
+
+git_add_issue() {
+  git config --add "branch.$(git_current_branch).issue" "$1"
+}
+
 ## GitHub Functions
 
 ghrc() {
   local git_cb=$(git_current_branch)
   gh release create $1 --target ${2:-"$git_cb"} --prerelease --generate-notes
+}
+
+escape() {
+  sed 's/\//\\\//g' <<< "$1"
 }
 
 ghpr() {
@@ -132,11 +144,21 @@ ghpr() {
 
   local t
   local args
+  local body_file
+  local issue
 
   t=$(tmpl)
   if [[ -n $t ]]; then
-    args="-T $t"
+    body_file="$(mktemp -d)/body.md"
+    issue=$(git_current_issue)
+    if [[ -n $issue ]]; then
+      issue="Issue: [$issue]($JIRA_ADDRESS/browse/$issue)"
+    fi
+    sed "s/{{issue}}/$(escape "$issue")/" "$t" > "$body_file"
+    eval "$EDITOR \"$body_file\""
+    args="-F=$body_file"
   fi
-  gh pr create $args "$@"
+
+  gh pr create "$args" "$@"
 }
 
