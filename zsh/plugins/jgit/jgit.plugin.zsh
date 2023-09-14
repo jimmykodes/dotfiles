@@ -10,6 +10,53 @@ alias gst='git status'
 alias gapa='git add --patch'
 alias ga='git add'
 alias gaa='git add .'
+alias gco="git checkout"
+alias gbd="git branch -d"
+alias gbD="git branch -D"
+
+gcd() {
+  local branch
+  local current
+
+  branch=$(git_develop_branch)
+  current=$(git_current_branch)
+
+  if [[ -z $branch ]]; then
+    echo "Could not find a develop branch to checkout"
+    return 1
+  elif [[ "$branch" == "$current" ]]; then
+    echo "Develop branch is already checked out"
+    return
+  fi
+  git checkout "$branch"
+}
+
+gcm() {
+  local branch
+  local current
+
+  branch=$(git_main_branch)
+  current=$(git_current_branch)
+
+  if [[ -z $branch ]]; then
+    echo "Could not find a main branch to checkout"
+    return 1
+  elif [[ "$branch" == "$current" ]]; then
+    echo "Main branch is already checked out"
+    return
+  fi
+  git checkout "$branch"
+}
+
+gmom() {
+  local branch
+  branch=$(git_main_branch)
+  # if somehow a main branch doesn't exist locally, assume `main` is going
+  # to be present on the remote, which I'm assuming is going to be `origin`
+  # for simplicity. Will update this if I ever need a different remote.
+  [[ -z $branch ]] && branch="main"
+  git merge "origin/$branch"
+}
 
 gcl() {
 	follow=
@@ -55,10 +102,10 @@ kcln() {
 	gcl "Khan/$1" "$KHAN/$1" "$@"
 }
 
-git_develop_branch() {
-  command git rev-parse --git-dir &> /dev/null || return
+git_main_branch() {
+  command git rev-parse --git-dir &> /dev/null || return 1
 	local branch
-	for branch in initial_dev dev devel development
+	for branch in main master
 	do
 		if command git show-ref -q --verify refs/heads/$branch
 		then
@@ -66,7 +113,21 @@ git_develop_branch() {
 			return
 		fi
 	done
-	echo develop
+  return 1
+}
+
+git_develop_branch() {
+  command git rev-parse --git-dir &> /dev/null || return 1
+	local branch
+	for branch in initial_dev dev devel development develop
+	do
+		if command git show-ref -q --verify refs/heads/$branch
+		then
+			echo $branch
+			return
+		fi
+	done
+  return 1
 }
 
 gcb() {

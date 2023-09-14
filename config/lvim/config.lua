@@ -56,9 +56,15 @@ vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "azure_pipel
 
 -- make sure server will always be installed even if the server is in skipped_servers list
 lvim.lsp.installer.setup.ensure_installed = {
+  "arduino_language_server",
   "jsonls",
   "gopls",
 }
+
+require("lspconfig")["arduino_language_server"].setup({
+  cmd = { "arduino-language-server", "-cli-config", "$HOME/Library/Arduino15/arduino-cli.yaml" }
+})
+
 
 -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
