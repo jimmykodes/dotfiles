@@ -2,7 +2,6 @@
 
 NEWLINE=$'\n'
 DELIM=" %{$fg_bold[grey]%}|%{$reset_color%} "
-PROMPT=""
 
 declare -gA icons
 icons=(
@@ -24,6 +23,7 @@ icons=(
 
   PYTHON_ICON                    '\UE73C'             # 
   KUBERNETES_ICON                '\U2388'             # ⎈
+  NODE_ICON                      '\u2B22'             # ⬢
 
   MULTILINE_FIRST_PROMPT_PREFIX  '\u256D\U2500'       # ╭─
   MULTILINE_LAST_PROMPT_PREFIX   '\u2570\U2500'       # ╰─
@@ -37,6 +37,10 @@ _jimple_end() {
 }
 
 _jimple_arch() {
+  if [[ $(tput cols) -lt 100 ]]; then
+    ## don't show on terminals < 100 cols
+    return
+  fi
   local ret
   ret=$(uname -m)
 
@@ -49,16 +53,20 @@ _jimple_arch() {
       ;;
   esac
 
-  echo "${icons[ARCH_ICON]} $ret"
+  echo "${DELIM}${icons[ARCH_ICON]} $ret"
 }
 
 _jimple_k_ctx() {
+  if [[ $(tput cols) -lt 100 ]]; then
+    ## don't show on terminals < 100 cols
+    return
+  fi
   if [[ ! -e "$HOME/.kube/config" ]]; then
     return 0
   fi
   local ctx=$(grep current-context "$HOME/.kube/config" | awk "{print $2}")
   local cluster=$(sed 's/_/ /g' <<< $ctx | awk '{print $NF}')
-  echo "%{$fg[yellow]%}${icons[KUBERNETES_ICON]} $cluster%{$reset_color%}${DELIM}"
+  echo "${DELIM}%{$fg[yellow]%}${icons[KUBERNETES_ICON]} $cluster%{$reset_color%}"
 }
 
 _jimple_wd() {
@@ -66,7 +74,7 @@ _jimple_wd() {
   local icon="HOME_SUB_ICON"
 
   [[ $wd == "~" ]] && icon="HOME_ICON"
-  echo "%{$fg[blue]%}${icons[$icon]} ${wd}%{$reset_color%}${DELIM}"
+  echo "%{$fg[blue]%}${icons[$icon]} ${wd}%{$reset_color%}"
 }
 
 _jimple_venv() {
@@ -76,7 +84,17 @@ _jimple_venv() {
   local version=$(python -V 2>/dev/null | awk '{ print $2 }')
   [[ -z $version ]] && version=$(python -V 2>&1 | awk '{ print $2 }')
   local machine=$(python -c "import platform; print(platform.machine())")
-  echo "%F{magenta}${icons[PYTHON_ICON]} $venv($version)[$machine]%f${DELIM}"
+  echo "${DELIM}%F{magenta}${icons[PYTHON_ICON]} $venv($version)[$machine]%f"
+}
+
+_jimple_node_version() {
+  local ls_default
+  ls_default=$(nvm list default --no-colors)
+  if [[ ${ls_default:0:2} == "->" ]]; then
+    # using default version, so don't print node version
+    return
+  fi
+  echo "${DELIM}%F{cyan}${icons[NODE_ICON]} $(nvm current)%f"
 }
 
 parse_git_dirty() {
@@ -94,16 +112,20 @@ parse_git_dirty() {
   echo $out
 }
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}%{$icons[VCS_BRANCH_ICON]%} "
-ZSH_THEME_GIT_PROMPT_SUFFIX="${DELIM}"
+ZSH_THEME_GIT_PROMPT_PREFIX="${DELIM}%{$fg[green]%}%{$icons[VCS_BRANCH_ICON]%} "
+ZSH_THEME_GIT_PROMPT_SUFFIX=""
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
-PROMPT+='$(_jimple_start)'
-PROMPT+='$(_jimple_wd)'
-PROMPT+='$(git_prompt_info)'
-PROMPT+='$(_jimple_venv)'
-PROMPT+='$(_jimple_k_ctx)'
-PROMPT+='$(_jimple_arch)'
-PROMPT+="${NEWLINE}"
-PROMPT+='$(_jimple_end)'
-PROMPT+="%{$reset_color%}"
+P=""
+P+='$(_jimple_start)'
+P+='$(_jimple_wd)'
+P+='$(git_prompt_info)'
+P+='$(_jimple_venv)'
+P+='$(_jimple_node_version)'
+P+='$(_jimple_k_ctx)'
+P+='$(_jimple_arch)'
+P+="${NEWLINE}"
+P+='$(_jimple_end)'
+P+="%{$reset_color%}"
+
+PROMPT=$P
