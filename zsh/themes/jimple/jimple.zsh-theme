@@ -29,6 +29,14 @@ icons=(
   MULTILINE_LAST_PROMPT_PREFIX   '\u2570\U2500'       # ╰─
 )
 
+kshow() {
+  if [[ -z $SHOW_KUBE_CTX ]]; then
+    export SHOW_KUBE_CTX=1
+  else
+    unexport SHOW_KUBE_CTX
+  fi
+}
+
 _jimple_start() {
   echo "%{$fg_bold[grey]%}$icons[MULTILINE_FIRST_PROMPT_PREFIX]%{$reset_color%} "
 }
@@ -59,6 +67,9 @@ _jimple_arch() {
 _jimple_k_ctx() {
   if [[ $(tput cols) -lt 100 ]]; then
     ## don't show on terminals < 100 cols
+    return
+  fi
+  if [[ -z $SHOW_KUBE_CTX ]]; then
     return
   fi
   if [[ ! -e "$HOME/.kube/config" ]]; then
