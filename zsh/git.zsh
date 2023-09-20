@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-alias gdb='git diff $(git_main_branch)...$(git_current_branch)'
+alias gdb='git diff $(git main-branch)...$(git current-branch)'
 alias gcnvm='git commit --no-verify -m'
 alias gp='git push'
 alias "gp!"="git push --force"
-alias gpsup='git push --set-upstream origin $(git_current_branch)'
+alias gpsup='git push --set-upstream origin $(git current-branch)'
 alias gl="git pull"
 alias gst='git status'
 alias gapa='git add --patch'
@@ -18,8 +18,8 @@ gcd() {
   local branch
   local current
 
-  branch=$(git_develop_branch)
-  current=$(git_current_branch)
+  branch=$(git dev-branch)
+  current=$(git current-branch)
 
   if [[ -z $branch ]]; then
     echo "Could not find a develop branch to checkout"
@@ -35,8 +35,8 @@ gcm() {
   local branch
   local current
 
-  branch=$(git_main_branch)
-  current=$(git_current_branch)
+  branch=$(git main-branch)
+  current=$(git current-branch)
 
   if [[ -z $branch ]]; then
     echo "Could not find a main branch to checkout"
@@ -50,7 +50,7 @@ gcm() {
 
 gmom() {
   local branch
-  branch=$(git_main_branch)
+  branch=$(git main-branch)
   # if somehow a main branch doesn't exist locally, assume `main` is going
   # to be present on the remote, which I'm assuming is going to be `origin`
   # for simplicity. Will update this if I ever need a different remote.
@@ -102,34 +102,6 @@ kcln() {
 	gcl "Khan/$1" "$KHAN/$1" "$@"
 }
 
-git_main_branch() {
-  command git rev-parse --git-dir &> /dev/null || return 1
-	local branch
-	for branch in main master
-	do
-		if command git show-ref -q --verify refs/heads/$branch
-		then
-			echo $branch
-			return
-		fi
-	done
-  return 1
-}
-
-git_develop_branch() {
-  command git rev-parse --git-dir &> /dev/null || return 1
-	local branch
-	for branch in initial_dev dev devel development develop
-	do
-		if command git show-ref -q --verify refs/heads/$branch
-		then
-			echo $branch
-			return
-		fi
-	done
-  return 1
-}
-
 gcb() {
   local branch=$1
   local issue=$2
@@ -171,18 +143,10 @@ gcmsg() {
   fi
 }
 
-git_current_issue() {
-  git config --get "branch.$(git_current_branch).issue"
-}
-
-git_add_issue() {
-  git config --add "branch.$(git_current_branch).issue" "$1"
-}
-
 ## GitHub Functions
 
 ghrc() {
-  local git_cb=$(git_current_branch)
+  local git_cb=$(git current-branch)
   gh release create $1 --target ${2:-"$git_cb"} --prerelease --generate-notes
 }
 
@@ -211,7 +175,7 @@ ghpr() {
   t=$(tmpl)
   if [[ -n $t ]]; then
     body_file="$(mktemp -d)/body.md"
-    issue=$(git_current_issue)
+    issue=$(git current-issue)
     if [[ -n $issue ]]; then
       issue="Issue: [$issue]($JIRA_ADDRESS/browse/$issue)"
     fi
