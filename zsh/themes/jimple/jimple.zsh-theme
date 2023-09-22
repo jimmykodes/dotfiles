@@ -47,7 +47,7 @@ _jimple_end() {
 
 _jimple_ssh() {
   if [[ -n $SSH_CLIENT ]]; then
-    echo "$icons[SSH_ICON]$USER@%m${DELIM}"
+    echo "%{$fg[yellow]%}$icons[SSH_ICON] $USER@%m%{$reset_color%}${DELIM}"
   fi
 }
 
