@@ -44,6 +44,12 @@ _jimple_end() {
   echo "%{$fg_bold[grey]%}$icons[MULTILINE_LAST_PROMPT_PREFIX]%{$reset_color%}%(?:%{$fg[green]%}❯:%{$fg[red]%}❯) "
 }
 
+_jimple_ssh() {
+  if [[ -n $SSH_CLIENT ]]; then
+    echo "$USER@%m${DELIM}"
+  fi
+}
+
 _jimple_arch() {
   if [[ $(tput cols) -lt 100 ]]; then
     ## don't show on terminals < 100 cols
@@ -131,6 +137,7 @@ VIRTUAL_ENV_DISABLE_PROMPT=1
 
 P=""
 P+='$(_jimple_start)'
+P+='$(_jimple_ssh)'
 P+='$(_jimple_wd)'
 P+='$(git_prompt_info)'
 P+='$(_jimple_venv)'
