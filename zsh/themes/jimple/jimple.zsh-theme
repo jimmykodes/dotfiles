@@ -9,6 +9,7 @@ icons=(
   LINUX_RASPBIAN_ICON            '\uF315'             # 
   LINUX_UBUNTU_ICON              '\uF31b'             # 
   ARCH_ICON                      '\uE266'             # 
+  SSH_ICON                       '\uF489'             # 
 
   HOME_ICON                      '\uF015'             # 
   HOME_SUB_ICON                  '\uF07C'             # 
@@ -46,7 +47,7 @@ _jimple_end() {
 
 _jimple_ssh() {
   if [[ -n $SSH_CLIENT ]]; then
-    echo "$USER@%m${DELIM}"
+    echo "$icons[SSH_ICON]$USER@%m${DELIM}"
   fi
 }
 
