@@ -11,7 +11,7 @@ export DAILY_DIR="$OBSIDIAN/Work/daily"
 
 export XDG_CONFIG_HOME="$HOME/.config"
 
-. "$HOME/.cargo/env"
+[[ -d "$HOME/.cargo" ]] && . "$HOME/.cargo/env"
 
 [[ -d "$gosrc" ]] || mkdir -p "$gosrc"
 [[ -d "$venv" ]] || mkdir -p "$venv"
