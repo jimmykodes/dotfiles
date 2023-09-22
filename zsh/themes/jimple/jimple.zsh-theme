@@ -99,13 +99,15 @@ _jimple_venv() {
 }
 
 _jimple_node_version() {
-  local ls_default
-  ls_default=$(nvm list default --no-colors)
-  if [[ ${ls_default:0:2} == "->" ]]; then
-    # using default version, so don't print node version
-    return
+  if which -s nvm > /dev/null; then
+    local ls_default
+    ls_default=$(nvm list default --no-colors)
+    if [[ ${ls_default:0:2} == "->" ]]; then
+      # using default version, so don't print node version
+      return
+    fi
+    echo "${DELIM}%F{cyan}${icons[NODE_ICON]} $(nvm current)%f"
   fi
-  echo "${DELIM}%F{cyan}${icons[NODE_ICON]} $(nvm current)%f"
 }
 
 parse_git_dirty() {

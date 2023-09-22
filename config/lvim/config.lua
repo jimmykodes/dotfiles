@@ -19,6 +19,7 @@ lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 lvim.keys.normal_mode["<S-TAB>"] = "<C-o>"
 
 -- -- Use which-key to add extra bindings with the leader-key prefix
+lvim.builtin.which_key.mappings["o"] = { "<cmd>NvimTreeFocus<cr>", "ExplorerFocus" }
 lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
@@ -96,6 +97,10 @@ lvim.plugins = {
     "ray-x/lsp_signature.nvim",
     event = "BufRead",
     config = function() require "lsp_signature".on_attach() end,
+  },
+  {
+    'stevearc/dressing.nvim',
+    opts = {},
   },
   "terryma/vim-multiple-cursors",
   "towolf/vim-helm",
