@@ -11,8 +11,10 @@ alias gapa='git add --patch'
 alias ga='git add'
 alias gaa='git add .'
 alias gco="git checkout"
+alias gb="git branch"
 alias gbd="git branch -d"
 alias gbD="git branch -D"
+alias gbda="git bleach"
 
 gcd() {
   local branch
