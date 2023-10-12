@@ -12,14 +12,14 @@ Linux)
 esac
 
 alias ls="ls ${colorflag}"
-if [[ -x "$(command -v exa)" ]]; then
+if [[ -x "$(command -v eza)" ]]; then
   iconflag=""
   if exa --icons > /dev/null 2>&1; then
     iconsflag="--icons"
   fi
   commonflags="--git --long --group-directories-first --no-user --no-time --no-filesize"
-  alias l="exa ${iconsflag} ${commonflags}"
-  alias la="exa ${iconsflag} ${commonflags} --all"
+  alias l="eza ${iconsflag} ${commonflags}"
+  alias la="eza ${iconsflag} ${commonflags} --all"
 else
   alias l='ls -lFh'
   alias la='ls -alFh'
