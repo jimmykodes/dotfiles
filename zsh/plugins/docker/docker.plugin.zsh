@@ -2,6 +2,7 @@
 #######################################
 alias dc='docker compose'
 alias dcd='dc down'
+alias dcdv='dcd --volumes'
 alias dce='dc exec'
 
 alias dl='docker logs'

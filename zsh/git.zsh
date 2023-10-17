@@ -170,9 +170,9 @@ ghpr() {
   }
 
   local t
-  local args
   local body_file
   local issue
+  local args='--assignee=@me'
 
   t=$(tmpl)
   if [[ -n $t ]]; then
@@ -183,9 +183,10 @@ ghpr() {
     fi
     sed "s/{{issue}}/$(escape "$issue")/" "$t" > "$body_file"
     eval "$EDITOR \"$body_file\""
-    args="-F=$body_file"
+    args="$args -F=$body_file"
+    echo "Body file saved to $body_file"
   fi
 
-  gh pr create "$args" "$@"
+  eval "gh pr create $args $*"
 }
 
