@@ -7,6 +7,7 @@ node_modules/
 venv/
 .source
 .terraform
+.tf-version
 
 *.swp
 cspell.json

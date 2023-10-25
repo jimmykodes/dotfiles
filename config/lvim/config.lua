@@ -25,7 +25,7 @@ lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Project
 
 -- -- Change theme settings
 vim.o.termguicolors = true
-lvim.colorscheme = "onedarker"
+lvim.colorscheme = "system76"
 
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
