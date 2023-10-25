@@ -89,6 +89,7 @@ code_actions.setup {
 }
 
 lvim.plugins = {
+  { "lunarvim/colorschemes" },
   {
     "ggandor/lightspeed.nvim",
     event = "BufRead",
