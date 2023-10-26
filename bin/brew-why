@@ -1,14 +1,48 @@
 #!/usr/bin/env bash
 
-declare -A formulae
 
-for cask in $(brew list -1 --formula); do
-  formulae["$cask"]=$(brew uses "$cask" --installed)
-done
+why() {
+  brew uses "$1" --installed
+}
 
-echo "graph LR;"
-for key in "${!formulae[@]}"; do
-  for val in ${formulae["$key"]}; do
-    echo -e "\t$val-->$key"
+graph() {
+  declare -A formulae
+
+  for cask in $(brew list -1 --formula); do
+    formulae["$cask"]=$(brew uses "$cask" --installed)
   done
+
+  echo "graph LR;"
+  for key in "${!formulae[@]}"; do
+    for val in ${formulae["$key"]}; do
+      echo -e "\t$val-->$key"
+    done
+  done
+}
+
+usage() {
+  echo "Usage: brew why [-g | -f formula]"
+  echo ""
+  echo "-g          graph all the formulae and their dependency tree"
+  echo "-f formula  show the installed packages that use the provided formula"
+}
+
+while getopts "gf:" o; do
+  case "${o}" in
+    g)
+      graph
+      exit
+      ;;
+    f)
+      why "$OPTARG"
+      exit
+      ;;
+    *)
+      usage
+      exit 1
+      ;;
+  esac
 done
+
+usage
+exit 1
