@@ -103,7 +103,6 @@ lvim.plugins = {
     'stevearc/dressing.nvim',
     opts = {},
   },
-  "terryma/vim-multiple-cursors",
   "towolf/vim-helm",
   "olexsmir/gopher.nvim",
   "leoluz/nvim-dap-go",
