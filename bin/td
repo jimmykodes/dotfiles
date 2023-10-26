@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# vim:ft=zsh
+
+TD_FILE="${HOME}/.todo"
+
+usage() {
+  echo "Usage: $(basename "$0") [-lh]" 1>&2
+}
+
+exit_err() {
+  usage
+  exit 1
+}
+
+list() {
+  cat "${TD_FILE}"
+}
+
+open() {
+  $EDITOR "${TD_FILE}"
+}
+
+while getopts "lh" options; do
+  case "${options}" in
+    l)
+      list
+      exit
+      ;;
+    h)
+      usage
+      exit
+      ;;
+    *)
+      exit_err
+      ;;
+  esac
+done
+
+open
