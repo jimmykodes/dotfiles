@@ -25,13 +25,6 @@ local hotkeys = {
   {
     mod = keys.hyper,
     key = "s",
-    func = function()
-      hs.application.launchOrFocus("slack")
-    end
-  },
-  {
-    mod = keys.meh,
-    key = "s",
     func = hs.spotify.displayCurrentTrack
   },
   -- window sizing
@@ -50,7 +43,7 @@ local hotkeys = {
       f.w = max.w / 2
       f.h = max.h
 
-      win:setFrame(f)
+      win:setFrame(f, 0)
     end
   },
   {
@@ -68,7 +61,7 @@ local hotkeys = {
       f.w = max.w / 2
       f.h = max.h
 
-      win:setFrame(f)
+      win:setFrame(f, 0)
     end
   },
   {
@@ -86,7 +79,7 @@ local hotkeys = {
       f.w = max.w
       f.h = max.h / 2
 
-      win:setFrame(f)
+      win:setFrame(f, 0)
     end
   },
   {
@@ -104,7 +97,7 @@ local hotkeys = {
       f.w = max.w
       f.h = max.h / 2
 
-      win:setFrame(f)
+      win:setFrame(f, 0)
     end
   },
   {
@@ -122,7 +115,7 @@ local hotkeys = {
       f.w = max.w / 2
       f.h = max.h / 2
 
-      win:setFrame(f)
+      win:setFrame(f, 0)
     end
   },
   {
@@ -140,7 +133,7 @@ local hotkeys = {
       f.w = max.w / 2
       f.h = max.h / 2
 
-      win:setFrame(f)
+      win:setFrame(f, 0)
     end
   },
   {
@@ -158,7 +151,7 @@ local hotkeys = {
       f.w = max.w / 2
       f.h = max.h / 2
 
-      win:setFrame(f)
+      win:setFrame(f, 0)
     end
   },
   {
@@ -176,7 +169,7 @@ local hotkeys = {
       f.w = max.w / 2
       f.h = max.h / 2
 
-      win:setFrame(f)
+      win:setFrame(f, 0)
     end
   },
   {
@@ -185,16 +178,16 @@ local hotkeys = {
     key = "p",
     func = function()
       local win = hs.window.focusedWindow()
-      local screen = win:screen()
-      local max = screen:frame()
-      local f = win:frame()
-
-      f.x = max.x
-      f.y = max.y
-      f.w = max.w
-      f.h = max.h
-
-      win:setFrame(f)
+      win:maximize(0)
+    end
+  },
+  {
+    -- snap window left
+    mod = keys.hyper,
+    key = "f",
+    func = function()
+      local win = hs.window.focusedWindow()
+      win:setFullScreen(not win:isFullScreen())
     end
   },
 }
