@@ -20,7 +20,11 @@ open() {
   $EDITOR "${TD_FILE}"
 }
 
-while getopts "lh" options; do
+add() {
+  echo "$@" >> "${TD_FILE}"
+}
+
+while getopts "lha" options; do
   case "${options}" in
     l)
       list
@@ -28,6 +32,12 @@ while getopts "lh" options; do
       ;;
     h)
       usage
+      exit
+      ;;
+    a)
+      shift
+      add "- [ ] $*"
+      list
       exit
       ;;
     *)
