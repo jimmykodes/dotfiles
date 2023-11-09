@@ -19,10 +19,49 @@ lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 lvim.keys.normal_mode["<S-TAB>"] = "<C-o>"
 
 -- -- Use which-key to add extra bindings with the leader-key prefix
-lvim.builtin.which_key.mappings["o"] = { "<cmd>NvimTreeFocus<cr>", "ExplorerFocus" }
+lvim.builtin.which_key.setup.plugins.registers = true
+
+lvim.builtin.which_key.vmappings["w"] = {
+  name = "Wrap",
+  ["'"] = { [["pc'<C-r>p'<Esc>]], "Single Quote" },
+  ['"'] = { [["pc"<C-r>p"<Esc>]], "Double Quote" },
+  ['('] = { [["pc(<C-r>p)<Esc>]], "Parens" },
+  ['{'] = { [["pc{<C-r>p}<Esc>]], "Braces" },
+  ['['] = { [["pc[<C-r>p]<Esc>]], "Brackets" },
+}
+
+lvim.builtin.which_key.vmappings["t"] = {
+  c = { ":'<,'>StrmanCamel<cr>", "Camel Case" },
+  p = { ":'<,'>StrmanPascal<cr>", "Pascal Case" },
+  s = { ":'<,'>StrmanSnake<cr>", "Snake Case" },
+  k = { ":'<,'>StrmanKebab<cr>", "Kebab Case" },
+  S = { ":'<,'>StrmanScreamingSnake<cr>", "Screaming Snake Case" },
+  K = { ":'<,'>StrmanScreamingKebab<cr>", "Screaming Kebab Case" },
+}
+
+lvim.builtin.which_key.mappings["o"] = { "<cmd>NvimTreeFocus<cr>", "Explorer Focus" }
 lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
-
+lvim.builtin.which_key.mappings["t"] = {
+  name = "Transform",
+  ["'"] = { [["pdi"h2xi'<C-r>p'<Esc>]], "Single Quote" },
+  ['"'] = { [["pdi'h2xi"<C-r>p"<Esc>]], "Double Quote" },
+  ["("] = {
+    name = "Paren -> _",
+    ["{"] = { [["pdi(h2xi{<C-r>p}<Esc>]], "Paren -> Brace" },
+    ["["] = { [["pdi(h2xi[<C-r>p]<Esc>]], "Paren -> Bracket" },
+  },
+  ["{"] = {
+    name = "Brace -> _",
+    ["("] = { [["pdi{h2xi(<C-r>p)<Esc>]], "Brace -> Paren" },
+    ["["] = { [["pdi{h2xi[<C-r>p]<Esc>]], "Brace -> Bracket" },
+  },
+  ["["] = {
+    name = "Bracket -> _",
+    ["("] = { [["pdi[h2xi(<C-r>p)<Esc>]], "Bracket -> Paren" },
+    ["{"] = { [["pdi[h2xi{<C-r>p}<Esc>]], "Bracket -> Brace" },
+  },
+}
 -- -- Change theme settings
 vim.o.termguicolors = true
 lvim.colorscheme = "system76"
