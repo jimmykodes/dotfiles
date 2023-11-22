@@ -45,3 +45,7 @@ alias help="man"
 alias H="| head"
 alias G="| grep"
 alias unexport='unset'
+
+if [[ -x "$(command -v k9s)" ]]; then
+  alias ks="k9s"
+fi
