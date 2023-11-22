@@ -15,6 +15,7 @@ alias gb="git branch"
 alias gbd="git branch -d"
 alias gbD="git branch -D"
 alias gbda="git bleach"
+alias grs="git restore --staged"
 
 gcd() {
   local branch
