@@ -1,7 +1,22 @@
+# Load all zsh files in $DOTFILES dir
+if [[ -d $DOTFILES/zsh ]]; then
+  for file in $DOTFILES/zsh/*.zsh; do
+    source $file
+  done
+fi
+
 # Functions
 if [[ -d $DOTFILES/zsh/functions ]]; then
     for func in $DOTFILES/zsh/functions/*; do
       autoload -U $(basename $func)
+    done
+fi
+
+# Load plugins
+if [[ -d $DOTFILES/zsh/plugins ]]; then
+    for plug in $DOTFILES/zsh/plugins/*; do
+      n=$(basename $plug)
+      source $plug/$n.plugin.zsh
     done
 fi
 
