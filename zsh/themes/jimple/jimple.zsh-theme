@@ -147,14 +147,16 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-untracked git-stashed
 
 +vi-git-untracked() {
   [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] || return
-  if (git status --porcelain | grep "?"); then
+  if (git status --porcelain 2> /dev/null | grep -q "?"); then
     hook_com[unstaged]+="%F{blue}$(print $icons[VCS_UNTRACKED_ICON])%f"
   fi
 }
 
 +vi-git-stashed() {
   [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] || return
-  hook_com[branch]+="%F{white}$(print $icons[VCS_STASH_ICON])%f"
+  if [[ -n $(git stash list 2> /dev/null) ]]; then
+    hook_com[unstaged]+=" %F{white}$(print $icons[VCS_STASH_ICON])%f"
+  fi
 }
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
