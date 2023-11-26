@@ -155,7 +155,7 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-untracked git-stashed
 +vi-git-stashed() {
   [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] || return
   if [[ -n $(git stash list 2> /dev/null) ]]; then
-    hook_com[unstaged]+=" %F{white}$(print $icons[VCS_STASH_ICON])%f"
+    hook_com[unstaged]+="%F{white}$(print $icons[VCS_STASH_ICON])%f"
   fi
 }
 
