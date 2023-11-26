@@ -1,4 +1,11 @@
 #!/usr/bin/env zsh
+setopt prompt_subst
+
+autoload -Uz colors
+colors
+
+autoload -Uz vcs_info
+precmd_functions+=vcs_info
 
 NEWLINE=$'\n'
 DELIM=" %{$fg_bold[grey]%}|%{$reset_color%} "
@@ -34,7 +41,7 @@ kshow() {
   if [[ -z $SHOW_KUBE_CTX ]]; then
     export SHOW_KUBE_CTX=1
   else
-    unexport SHOW_KUBE_CTX
+    unset SHOW_KUBE_CTX
   fi
 }
 
@@ -124,7 +131,6 @@ parse_git_dirty() {
   [[ "$git_status" =~ "branch is ahead" ]] && out+="%F{magenta}${icons[VCS_OUTGOING_CHANGES_ICON]}%f"
   [[ "$git_status" =~ "branch is behind" ]] && out+="%F{magenta}${icons[VCS_INCOMING_CHANGES_ICON]}%f"
   [[ -n $stash ]] && out+="%F{white}${icons[VCS_STASH_ICON]}%f"
-  [[ "$git_status" =~ "Changes to be committed:" ]] && out+="%F{cyan}${icons[VCS_STAGED_ICON]}%f"
   [[ "$git_status" =~ "Changes not staged for commit:" ]] && out+="%F{yellow}${icons[VCS_UNSTAGED_ICON]}%f"
   [[ "$git_status" =~ "Untracked files:" ]] && out+="%F{blue}${icons[VCS_UNTRACKED_ICON]}%f"
 
@@ -132,15 +138,20 @@ parse_git_dirty() {
   echo $out
 }
 
-ZSH_THEME_GIT_PROMPT_PREFIX="${DELIM}%{$fg[green]%}%{$icons[VCS_BRANCH_ICON]%} "
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
+zstyle ":vcs_info:*" enable git
+zstyle ":vcs_info:git:*" check-for-changes true
+zstyle ":vcs_info:git:*" formats "${DELIM}%F{green}$(print $icons[VCS_BRANCH_ICON]) %b%f %m%u%c"
+zstyle ":vcs_info:git:*" stagedstr "%F{cyan}$(print $icons[VCS_STAGED_ICON])%f"
+zstyle ":vcs_info:git:*" unstagedstr "%F{yellow}$(print $icons[VCS_UNSTAGED_ICON])%f"
+
+
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
 P=""
 P+='$(_jimple_start)'
 P+='$(_jimple_ssh)'
 P+='$(_jimple_wd)'
-P+='$(git_prompt_info)'
+P+='$vcs_info_msg_0_'
 P+='$(_jimple_venv)'
 P+='$(_jimple_node_version)'
 P+='$(_jimple_k_ctx)'
