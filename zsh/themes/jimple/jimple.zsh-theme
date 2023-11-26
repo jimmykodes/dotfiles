@@ -143,7 +143,19 @@ zstyle ":vcs_info:git:*" check-for-changes true
 zstyle ":vcs_info:git:*" formats "${DELIM}%F{green}$(print $icons[VCS_BRANCH_ICON]) %b%f %m%u%c"
 zstyle ":vcs_info:git:*" stagedstr "%F{cyan}$(print $icons[VCS_STAGED_ICON])%f"
 zstyle ":vcs_info:git:*" unstagedstr "%F{yellow}$(print $icons[VCS_UNSTAGED_ICON])%f"
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked git-stashed
 
++vi-git-untracked() {
+  [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] || return
+  if (git status --porcelain | grep "?"); then
+    hook_com[unstaged]+="%F{blue}$(print $icons[VCS_UNTRACKED_ICON])%f"
+  fi
+}
+
++vi-git-stashed() {
+  [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] || return
+  hook_com[branch]+="%F{white}$(print $icons[VCS_STASH_ICON])%f"
+}
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
