@@ -4,9 +4,6 @@ setopt prompt_subst
 autoload -Uz colors
 colors
 
-autoload -Uz vcs_info
-precmd_functions+=vcs_info
-
 NEWLINE=$'\n'
 DELIM=" %{$fg_bold[grey]%}|%{$reset_color%} "
 
@@ -36,6 +33,10 @@ icons=(
   MULTILINE_FIRST_PROMPT_PREFIX  '\u256D\U2500'       # ╭─
   MULTILINE_LAST_PROMPT_PREFIX   '\u2570\U2500'       # ╰─
 )
+
+icon() {
+  print $icons[$1]
+}
 
 kshow() {
   if [[ -z $SHOW_KUBE_CTX ]]; then
@@ -124,40 +125,38 @@ _jimple_node_version() {
   fi
 }
 
-parse_git_dirty() {
-  local git_status="$(git status 2> /dev/null)"
-  local stash="$(git stash list 2> /dev/null)"
-  out=""
-  [[ "$git_status" =~ "branch is ahead" ]] && out+="%F{magenta}${icons[VCS_OUTGOING_CHANGES_ICON]}%f"
-  [[ "$git_status" =~ "branch is behind" ]] && out+="%F{magenta}${icons[VCS_INCOMING_CHANGES_ICON]}%f"
-  [[ -n $stash ]] && out+="%F{white}${icons[VCS_STASH_ICON]}%f"
-  [[ "$git_status" =~ "Changes not staged for commit:" ]] && out+="%F{yellow}${icons[VCS_UNSTAGED_ICON]}%f"
-  [[ "$git_status" =~ "Untracked files:" ]] && out+="%F{blue}${icons[VCS_UNTRACKED_ICON]}%f"
+declare -A git_strings
+git_strings=(
+  STAGED    "%F{cyan}${icons[VCS_STAGED_ICON]}%f"
+  UNSTAGED  "%F{yellow}${icons[VCS_UNSTAGED_ICON]}%f"
+  UNTRACKED "%F{blue}${icons[VCS_UNTRACKED_ICON]}%f"
+  STASH     "%F{white}${icons[VCS_STASH_ICON]}%f"
+  AHEAD     "%F{magenta}${icons[VCS_OUTGOING_CHANGES_ICON]}%f"
+  BEHIND    "%F{magenta}${icons[VCS_INCOMING_CHANGES_ICON]}%f"
+)
 
-  [[ -n $out ]] && out=" %{$reset_color%}$out%{$reset_color%}"
+_jimple_git() {
+  local git_branch
+  local git_status
+  local num_stash 
+  git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+  # if fetching branch name failed, assume not a git repo
+  [ $? -eq 0 ] || return
+
+  git_status=$(git status --porcelain --show-stash --branch)
+  num_stash=$(git stash list | wc -l)
+
+  out="${DELIM}%F{green}${icons[VCS_BRANCH_ICON]} ${git_branch}%f "
+
+  if [ $num_stash -gt 0 ]; then out+=${git_strings[STASH]}; fi
+  if rg -q "\[ahead [\d]+\]" <<< $git_status; then out+=${git_strings[AHEAD]}; fi
+  if rg -q "\[behind [\d]+\]" <<< $git_status; then out+=${git_strings[BEHIND]}; fi
+  if rg -q "^\?{2}" <<< $git_status; then out+=${git_strings[UNTRACKED]}; fi
+  if rg -q "^[AMD]" <<< $git_status; then out+=${git_strings[STAGED]}; fi
+  if rg -q "^.[AMD]" <<< $git_status; then out+=${git_strings[UNSTAGED]}; fi
+
   echo $out
-}
-
-# TODO: vcs info is the slowest part of this theme (at least in large repos). can we do this lazy?
-zstyle ":vcs_info:*" enable git
-zstyle ":vcs_info:git:*" check-for-changes true
-zstyle ":vcs_info:git:*" formats "${DELIM}%F{green}$(print $icons[VCS_BRANCH_ICON]) %b%f%u%c"
-zstyle ":vcs_info:git:*" stagedstr " %F{cyan}$(print $icons[VCS_STAGED_ICON])%f"
-zstyle ":vcs_info:git:*" unstagedstr " %F{yellow}$(print $icons[VCS_UNSTAGED_ICON])%f"
-zstyle ':vcs_info:git*+set-message:*' hooks git-untracked git-stashed
-
-+vi-git-untracked() {
-  [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] || return
-  if (git status --porcelain 2> /dev/null | grep -q "?"); then
-    hook_com[unstaged]+="%F{blue}$(print $icons[VCS_UNTRACKED_ICON])%f"
-  fi
-}
-
-+vi-git-stashed() {
-  [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] || return
-  if [[ -n $(git stash list 2> /dev/null) ]]; then
-    hook_com[unstaged]+="%F{white}$(print $icons[VCS_STASH_ICON])%f"
-  fi
 }
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
@@ -166,9 +165,9 @@ P=""
 P+='$(_jimple_start)'
 P+='$(_jimple_ssh)'
 P+='$(_jimple_wd)'
-P+='$vcs_info_msg_0_'
+P+='$(_jimple_git)'
 P+='$(_jimple_venv)'
-P+='$(_jimple_node_version)'
+# P+='$(_jimple_node_version)' I rarely use a different node version, and this is slow
 P+='$(_jimple_k_ctx)'
 P+='$(_jimple_arch)'
 P+="${NEWLINE}"
