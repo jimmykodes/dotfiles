@@ -56,4 +56,12 @@ zsyh=/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
+# up/down arrows search based on current line buffer
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search # Up
+bindkey "^[[B" down-line-or-beginning-search # Down
+
 source $HOME/go/src/github.com/jimmykodes/dotfiles/zsh/themes/jimple/init.zsh
