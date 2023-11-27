@@ -35,7 +35,7 @@ for plugin in "${plugins[@]}"; do
       case $src in
         gh)
           if [ ! -d "$HOME/.zlug/$repo" ]; then
-            git clone "git@github.com:$repo" "$HOME/.zlug/$repo"
+            git clone --depth=1 "git@github.com:$repo" "$HOME/.zlug/$repo"
           fi
           source "$HOME/.zlug/$repo/$init"
           ;;
@@ -58,20 +58,11 @@ prepend_path $DOTFILES/bin
 prepend_path /usr/local/opt/openjdk@8/bin
 [[ -n "$(command -v gcloud)" ]] && prepend_path "$(gcloud info --format="value(installation.sdk_root)")/bin"
 prepend_path $HOME/.rd/bin
-
 # raspberry pi
 prepend_path /snap/bin
 prepend_path /usr/local/go/bin
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# TODO: profile this, is it any faster to check zsyh_loaded vs just checking file paths?
-zsyh_loaded=0
-zsyh=/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-[[ ($zsyh_loaded -eq 0) && (-f "/usr/local/share/${zsyh}") ]] && source "/usr/local/share/${zsyh}" && zsyh_loaded=1
-[[ ($zsyh_loaded -eq 0) && (-f "/opt/homebrew/share/${zsyh}") ]] && source "/opt/homebrew/share/${zsyh}" && zsyh_loaded=1
-[[ ($zsyh_loaded -eq 0) && (-f "/usr/share/${zsyh}") ]] && source "/usr/share/${zsyh}" && zsyh_loaded=1
 
 [ -x $(command -v lvim) ] && export EDITOR=lvim || export EDITOR=vim
 
