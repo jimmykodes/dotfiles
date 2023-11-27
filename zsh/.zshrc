@@ -12,15 +12,40 @@ if [[ -d $DOTFILES/zsh/functions ]]; then
     done
 fi
 
-plugins=(docker git go)
+plugins=(
+  docker
+  git
+  go
+  "gh;zsh-users/zsh-syntax-highlighting;zsh-syntax-highlighting.zsh"
+)
+
+OIFS=$IFS
 for plugin in "${plugins[@]}"; do
   if [[ -f $DOTFILES/zsh/plugins/$plugin/init.zsh ]]; then
     source "$DOTFILES/zsh/plugins/$plugin/init.zsh"
   else
-    echo "$plugin not found"
-    # TODO: pull from git (if git) and store in $HOME/.zlug/$plugin
+    parts=($(echo $plugin | tr ";" " "))
+    if [ ${#parts[@]} -eq 1 ]; then
+      echo "$plugin not found"
+    else
+      src=${parts[1]}
+      repo=${parts[2]}
+      init=${parts[3]}
+      if [[ -z "$init" ]]; then init="init.zsh"; fi
+      case $src in
+        gh)
+          if [ ! -d "$HOME/.zlug/$repo" ]; then
+            git clone "git@github.com:$repo" "$HOME/.zlug/$repo"
+          fi
+          source "$HOME/.zlug/$repo/$init"
+          ;;
+        *)
+          echo "invalid source - $src not supported"
+          ;;
+      esac fi
   fi
 done
+IFS=$OIFS
 
 autoload -Uz compinit
 compinit

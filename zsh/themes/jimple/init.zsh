@@ -141,9 +141,9 @@ parse_git_dirty() {
 # TODO: vcs info is the slowest part of this theme (at least in large repos). can we do this lazy?
 zstyle ":vcs_info:*" enable git
 zstyle ":vcs_info:git:*" check-for-changes true
-zstyle ":vcs_info:git:*" formats "${DELIM}%F{green}$(print $icons[VCS_BRANCH_ICON]) %b%f %m%u%c"
-zstyle ":vcs_info:git:*" stagedstr "%F{cyan}$(print $icons[VCS_STAGED_ICON])%f"
-zstyle ":vcs_info:git:*" unstagedstr "%F{yellow}$(print $icons[VCS_UNSTAGED_ICON])%f"
+zstyle ":vcs_info:git:*" formats "${DELIM}%F{green}$(print $icons[VCS_BRANCH_ICON]) %b%f%u%c"
+zstyle ":vcs_info:git:*" stagedstr " %F{cyan}$(print $icons[VCS_STAGED_ICON])%f"
+zstyle ":vcs_info:git:*" unstagedstr " %F{yellow}$(print $icons[VCS_UNSTAGED_ICON])%f"
 zstyle ':vcs_info:git*+set-message:*' hooks git-untracked git-stashed
 
 +vi-git-untracked() {
@@ -166,7 +166,7 @@ P=""
 P+='$(_jimple_start)'
 P+='$(_jimple_ssh)'
 P+='$(_jimple_wd)'
-# P+='$vcs_info_msg_0_'
+P+='$vcs_info_msg_0_'
 P+='$(_jimple_venv)'
 P+='$(_jimple_node_version)'
 P+='$(_jimple_k_ctx)'
