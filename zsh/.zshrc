@@ -20,15 +20,13 @@ plugins=(
   go
   "gh;zsh-users/zsh-syntax-highlighting;zsh-syntax-highlighting.zsh"
   "gh;zsh-users/zsh-autosuggestions;zsh-autosuggestions.zsh"
-  "gh;marlonrichert/zsh-autocomplete;zsh-autocomplete.plugin.zsh"
 )
 
-OIFS=$IFS
 for plugin in "${plugins[@]}"; do
   if [[ -f $DOTFILES/zsh/plugins/$plugin/init.zsh ]]; then
     source "$DOTFILES/zsh/plugins/$plugin/init.zsh"
   else
-    parts=($(echo $plugin | tr ";" " "))
+    IFS=";" read -Ar parts <<< "$plugin"
     if [ ${#parts[@]} -eq 1 ]; then
       echo "$plugin not found"
     else
@@ -49,7 +47,6 @@ for plugin in "${plugins[@]}"; do
       esac fi
   fi
 done
-IFS=$OIFS
 
 autoload -Uz compinit
 compinit
@@ -70,11 +67,12 @@ prepend_path /usr/local/go/bin
 
 [ -x $(command -v lvim) ] && export EDITOR=lvim || export EDITOR=vim
 
-# TODO: figure out how to lazy load nvm, cause this is the slowest part of
-# zsh load time
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+export NVM_DIR="$HOME/.nvm"
+# setting a default node bin
+prepend_path "$HOME/.nvm/versions/node/v16.17.0/bin"
+# passing --no-use speeds up load time a lot, by not having to lookup a default version
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" --no-use
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # up/down arrows search based on current line buffer
 autoload -U up-line-or-beginning-search
