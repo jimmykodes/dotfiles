@@ -138,6 +138,7 @@ parse_git_dirty() {
   echo $out
 }
 
+# TODO: vcs info is the slowest part of this theme (at least in large repos). can we do this lazy?
 zstyle ":vcs_info:*" enable git
 zstyle ":vcs_info:git:*" check-for-changes true
 zstyle ":vcs_info:git:*" formats "${DELIM}%F{green}$(print $icons[VCS_BRANCH_ICON]) %b%f %m%u%c"
@@ -165,7 +166,7 @@ P=""
 P+='$(_jimple_start)'
 P+='$(_jimple_ssh)'
 P+='$(_jimple_wd)'
-P+='$vcs_info_msg_0_'
+# P+='$vcs_info_msg_0_'
 P+='$(_jimple_venv)'
 P+='$(_jimple_node_version)'
 P+='$(_jimple_k_ctx)'
