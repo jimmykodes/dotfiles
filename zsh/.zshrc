@@ -1,3 +1,5 @@
+unsetopt beep
+
 # Load all zsh files in $DOTFILES dir
 if [[ -d $DOTFILES/zsh ]]; then
   for file in $DOTFILES/zsh/*.zsh; do
@@ -17,6 +19,8 @@ plugins=(
   git
   go
   "gh;zsh-users/zsh-syntax-highlighting;zsh-syntax-highlighting.zsh"
+  "gh;zsh-users/zsh-autosuggestions;zsh-autosuggestions.zsh"
+  "gh;marlonrichert/zsh-autocomplete;zsh-autocomplete.plugin.zsh"
 )
 
 OIFS=$IFS
