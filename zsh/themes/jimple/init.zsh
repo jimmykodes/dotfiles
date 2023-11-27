@@ -147,7 +147,7 @@ _jimple_git() {
   git_status=$(git status --porcelain --show-stash --branch)
   num_stash=$(git stash list | wc -l)
 
-  out="${DELIM}%F{green}${icons[VCS_BRANCH_ICON]} ${git_branch}%f "
+  out=""
 
   if [ $num_stash -gt 0 ]; then out+=${git_strings[STASH]}; fi
   if rg -q "\[ahead [\d]+\]" <<< $git_status; then out+=${git_strings[AHEAD]}; fi
@@ -156,7 +156,9 @@ _jimple_git() {
   if rg -q "^[AMD]" <<< $git_status; then out+=${git_strings[STAGED]}; fi
   if rg -q "^.[AMD]" <<< $git_status; then out+=${git_strings[UNSTAGED]}; fi
 
-  echo $out
+  [[ $out == "" ]] || out=" ${out}"
+
+  echo "${DELIM}%F{green}${icons[VCS_BRANCH_ICON]} ${git_branch}%f${out}"
 }
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
