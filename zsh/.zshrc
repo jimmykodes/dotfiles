@@ -18,6 +18,7 @@ plugins=(
   docker
   git
   go
+  colorize
   "gh;zsh-users/zsh-syntax-highlighting;zsh-syntax-highlighting.zsh"
   "gh;zsh-users/zsh-autosuggestions;zsh-autosuggestions.zsh"
 )
