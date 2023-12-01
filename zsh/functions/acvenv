@@ -1,21 +1,2 @@
 #!/usr/bin/env bash
 # vim:ft=zsh
-if [[ -e ${1:-venv}/bin/activate ]]; then
-  # if a venv folder location is passed, look for it, and try to activate it
-  # if one is not passed, use `./venv` as the folder name
-  . "${1:-venv}/bin/activate"
-elif [[ -e $(project-root)/${1:-venv}/bin/activate ]]; then
-  # check the project-root of the cwd for a venv and activate it if found
-  . "$(project-root)/${1:-venv}/bin/activate"
-elif [[ -e $venv/${1:-$(basename "$PWD")}/bin/activate ]]; then
-  # if a venv name is passed, look for it in the $venv global location
-  # if one is not passed, use the basename of the cwd as the venv name
-  . "$venv/${1:-$(basename "$PWD")}/bin/activate"
-elif [[ -e .venv && -e $venv/$(cat .venv)/bin/activate ]]; then
-  # if a .venv file exists, use its value as an override for the name of the venv
-  # to activate from the $venv global location
-  . "$venv/$(cat .venv)/bin/activate"
-else
-  echo "could not determine venv to activate"
-  return 1
-fi

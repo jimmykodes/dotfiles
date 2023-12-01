@@ -19,6 +19,7 @@ plugins=(
   git
   go
   colorize
+  py_venv
   "gh;zsh-users/zsh-syntax-highlighting;zsh-syntax-highlighting.zsh"
   "gh;zsh-users/zsh-autosuggestions;zsh-autosuggestions.zsh"
 )
