@@ -45,6 +45,6 @@ config.keys = {
 }
 
 config.color_scheme = 'System76'
-config.font = wezterm.font 'JetBrainsMonoNL Nerd Font Mono'
-config.font_size = 15
+config.font = wezterm.font 'Monaspace Neon'
+config.font_size = 16
 return config
