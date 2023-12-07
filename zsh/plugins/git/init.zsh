@@ -17,6 +17,10 @@ alias gbD="git branch -D"
 alias gbda="git bleach"
 alias grs="git restore --staged"
 
+git-current-branch(){
+  git rev-parse --abbrev-ref HEAD
+}
+
 gcd() {
   local branch
   local current
