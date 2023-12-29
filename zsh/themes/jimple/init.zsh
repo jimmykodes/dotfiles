@@ -1,4 +1,8 @@
 #!/usr/bin/env zsh
+setopt prompt_subst
+
+autoload -Uz colors
+colors
 
 NEWLINE=$'\n'
 DELIM=" %{$fg_bold[grey]%}|%{$reset_color%} "
@@ -30,11 +34,15 @@ icons=(
   MULTILINE_LAST_PROMPT_PREFIX   '\u2570\U2500'       # ╰─
 )
 
+icon() {
+  print $icons[$1]
+}
+
 kshow() {
   if [[ -z $SHOW_KUBE_CTX ]]; then
     export SHOW_KUBE_CTX=1
   else
-    unexport SHOW_KUBE_CTX
+    unset SHOW_KUBE_CTX
   fi
 }
 
@@ -117,32 +125,51 @@ _jimple_node_version() {
   fi
 }
 
-parse_git_dirty() {
-  local git_status="$(git status 2> /dev/null)"
-  local stash="$(git stash list 2> /dev/null)"
-  out=""
-  [[ "$git_status" =~ "branch is ahead" ]] && out+="%F{magenta}${icons[VCS_OUTGOING_CHANGES_ICON]}%f"
-  [[ "$git_status" =~ "branch is behind" ]] && out+="%F{magenta}${icons[VCS_INCOMING_CHANGES_ICON]}%f"
-  [[ -n $stash ]] && out+="%F{white}${icons[VCS_STASH_ICON]}%f"
-  [[ "$git_status" =~ "Changes to be committed:" ]] && out+="%F{cyan}${icons[VCS_STAGED_ICON]}%f"
-  [[ "$git_status" =~ "Changes not staged for commit:" ]] && out+="%F{yellow}${icons[VCS_UNSTAGED_ICON]}%f"
-  [[ "$git_status" =~ "Untracked files:" ]] && out+="%F{blue}${icons[VCS_UNTRACKED_ICON]}%f"
+declare -A git_strings
+git_strings=(
+  STAGED    "%F{cyan}${icons[VCS_STAGED_ICON]}%f"
+  UNSTAGED  "%F{yellow}${icons[VCS_UNSTAGED_ICON]}%f"
+  UNTRACKED "%F{blue}${icons[VCS_UNTRACKED_ICON]}%f"
+  STASH     "%F{white}${icons[VCS_STASH_ICON]}%f"
+  AHEAD     "%F{magenta}${icons[VCS_OUTGOING_CHANGES_ICON]}%f"
+  BEHIND    "%F{magenta}${icons[VCS_INCOMING_CHANGES_ICON]}%f"
+)
 
-  [[ -n $out ]] && out=" %{$reset_color%}$out%{$reset_color%}"
-  echo $out
+_jimple_git() {
+  local git_branch
+  local git_status
+  local num_stash 
+  git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+  # if fetching branch name failed, assume not a git repo
+  [ $? -eq 0 ] || return
+
+  git_status=$(git status --porcelain --show-stash --branch)
+  num_stash=$(git stash list | wc -l)
+
+  out=""
+
+  if [ $num_stash -gt 0 ]; then out+=${git_strings[STASH]}; fi
+  if rg -q "\[ahead [\d]+\]" <<< $git_status; then out+=${git_strings[AHEAD]}; fi
+  if rg -q "\[behind [\d]+\]" <<< $git_status; then out+=${git_strings[BEHIND]}; fi
+  if rg -q "^\?{2}" <<< $git_status; then out+=${git_strings[UNTRACKED]}; fi
+  if rg -q "^[AMD]" <<< $git_status; then out+=${git_strings[STAGED]}; fi
+  if rg -q "^.[AMD]" <<< $git_status; then out+=${git_strings[UNSTAGED]}; fi
+
+  [[ $out == "" ]] || out=" ${out}"
+
+  echo "${DELIM}%F{green}${icons[VCS_BRANCH_ICON]} ${git_branch}%f${out}"
 }
 
-ZSH_THEME_GIT_PROMPT_PREFIX="${DELIM}%{$fg[green]%}%{$icons[VCS_BRANCH_ICON]%} "
-ZSH_THEME_GIT_PROMPT_SUFFIX=""
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
 P=""
 P+='$(_jimple_start)'
 P+='$(_jimple_ssh)'
 P+='$(_jimple_wd)'
-P+='$(git_prompt_info)'
+P+='$(_jimple_git)'
 P+='$(_jimple_venv)'
-P+='$(_jimple_node_version)'
+# P+='$(_jimple_node_version)' I rarely use a different node version, and this is slow
 P+='$(_jimple_k_ctx)'
 P+='$(_jimple_arch)'
 P+="${NEWLINE}"
