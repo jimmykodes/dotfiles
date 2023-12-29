@@ -34,7 +34,7 @@ ls_venv() {
 }
 
 acvenv() {
-  if [[ -f .venv && -e $venv/$(cat .venv)/bin/activate ]]; then
+  if [[ -f .venv && -e $venv/$(cat .venv)/bin/activate && -n "$1" ]]; then
     # if a .venv file exists, use its value as an override for the name of the venv
     # to activate from the $venv global location
     . "$venv/$(cat .venv)/bin/activate"
