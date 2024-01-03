@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
@@ -84,6 +84,11 @@ lunarVim() {
   fi
 }
 
+k9sConf() {
+  yq ".k9s.screenDumpDir = \"$HOME/.k9s/screendumps/\"" config/k9s/config.template.yaml > config/k9s/config.yaml
+  success "Created k9s config"
+}
+
 create_link() {
   local src=$1
   local dst=$2
@@ -118,19 +123,30 @@ create_link() {
 }
 
 symlinks() {
+  header "Creating config files"
+  k9sConf
   header "Checking symlinks"
-  files=("zsh/.p10k.zsh" "zsh/.zprofile" "zsh/.profile" "zsh/.zshenv" "zsh/.zshrc" "config/wezterm/.wezterm.lua" "config/git/.global_gitignore")
+  local files=(
+    "zsh/.zprofile"
+    "zsh/.zshenv"
+    "zsh/.zshrc"
+    "config/wezterm/.wezterm.lua"
+    "config/git/.global_gitignore"
+  )
   for f in "${files[@]}"
   do
     create_link "$f" "$(basename "$f")"
   done
-
-  # handle more complicated symlinks
-  mkdir -p "$HOME/.config/wezterm"
-  create_link "config/wezterm/colors" ".config/wezterm/colors"
-
-  mkdir -p "$HOME/.config/lvim"
-  create_link "config/lvim/config.lua" ".config/lvim/config.lua"
+  local config_dir=(
+    "wezterm/colors"
+    "lvim/config.lua"
+    "k9s"
+  )
+  for d in "${config_dir[@]}"
+  do
+    mkdir -p "$HOME/.config/$(dirname "$d")"
+    create_link "config/$d" ".config/$d"
+  done
 }
 
 git() {
@@ -139,11 +155,33 @@ git() {
   warn "Unfortunately, git setup is still manual. This is a placeholder"
 }
 
-main() {
+all() {
   homebrew
   lunarVim
   symlinks
   git
 }
 
-main
+main() {
+  case $1 in
+    brew | homebrew )
+      homebrew
+      ;;
+    lvim | vim )
+      lunarVim
+      ;;
+    sym | symlinks | links )
+      symlinks
+      ;;
+    git )
+      git
+      ;;
+    help | h )
+      usage
+      ;;
+    * )
+      all
+  esac
+}
+
+main "$@"
