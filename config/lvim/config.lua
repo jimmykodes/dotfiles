@@ -90,6 +90,7 @@ lvim.builtin.treesitter.ensure_installed = {
   "go",
   "gomod",
   "hcl",
+  "joker",
 }
 
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "azure_pipelines_language_server" })
@@ -105,6 +106,22 @@ require("lspconfig")["arduino_language_server"].setup({
   cmd = { "arduino-language-server", "-cli-config", "$HOME/Library/Arduino15/arduino-cli.yaml" }
 })
 
+
+-- configure Joker language support
+vim.filetype.add({
+  extension = {
+    jk = "joker"
+  }
+})
+
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.joker = {
+  install_info = {
+    url = "https://github.com/jimmykodes/tree-sitter-joker",
+    files = { "src/parser.c" },
+    branch = "main",
+  }
+}
 
 -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
