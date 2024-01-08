@@ -5,3 +5,4 @@ ignore.zsh
 scripts/private
 Brewfile.lock.json
 lazy-lock.json
+config/k9s/config.yaml
