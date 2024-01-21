@@ -48,6 +48,12 @@ for plugin in "${plugins[@]}"; do
           ;;
       esac fi
   fi
+  if [[ -d $DOTFILES/zsh/plugins/$plugin/completions ]]; then
+    fpath=(
+      "$DOTFILES/zsh/plugins/$plugin/completions"
+      $fpath
+    )
+  fi
 done
 
 autoload -Uz compinit
