@@ -55,6 +55,10 @@ alias H="| head"
 alias G="| grep"
 alias unexport='unset'
 
+if [[ -x "$(command -v kubectl)" ]]; then
+  alias k="kubectl"
+fi
+
 if [[ -x "$(command -v k9s)" ]]; then
   alias ks="k9s"
 fi

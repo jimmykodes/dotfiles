@@ -1,12 +1,5 @@
 unsetopt beep
 
-# Load all zsh files in $DOTFILES dir
-if [[ -d $DOTFILES/zsh ]]; then
-  for file in $DOTFILES/zsh/*.zsh; do
-    source $file
-  done
-fi
-
 # Functions
 if [[ -d $DOTFILES/zsh/functions ]]; then
     for func in $DOTFILES/zsh/functions/*; do
@@ -73,15 +66,14 @@ prepend_path /usr/local/go/bin
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-[ -x $(command -v lvim) ] && export EDITOR=lvim || export EDITOR=vim
 
-export NVM_DIR="$HOME/.nvm"
-# setting a default node bin
-lp=($(find "$HOME/.nvm/versions/node" -regex ".*[0-9]/bin/npm" | sort))
-prepend_path "$(dirname "${lp[-1]}")"
-# passing --no-use speeds up load time a lot, by not having to lookup a default version
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" --no-use
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Load all zsh files in $DOTFILES dir
+if [[ -d $DOTFILES/zsh ]]; then
+  for file in $DOTFILES/zsh/*.zsh; do
+    source $file
+  done
+fi
 
 # up/down arrows search based on current line buffer
 autoload -U up-line-or-beginning-search
