@@ -1,4 +1,4 @@
-if [[ -d "$HOME/.nvim" ]]; then
+if [[ -d "$HOME/.nvm" ]]; then
   export NVM_DIR="$HOME/.nvm"
   # setting a default node bin
   lp=($(find "$HOME/.nvm/versions/node" -regex ".*[0-9]/bin/npm" | sort))
