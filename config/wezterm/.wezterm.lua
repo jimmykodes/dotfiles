@@ -44,7 +44,8 @@ config.keys = {
   },
 }
 
-config.color_scheme = 'System76'
+-- config.color_scheme = 'System76'
+config.color_scheme = 'Tyranitar'
 config.font = wezterm.font 'Monaspace Neon'
 config.font_size = 16
 return config

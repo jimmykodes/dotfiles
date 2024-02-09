@@ -64,7 +64,7 @@ lvim.builtin.which_key.mappings["t"] = {
 }
 -- -- Change theme settings
 vim.o.termguicolors = true
-lvim.colorscheme = "system76"
+lvim.colorscheme = "tyranitar"
 
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
@@ -163,6 +163,7 @@ lvim.plugins = {
   "olexsmir/gopher.nvim",
   "leoluz/nvim-dap-go",
   "jimmykodes/strman.nvim",
+  "jimmykodes/tyranitar.nvim",
   "jimmykodes/gink.nvim",
 }
 
