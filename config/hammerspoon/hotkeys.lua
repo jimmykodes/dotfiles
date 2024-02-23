@@ -4,23 +4,7 @@ local hotkeys = {
   {
     mod = keys.hyper,
     key = "r",
-    func = function()
-      hs.reload()
-    end
-  },
-  {
-    mod = keys.hyper,
-    key = "t",
-    func = function()
-      hs.application.launchOrFocus("wezTerm")
-    end
-  },
-  {
-    mod = keys.hyper,
-    key = "a",
-    func = function()
-      hs.application.launchOrFocus("arc")
-    end
+    func = hs.reload
   },
   {
     mod = keys.hyper,
@@ -173,16 +157,31 @@ local hotkeys = {
     end
   },
   {
-    -- snap window left
+    -- snap window middle
     mod = keys.hyper,
-    key = "p",
+    key = "m",
     func = function()
       local win = hs.window.focusedWindow()
-      win:maximize(0)
+      local screen = win:screen()
+      local max = screen:frame()
+      local f = win:frame()
+
+      f.x = max.x + (max.w / 4)
+      f.y = max.y
+      f.w = (max.w / 2)
+      f.h = max.h
+
+      win:setFrame(f, 0)
     end
   },
   {
-    -- snap window left
+    -- maximize window
+    mod = keys.hyper,
+    key = "p",
+    func = function() hs.window.focusedWindow():maximize(0) end
+  },
+  {
+    -- toggle window full screen
     mod = keys.hyper,
     key = "f",
     func = function()

@@ -64,7 +64,8 @@ lvim.builtin.which_key.mappings["t"] = {
 }
 -- -- Change theme settings
 vim.o.termguicolors = true
-lvim.colorscheme = "tyranitar"
+-- lvim.colorscheme = "tyranitar"
+lvim.colorscheme = "system76"
 
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
@@ -159,12 +160,14 @@ lvim.plugins = {
     'stevearc/dressing.nvim',
     opts = {},
   },
+  {
+    'sourcegraph/sg.nvim',
+  },
   "towolf/vim-helm",
   "olexsmir/gopher.nvim",
   "leoluz/nvim-dap-go",
+
   "jimmykodes/strman.nvim",
-  "jimmykodes/tyranitar.nvim",
-  "jimmykodes/gink.nvim",
 }
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -174,6 +177,18 @@ vim.api.nvim_create_autocmd("FileType", {
     require("nvim-treesitter.highlight").attach(0, "bash")
   end,
 })
+
+-- Cody
+local function setupCody()
+  local ok, cody = pcall(require, "sg")
+  if not ok then
+    return
+  end
+  cody.setup()
+end
+
+setupCody()
+
 
 -- Dap
 local function setupDapGo()
