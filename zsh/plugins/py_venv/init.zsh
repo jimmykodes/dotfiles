@@ -1,6 +1,6 @@
 _VENV_DIR="$HOME/.venv"
 
-ls_venv() {
+lsvenv() {
   local venv=${VENV_DIR:-$_VENV_DIR}
   if [ -z "$venv" ]; then 
     echo "no venv defined"
@@ -33,26 +33,73 @@ ls_venv() {
   done
 }
 
-acvenv() {
-  if [[ -f .venv && -e $venv/$(cat .venv)/bin/activate && -n "$1" ]]; then
-    # if a .venv file exists, use its value as an override for the name of the venv
-    # to activate from the $venv global location
-    . "$venv/$(cat .venv)/bin/activate"
-  elif [[ -e ${1:-venv}/bin/activate ]]; then
-    # if a venv folder location is passed, look for it, and try to activate it
-    # if one is not passed, use `./venv` as the folder name
-    . "${1:-venv}/bin/activate"
-  elif [[ -e $(project-root)/${1:-venv}/bin/activate ]]; then
-    # check the project-root of the cwd for a venv and activate it if found
-    . "$(project-root)/${1:-venv}/bin/activate"
-  elif [[ -e $venv/${1:-$(basename "$PWD")}/bin/activate ]]; then
-    # if a venv name is passed, look for it in the $venv global location
-    # if one is not passed, use the basename of the cwd as the venv name
-    . "$venv/${1:-$(basename "$PWD")}/bin/activate"
+get_venv() {
+  if [[ -n "$1" ]]; then
+    if [[ "$1" == "venv" ]]; then
+      echo "venv/bin/activate"
+      return 0
+    elif [[ -e "${_VENV_DIR}/${1}/bin/activate" ]]; then
+      # the name of the venv to activate was passed. This will always be a global venv
+      echo "${_VENV_DIR}/${1}/bin/activate"
+      return 0
+    else
+      echo "venv '${1}' does not exist"
+      return 1
+    fi
+  elif [[ -f .venv ]]; then
+    # there is a .venv file in cwd
+    local venv
+    venv=$(lua <<EOF
+local venv = dofile(".venv")
+if type(venv) == "string" then
+  print(venv)
+elseif type(venv) == "table" then
+  print(venv.get_venv({
+    current = "$(git current-branch)", 
+    main = "$(git main-branch)", 
+    dev = "$(git dev-branch)"
+  }))
+else
+  os.exit(1)
+end
+EOF
+)
+    if [ $? -ne 0 ]; then
+      echo "invalid .venv file"
+      return 1
+    fi
+
+    if [[ -e "${_VENV_DIR}/${venv}/bin/activate" ]]; then
+      echo "${_VENV_DIR}/${venv}/bin/activate"
+      return 0
+    else
+      echo "venv ${venv} does not exist"
+      return 1
+    fi
+
+
+  elif [[ -e venv/bin/activate ]]; then
+    # there is a venv/ dir in cwd
+    echo venv/bin/activate
+  elif [[ -e "$(project-root)/venv/bin/activate" ]]; then
+    # there is a venv dir in the root of the project
+    echo "$(project-root)/venv/bin/activate"
+  elif [[ -e "${_VENV_DIR}/$(basename "$PWD")/bin/activate" ]]; then
+    # there is a global venv with the name of the current enclosing folder
+    echo "${_VENV_DIR}/$(basename "$PWD")/bin/activate"
+  elif [[ -e "${_VENV_DIR}/$(basename "$(project-root)")/bin/activate" ]]; then
+    # there is a global venv with the name of the current project root
+    echo "${_VENV_DIR}/$(basename "$(project-root)")/bin/activate"
   else
-    echo "could not determine venv to activate"
+    echo "could not determine which venv to activate"
     return 1
   fi
+}
+
+acvenv() {
+  local venv
+  venv=$(get_venv "$@")
+  . "$venv"
   if [[ -f .env ]]; then
     envup
   fi
@@ -97,12 +144,23 @@ mkvenv() {
 }
 
 rmvenv() {
-  if [[ -e "${1:-venv}/bin/activate" ]]; then
-    rm -rf "${1:-venv}"
-  elif [[ -e $venv/${1:-$(basename "$PWD")}/bin/activate ]]; then
-    rm -rf "$venv/${1:-$(basename "$PWD")}"
-  else
+  local venv
+  venv=$(get_venv "$@")
+
+  if [ $? -ne 0 ]; then
     echo "could not determine venv to remove"
     return 1
+  fi
+
+  local dir
+  dir="$(dirname "$(dirname "$venv")")"
+
+  printf "Delete venv '%s'? (y/N) " "$dir"
+  read -r choice
+  if [[ $choice =~ ^[Yy]$ ]]; then
+    echo "Deleting"
+    rm -rf "$dir"
+  else
+    echo "Skipping deletion"
   fi
 }
