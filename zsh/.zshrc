@@ -58,15 +58,23 @@ prepend_path $HOME/go/bin
 prepend_path $HOME/.local/bin
 prepend_path $DOTFILES/bin
 prepend_path /usr/local/opt/openjdk@8/bin
-[[ -n "$(command -v gcloud)" ]] && prepend_path "$(gcloud info --format="value(installation.sdk_root)")/bin"
 prepend_path $HOME/.rd/bin
+
 # raspberry pi
 prepend_path /snap/bin
 prepend_path /usr/local/go/bin
 
+# gcloud
+if [[ -n "$(command -v gcloud)" ]]; then
+  if [[ -n "$(command -v python3.8)" ]]; then
+    export CLOUDSDK_PYTHON="$(which python3.8)"
+  elif [[ -n "$(command -v python3.9)" ]]; then
+    export CLOUDSDK_PYTHON="$(which python3.9)"
+  fi
+  prepend_path "$(gcloud info --format="value(installation.sdk_root)")/bin"
+fi
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-
 
 # Load all zsh files in $DOTFILES dir
 if [[ -d $DOTFILES/zsh ]]; then
