@@ -42,7 +42,7 @@ lvim.builtin.which_key.vmappings["t"] = {
 lvim.builtin.which_key.mappings["o"] = { "<cmd>NvimTreeFocus<cr>", "Explorer Focus" }
 lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
-lvim.builtin.which_key.mappings["t"] = {
+lvim.builtin.which_key.mappings["T"] = {
   name = "Transform",
   ["'"] = { [["pdi"h2xi'<C-r>p'<Esc>]], "Single Quote" },
   ['"'] = { [["pdi'h2xi"<C-r>p"<Esc>]], "Double Quote" },
@@ -60,6 +60,31 @@ lvim.builtin.which_key.mappings["t"] = {
     name = "Bracket -> _",
     ["("] = { [["pdi[h2xi(<C-r>p)<Esc>]], "Bracket -> Paren" },
     ["{"] = { [["pdi[h2xi{<C-r>p}<Esc>]], "Bracket -> Brace" },
+  },
+}
+
+lvim.builtin.which_key.mappings["t"] = {
+  name = "Terminal",
+  j = { ":ToggleTerm 1<cr>", "Terminal 1" },
+  k = { ":ToggleTerm 2<cr>", "Terminal 2" },
+  l = { ":ToggleTerm 3<cr>", "Terminal 3" },
+  v = {
+    name = "Vertical",
+    j = { ":ToggleTerm 1 direction=vertical<cr>", "Terminal 1" },
+    k = { ":ToggleTerm 2 direction=vertical<cr>", "Terminal 2" },
+    l = { ":ToggleTerm 3 direction=vertical<cr>", "Terminal 3" },
+  },
+  h = {
+    name = "Horizontal",
+    j = { ":ToggleTerm 1 direction=horizontal<cr>", "Terminal 1" },
+    k = { ":ToggleTerm 2 direction=horizontal<cr>", "Terminal 2" },
+    l = { ":ToggleTerm 3 direction=horizontal<cr>", "Terminal 3" },
+  },
+  f = {
+    name = "Float",
+    j = { ":ToggleTerm 1 direction=float<cr>", "Terminal 1" },
+    k = { ":ToggleTerm 2 direction=float<cr>", "Terminal 2" },
+    l = { ":ToggleTerm 3 direction=float<cr>", "Terminal 3" },
   },
 }
 -- -- Change theme settings
