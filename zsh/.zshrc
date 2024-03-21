@@ -71,7 +71,8 @@ if [[ -n "$(command -v gcloud)" ]]; then
   elif [[ -n "$(command -v python3.9)" ]]; then
     export CLOUDSDK_PYTHON="$(which python3.9)"
   fi
-  prepend_path "$(gcloud info --format="value(installation.sdk_root)")/bin"
+  source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+  source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

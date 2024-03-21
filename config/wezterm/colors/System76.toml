@@ -1,6 +1,7 @@
 [colors]
 ansi = [
-   '#3e3e3e', # dark_gray
+   # '#3e3e3e', # dark_gray
+   '#222222', # dark_gray
    '#f15d22', # red
    '#6eaa76', # green
    '#d19a66', # yellow_orange
