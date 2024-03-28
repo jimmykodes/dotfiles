@@ -1,7 +1,6 @@
 local M = {
-  "neovim/nvim-lspconfig",
-  init = function()
-  end
+	"neovim/nvim-lspconfig",
+	init = function() end
 }
 
 
