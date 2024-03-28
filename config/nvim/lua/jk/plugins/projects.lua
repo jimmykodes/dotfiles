@@ -1,9 +1,6 @@
 local M = {
 	"ahmedkhalf/project.nvim",
+	opts = {},
 }
-
-function M.config()
-	require("project_nvim").setup {}
-end
 
 return M

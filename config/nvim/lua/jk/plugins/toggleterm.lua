@@ -1,10 +1,7 @@
 local M = {
   "akinsho/toggleterm.nvim",
   lazy = false,
-}
-
-M.config = function()
-  require("toggleterm").setup({
+	opts = {
     open_mapping = [[<C-\>]],
     hide_numbers = true,    -- hide the number column in toggleterm buffers
     shade_terminals = false,
@@ -16,8 +13,8 @@ M.config = function()
     float_opts = {
       border = "curved",
     },
-  })
-end
+  }
+}
 
 M.k9s = function()
   local Terminal = require("toggleterm.terminal").Terminal

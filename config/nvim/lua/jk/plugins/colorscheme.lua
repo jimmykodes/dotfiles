@@ -1,12 +1,12 @@
 local M = {
-  "lunarvim/onedarker.nvim",
-  branch = "freeze",
-  priority = 1000,
-  lazy = false,
+	"lunarvim/colorschemes",
+	priority = 1000,
+	lazy = false,
 }
 
 M.config = function()
-  require("onedarker").setup()
+	vim.g.colors_name = "system76"
+	vim.cmd("colorscheme system76")
 end
 
 return M

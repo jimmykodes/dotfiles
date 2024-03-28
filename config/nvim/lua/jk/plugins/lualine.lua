@@ -1,10 +1,8 @@
 local M = {
   "nvim-lualine/lualine.nvim",
   lazy=false,
+	opts={},
 }
 
-function M.config()
-  require("lualine").setup()
-end
 
 return M
