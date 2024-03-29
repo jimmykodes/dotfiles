@@ -3,8 +3,8 @@ local M = {
 		-- LSP
 		{
 			"williamboman/mason.nvim",
-			opts={},
-			lazy=false,
+			opts = {},
+			lazy = false,
 		},
 		{
 			"williamboman/mason-lspconfig.nvim",
@@ -148,6 +148,13 @@ local M = {
 		{
 			"nvim-lua/plenary.nvim",
 			cmd = { "PlenaryBustedFile", "PlenaryBustedDirectory" },
+		},
+		{
+			"code-biscuits/nvim-biscuits",
+			event = "BufRead",
+			opts = {
+				cursor_line_only = true,
+			},
 		},
 
 		-- Telescope
