@@ -1,6 +1,4 @@
 local M = {
-	"lewis6991/gitsigns.nvim",
-	lazy = false,
 	opts = {
 		signs                        = {
 			add          = { text = '│' },
@@ -45,5 +43,9 @@ local M = {
 		},
 	}
 }
+
+function M.setup()
+	require("gitsigns").setup(M.opts)
+end
 
 return M

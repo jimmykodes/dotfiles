@@ -1,8 +1,6 @@
 local icons = require "jk.icons"
 
 local M = {
-	"kyazdani42/nvim-tree.lua",
-	event = "VimEnter",
 	opts = {
 		auto_reload_on_write = false,
 		disable_netrw = false,
@@ -216,5 +214,9 @@ local M = {
 		},
 	}
 }
+
+function M.setup()
+	require("nvim-tree").setup(M.opts)
+end
 
 return M
