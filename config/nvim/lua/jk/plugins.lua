@@ -3,9 +3,8 @@ local M = {
 		-- LSP
 		{
 			"williamboman/mason.nvim",
-			init = function()
-				require("mason").setup()
-			end,
+			opts={},
+			lazy=false,
 		},
 		{
 			"williamboman/mason-lspconfig.nvim",
@@ -20,7 +19,7 @@ local M = {
 		{
 			"hrsh7th/nvim-cmp",
 			config = function()
-				require("jk.plugins.compare").setup()
+				require("jk.plugins.completion").setup()
 			end,
 			event = { "InsertEnter", "CmdlineEnter" },
 			dependencies = {
@@ -29,12 +28,14 @@ local M = {
 				"cmp-path",
 				"cmp-cmdline",
 				"cmp_luasnip",
+				"cmp-calc",
 			},
 		},
 		{ "hrsh7th/cmp-nvim-lsp" },
 		{ "hrsh7th/cmp-buffer" },
 		{ "hrsh7th/cmp-path" },
 		{ "hrsh7th/cmp-cmdline" },
+		{ "hrsh7th/cmp-calc" },
 		{ "saadparwaiz1/cmp_luasnip" },
 		{
 			"L3MON4D3/LuaSnip",
@@ -67,6 +68,10 @@ local M = {
 			config = function()
 				require("jk.plugins.nvim-tree").setup()
 			end
+		},
+		{
+			"sourcegraph/sg.nvim",
+			opts = {},
 		},
 		-- UI
 		{
@@ -195,6 +200,14 @@ local M = {
 					indent = { enable = true },
 				})
 			end
+		},
+		-- Go
+		{
+			"olexsmir/gopher.nvim",
+		},
+		{
+			"leoluz/nvim-dap-go",
+			opts = {},
 		},
 	}
 }
