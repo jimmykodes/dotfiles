@@ -23,7 +23,14 @@ local M = {
 		},
 		{
 			"akinsho/toggleterm.nvim",
-			lazy = false,
+			cmd = {
+				"ToggleTerm",
+				"TermExec",
+				"ToggleTermToggleAll",
+				"ToggleTermSendCurrentLine",
+				"ToggleTermSendVisualLines",
+				"ToggleTermSendVisualSelection",
+			},
 			config = function()
 				require("jk.plugins.toggleterm").setup()
 			end
@@ -55,13 +62,16 @@ local M = {
 		{
 			'akinsho/bufferline.nvim',
 			dependencies = 'nvim-tree/nvim-web-devicons',
-			event = { "BufReadPre", "BufAdd", "BufNew", "BufReadPost" },
-			opts = {},
+			event = { "BufRead", "BufWinEnter", "BufNewFile" },
+			config = function()
+				vim.opt.showtabline = 2
+				require("bufferline").setup()
+			end
 		},
 		{
 			"lewis6991/gitsigns.nvim",
 			lazy = false,
-			event = "User FileOpened",
+			event = { "BufRead", "BufWinEnter", "BufNewFile" },
 			cmd = "Gitsigns",
 			config = function()
 				require("jk.plugins.gitsigns").setup()
@@ -83,6 +93,9 @@ local M = {
 			event = "VimEnter",
 		},
 		-- Convenience
+		{
+			"jimmykodes/strman.nvim",
+		},
 		{
 			'windwp/nvim-autopairs',
 			event = "InsertEnter",
@@ -110,7 +123,6 @@ local M = {
 		{
 			"nvim-telescope/telescope.nvim",
 			branch = "0.1.x",
-			lazy = true,
 			cmd = "Telescope",
 			opts = {},
 		},
@@ -125,12 +137,33 @@ local M = {
 			build = function()
 				require("nvim-treesitter.install").update({ with_sync = true })()
 			end,
-			lazy = false,
+			event = { "BufRead", "BufWinEnter", "BufNewFile" },
 			config = function()
 				local configs = require("nvim-treesitter.configs")
 
 				configs.setup({
-					ensure_installed = { "lua", "vim", "vimdoc", "query", "go", "python", "javascript", "html" },
+					ensure_installed = {
+						"bash",
+						"css",
+						"dockerfile",
+						"go",
+						"gomod",
+						"gotmpl",
+						"gowork",
+						"helm",
+						"html",
+						"javascript",
+						"json",
+						"lua",
+						"make",
+						"markdown",
+						"python",
+						"query",
+						"terraform",
+						"vim",
+						"vimdoc",
+						"yaml",
+					},
 					sync_install = false,
 					highlight = { enable = true },
 					indent = { enable = true },
