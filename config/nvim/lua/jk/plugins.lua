@@ -16,6 +16,39 @@ local M = {
 		{
 			"nvimtools/none-ls.nvim",
 		},
+		-- Completions
+		{
+			"hrsh7th/nvim-cmp",
+			config = function()
+				require("jk.plugins.compare").setup()
+			end,
+			event = { "InsertEnter", "CmdlineEnter" },
+			dependencies = {
+				"cmp-nvim-lsp",
+				"cmp-buffer",
+				"cmp-path",
+				"cmp-cmdline",
+				"cmp_luasnip",
+			},
+		},
+		{ "hrsh7th/cmp-nvim-lsp" },
+		{ "hrsh7th/cmp-buffer" },
+		{ "hrsh7th/cmp-path" },
+		{ "hrsh7th/cmp-cmdline" },
+		{ "saadparwaiz1/cmp_luasnip" },
+		{
+			"L3MON4D3/LuaSnip",
+			config = function()
+				require("luasnip.loaders.from_lua").lazy_load()
+				require("luasnip.loaders.from_vscode").lazy_load()
+				require("luasnip.loaders.from_snipmate").lazy_load()
+			end,
+			event = "InsertEnter",
+			dependencies = { "friendly-snippets" },
+		},
+		{ "rafamadriz/friendly-snippets" },
+
+
 		-- Functionality
 		{
 			"ahmedkhalf/project.nvim",
@@ -23,14 +56,7 @@ local M = {
 		},
 		{
 			"akinsho/toggleterm.nvim",
-			cmd = {
-				"ToggleTerm",
-				"TermExec",
-				"ToggleTermToggleAll",
-				"ToggleTermSendCurrentLine",
-				"ToggleTermSendVisualLines",
-				"ToggleTermSendVisualSelection",
-			},
+			lazy = false,
 			config = function()
 				require("jk.plugins.toggleterm").setup()
 			end
