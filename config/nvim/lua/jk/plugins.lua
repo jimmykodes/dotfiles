@@ -120,8 +120,10 @@ local M = {
 		{
 			"nvim-lualine/lualine.nvim",
 			dependencies = { 'nvim-tree/nvim-web-devicons' },
-			opts = {},
 			event = "VimEnter",
+			config = function ()
+				require("jk.plugins.lualine").setup()
+			end,
 		},
 		-- Convenience
 		{
