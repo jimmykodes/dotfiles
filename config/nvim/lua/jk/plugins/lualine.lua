@@ -6,13 +6,13 @@ local M = {
 			"mode",
 			fmt = function(name, _)
 				if name == "INSERT" then
-					return "I"
+					return icons.ui.Pencil
 				elseif name == "NORMAL" then
-					return "N"
+					return icons.ui.Project
 				elseif name == "COMMAND" then
-					return "C"
+					return icons.ui.Code
 				else
-					return "V"
+					return icons.ui.Text
 				end
 			end
 		},
@@ -63,7 +63,10 @@ local M = {
 			color = function()
 				local buf = vim.api.nvim_get_current_buf()
 				local ts = vim.treesitter.highlighter.active[buf]
-				return { fg = ts and not vim.tbl_isempty(ts) and 'green' or 'red' }
+				if ts and not vim.tbl_isempty(ts) then
+					return { fg = 'green' }
+				end
+				return { fg = 'red' }
 			end,
 		},
 	}
@@ -92,8 +95,8 @@ M.opts = {
 	sections = {
 		lualine_a = { M.components.mode },
 		lualine_b = { 'branch', 'diff', 'diagnostics' },
-		lualine_c = { M.components.treesitter },
-		lualine_x = { 'filetype', M.components.lsp },
+		lualine_c = {},
+		lualine_x = { 'filetype', M.components.lsp, M.components.treesitter },
 		lualine_y = { 'progress' },
 		lualine_z = { 'location' }
 	},
