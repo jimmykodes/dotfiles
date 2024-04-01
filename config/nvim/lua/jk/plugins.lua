@@ -121,7 +121,7 @@ local M = {
 			"nvim-lualine/lualine.nvim",
 			dependencies = { 'nvim-tree/nvim-web-devicons' },
 			event = "VimEnter",
-			config = function ()
+			config = function()
 				require("jk.plugins.lualine").setup()
 			end,
 		},
@@ -210,13 +210,28 @@ local M = {
 				})
 			end
 		},
+		-- DAP
+		{
+			"mfussenegger/nvim-dap",
+			lazy = false,
+		},
+		{
+			"rcarriga/nvim-dap-ui",
+			dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+			opts = {},
+			lazy = false,
+		},
 		-- Go
 		{
 			"olexsmir/gopher.nvim",
+			build = ":GoInstallDeps",
+			opts = {},
+			ft = "go"
 		},
 		{
 			"leoluz/nvim-dap-go",
 			opts = {},
+			ft = "go"
 		},
 	}
 }
