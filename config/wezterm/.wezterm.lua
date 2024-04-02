@@ -13,6 +13,11 @@ config.keys = {
 		action = wezterm.action.ActivateCommandPalette,
 	},
 	{
+		key = 'C',
+		mods = 'SUPER',
+		action = wezterm.action.ActivateCopyMode,
+	},
+	{
 		key = 'd',
 		mods = 'SUPER',
 		action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' },
@@ -95,6 +100,8 @@ local function tab_title(tab_info)
 	local bn = basename(pane.foreground_process_name)
 	if bn == "nvim" then
 		return "nvim - " .. shorten_path(pane.current_working_dir.file_path)
+	elseif bn == "zsh" then
+		return " " .. shorten_path(pane.current_working_dir.file_path)
 	end
 	return bn
 end
