@@ -125,6 +125,23 @@ local M = {
 				require("jk.plugins.lualine").setup()
 			end,
 		},
+		{
+			"RRethy/vim-illuminate",
+			event = { "BufRead", "BufWinEnter", "BufNewFile" },
+		},
+		{ "MunifTanjim/nui.nvim" },
+		{
+			"SmiteshP/nvim-navic",
+			dependencies = { "MunifTanjim/nui.nvim" },
+			opts = {},
+		},
+		{
+			"SmiteshP/nvim-navbuddy",
+			dependencies = {
+				"SmiteshP/nvim-navic",
+				"MunifTanjim/nui.nvim",
+			},
+		},
 		-- Convenience
 		{
 			"jimmykodes/strman.nvim",

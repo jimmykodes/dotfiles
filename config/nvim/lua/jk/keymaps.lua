@@ -49,6 +49,7 @@ M.config = {
 			["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
 			["e"] = { "<cmd>NvimTreeToggle<CR>", "Explorer" },
 			["o"] = { "<cmd>NvimTreeFocus<CR>", "Explorer Focus" },
+			["n"] = { "<cmd>Navbuddy<CR>", "Navbuddy" },
 			a = {
 				name = "Apps",
 				k = { "<cmd>lua require 'jk.plugins.toggleterm'.k9s()<cr>", "k9s" },

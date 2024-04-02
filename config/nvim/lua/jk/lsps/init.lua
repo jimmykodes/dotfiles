@@ -6,36 +6,22 @@ local M = {
 		"pyright",
 		"tsserver",
 		"lua_ls",
-		"golangci_lint_ls",
 		"gopls",
+		"golangci_lint_ls",
 	},
-	opts = {
-		gopls = {
-			settings = {
-				gopls = {
-					usePlaceholders = true,
-					gofumpt = true,
-					codelenses = {
-						generate = true,
-						gc_details = false,
-						test = true,
-						tidy = true,
-					},
-				},
-			},
-		}
-	}
+	opts = {}
 }
 
 function M.setup()
 	for _, svr in ipairs(M.servers) do
-		lspconfig[svr].setup(M.opts[svr] or {})
+		local opts = M.opts[svr] or {}
+		local default_opts = require("jk.lsps.events").get_common_opts()
+		lspconfig[svr].setup(vim.tbl_deep_extend("force", default_opts, opts))
 	end
 
 	require("jk.lsps.null_ls").setup()
 	require("jk.lsps.autocmd").setup()
 
-	require("gopher").setup()
 	wk.register({
 		G = {
 			name = "Go",
@@ -50,7 +36,7 @@ function M.setup()
 			e = { "<cmd>GoIfErr<Cr>", "If err" },
 			T = { "<cmd>lua require('dap-go').debug_test()<cr>", "Debug Test" },
 		},
-	}, { prefix = "<leader>", buffer = bufnr })
+	}, { prefix = "<leader>" })
 end
 
 return M

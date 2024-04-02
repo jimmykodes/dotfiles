@@ -9,7 +9,7 @@ local M = {
 		filetypes = { "python" },
 		generator_opts = {
 			command = "autopep8",
-			args = { "--max-line-length", "120", "$FILENAME" },
+			args = { "--max-line-length", "120", "-" },
 			to_stdin = true,
 		},
 		factory = h.formatter_factory,
@@ -25,7 +25,8 @@ M.opts = {
 
 
 function M.setup()
-	null_ls.setup(M.opts)
+	local default_opts = require("jk.lsps.events").get_common_opts()
+	null_ls.setup(vim.tbl_deep_extend("force", default_opts, M.opts))
 end
 
 return M

@@ -52,7 +52,6 @@ local M = {
 			end,
 			color = { gui = "bold" },
 		},
-
 		treesitter = {
 			-- green if treesitter installed for buffer type, otherwise red.
 			-- useful for determining when I'll need to run `:TSInstall` since
@@ -69,6 +68,16 @@ local M = {
 				return { fg = 'red' }
 			end,
 		},
+		breadcrumbs = {
+			function()
+				local status_ok, navic = pcall(require, "nvim-navic")
+				return status_ok and navic.get_location() or ""
+			end,
+			cond = function()
+				local status_ok, navic = pcall(require, "nvim-navic")
+				return status_ok and navic.is_available()
+			end
+		}
 	}
 }
 
@@ -95,7 +104,7 @@ M.opts = {
 	sections = {
 		lualine_a = { M.components.mode },
 		lualine_b = { 'branch', 'diff', 'diagnostics' },
-		lualine_c = {},
+		lualine_c = { M.components.breadcrumbs },
 		lualine_x = { 'filetype', M.components.lsp, M.components.treesitter },
 		lualine_y = { 'progress' },
 		lualine_z = { 'location' }
