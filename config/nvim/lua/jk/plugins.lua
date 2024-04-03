@@ -137,6 +137,7 @@ local M = {
 		},
 		{
 			"SmiteshP/nvim-navbuddy",
+			commands = ":Navbuddy",
 			dependencies = {
 				"SmiteshP/nvim-navic",
 				"MunifTanjim/nui.nvim",
