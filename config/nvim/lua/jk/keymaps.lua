@@ -2,23 +2,34 @@ local M = {}
 
 M.config = {
 	opts = { silent = true },
-	vopts = { silent = true },
 	mappings = {
-		-- Navigate windows
-		["<C-h>"] = "<C-w>h",
-		["<C-j>"] = "<C-w>j",
-		["<C-k>"] = "<C-w>k",
-		["<C-l>"] = "<C-w>l",
-		["<C-c>"] = "<C-w>c",
+		i = {
+			-- Navigate snippets
+			["<C-m>"] = "<CMD>lua require('luasnip').jump(1)<CR>",
+			["<C-,>"] = "<CMD>lua require('luasnip').jump(-1)<CR>",
+		},
+		s = {
+			-- Navigate snippets
+			["<C-m>"] = "<CMD>lua require('luasnip').jump(1)<CR>",
+			["<C-,>"] = "<CMD>lua require('luasnip').jump(-1)<CR>",
+		},
+		v = {
+			["<"] = "<gv",
+			[">"] = ">gv",
+		},
+		n = {
+			-- Navigate windows
+			["<C-h>"] = "<C-w>h",
+			["<C-j>"] = "<C-w>j",
+			["<C-k>"] = "<C-w>k",
+			["<C-l>"] = "<C-w>l",
+			["<C-c>"] = "<C-w>c",
 
-		-- Navigate buffers
-		["<S-l>"] = ":bnext<CR>",
-		["<S-h>"] = ":bprevious<CR>",
-		["<S-TAB>"] = "<C-o>"
-	},
-	vmappings = {
-		["<"] = "<gv",
-		[">"] = ">gv",
+			-- Navigate buffers
+			["<S-l>"] = ":bnext<CR>",
+			["<S-h>"] = ":bprevious<CR>",
+			["<S-TAB>"] = "<C-o>"
+		},
 	},
 	whichkey = {
 		setup     = {},
@@ -222,14 +233,10 @@ function M.setup()
 	which_key.register(wk.mappings, wk.opts)
 	which_key.register(wk.vmappings, wk.vopts)
 
-	local keymap = vim.keymap.set
-
-	for k, v in pairs(M.config.mappings) do
-		keymap("n", k, v, M.config.opts)
-	end
-
-	for k, v in pairs(M.config.vmappings) do
-		keymap("v", k, v, M.config.vopts)
+	for mode, mappings in pairs(M.config.mappings) do
+		for k, v in pairs(mappings) do
+			vim.keymap.set(mode, k, v, M.config.opts)
+		end
 	end
 end
 
