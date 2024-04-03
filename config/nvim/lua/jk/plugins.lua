@@ -1,6 +1,8 @@
+local icons = require("jk.icons")
+
 local M = {
 	plugins = {
-		-- LSP
+		-- MARK: LSP
 		{
 			"williamboman/mason.nvim",
 			opts = {},
@@ -15,7 +17,7 @@ local M = {
 		{
 			"nvimtools/none-ls.nvim",
 		},
-		-- Completions
+		-- MARK: Completions
 		{
 			"hrsh7th/nvim-cmp",
 			config = function()
@@ -50,7 +52,7 @@ local M = {
 		{ "rafamadriz/friendly-snippets" },
 
 
-		-- Functionality
+		-- MARK: Functionality
 		{
 			"ahmedkhalf/project.nvim",
 			opts = {},
@@ -73,7 +75,7 @@ local M = {
 			"sourcegraph/sg.nvim",
 			opts = {},
 		},
-		-- UI
+		-- MARK: UI
 		{
 			"goolord/alpha-nvim",
 			event = "VimEnter",
@@ -143,18 +145,53 @@ local M = {
 				"MunifTanjim/nui.nvim",
 			},
 		},
-		-- Convenience
+		-- MARK: Convenience
 		{
 			"jimmykodes/strman.nvim",
+			event = { "BufRead", "BufWinEnter", "BufNewFile" },
 		},
 		{
 			'windwp/nvim-autopairs',
 			event = "InsertEnter",
 			opts = {},
 		},
+
+		{
+			"folke/todo-comments.nvim",
+			event = { "BufRead", "BufWinEnter", "BufNewFile" },
+			dependencies = { "nvim-lua/plenary.nvim" },
+			opts = {
+				keywords = {
+					MARK = {
+						icon = icons.ui.BookMark,
+						color = "hint"
+					},
+				},
+				highlight = {
+					keyword = "bg",
+					pattern = [[.*<(KEYWORDS)(\(\w*\)|):]],
+				},
+				search = {
+					pattern = [[\b(KEYWORDS)(?:\(\w*\)|):]],
+				},
+			},
+
+		},
+		{
+			-- Lazy loaded by Comment.nvim pre_hook
+			"JoosepAlviste/nvim-ts-context-commentstring",
+			lazy = true,
+		},
 		{
 			"numToStr/Comment.nvim",
-			opts = {},
+			opts = {
+				pre_hook = function(...)
+					local loaded, ts_comment = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
+					if loaded and ts_comment then
+						return ts_comment.create_pre_hook()(...)
+					end
+				end,
+			},
 		},
 		{
 			"folke/which-key.nvim",
@@ -177,7 +214,7 @@ local M = {
 			},
 		},
 
-		-- Telescope
+		-- MARK: Telescope
 		{
 			"nvim-telescope/telescope.nvim",
 			branch = "0.1.x",
@@ -189,7 +226,7 @@ local M = {
 			build = "make",
 		},
 
-		-- Treesitter
+		-- MARK: Treesitter
 		{
 			"nvim-treesitter/nvim-treesitter",
 			build = function()
@@ -228,7 +265,7 @@ local M = {
 				})
 			end
 		},
-		-- DAP
+		-- MARK: DAP
 		{
 			"mfussenegger/nvim-dap",
 			lazy = false,
@@ -239,7 +276,7 @@ local M = {
 			opts = {},
 			lazy = false,
 		},
-		-- Go
+		-- MARK: Go
 		{
 			"olexsmir/gopher.nvim",
 			build = ":GoInstallDeps",

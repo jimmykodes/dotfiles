@@ -141,9 +141,9 @@ M.config = {
 				},
 				e = { "<cmd>Telescope quickfix<cr>", "Telescope Quickfix" },
 			},
+			-- MARK: Search
 			s = {
 				name = "Search",
-				b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
 				f = { "<cmd>Telescope find_files<cr>", "Find File" },
 				h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
 				H = { "<cmd>Telescope highlights<cr>", "Find highlight groups" },
@@ -151,9 +151,12 @@ M.config = {
 				r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
 				R = { "<cmd>Telescope registers<cr>", "Registers" },
 				t = { "<cmd>Telescope live_grep<cr>", "Text" },
+				T = { "<cmd>TodoTelescope<cr>", "Todos" },
+				m = { "<cmd>TodoTelescope keywords=MARK<cr>", "Marks" },
 				C = { "<cmd>Telescope commands<cr>", "Commands" },
 				l = { "<cmd>Telescope resume<cr>", "Resume last search" },
 			},
+			-- MARK: Transforms
 			T = {
 				name = "Transform",
 				["'"] = { [["pdi"h2xi'<C-r>p'<Esc>]], "Single Quote" },
@@ -174,6 +177,7 @@ M.config = {
 					["{"] = { [["pdi[h2xi{<C-r>p}<Esc>]], "Bracket -> Brace" },
 				},
 			},
+			-- MARK: Terminal
 			t = {
 				name = "Terminal",
 				j = { ":ToggleTerm 1<cr>", "Terminal 1" },
