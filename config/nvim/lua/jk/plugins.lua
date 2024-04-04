@@ -280,8 +280,10 @@ local M = {
 		{
 			"olexsmir/gopher.nvim",
 			build = ":GoInstallDeps",
-			opts = {},
-			ft = "go"
+			ft = "go",
+			config = function()
+				require("jk.plugins.gopher").setup()
+			end
 		},
 		{
 			"leoluz/nvim-dap-go",
