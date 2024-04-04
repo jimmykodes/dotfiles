@@ -23,6 +23,18 @@ M.opts = {
 	}
 }
 
+function M.list_registered_sources(filetype)
+	local s = require "null-ls.sources"
+	local available_sources = s.get_available(filetype)
+	local registered = {}
+	for _, source in ipairs(available_sources) do
+		for method in pairs(source.methods) do
+			registered[method] = registered[method] or {}
+			table.insert(registered[method], source.name)
+		end
+	end
+	return registered
+end
 
 function M.setup()
 	local default_opts = require("jk.lsps.events").get_common_opts()
