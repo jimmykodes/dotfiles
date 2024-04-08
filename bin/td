@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TD_FILE="${HOME}/.todo"
+TD_FILE="${HOME}/.tasks.td"
 
 usage() {
   echo "Usage: $(basename "$0") [-lh]" 1>&2
