@@ -5,11 +5,23 @@ local M = {
 				jk = "joker"
 			}
 		},
+		{
+			extension = {
+				td = "todo"
+			}
+		},
 	},
 	parsers = {
 		joker = {
 			install_info = {
 				url = "https://github.com/jimmykodes/tree-sitter-joker",
+				files = { "src/parser.c" },
+				branch = "main",
+			}
+		},
+		todo = {
+			install_info = {
+				url = "https://github.com/jimmykodes/tree-sitter-todo",
 				files = { "src/parser.c" },
 				branch = "main",
 			}
