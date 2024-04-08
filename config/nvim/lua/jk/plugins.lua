@@ -234,35 +234,7 @@ local M = {
 			end,
 			event = { "BufRead", "BufWinEnter", "BufNewFile" },
 			config = function()
-				local configs = require("nvim-treesitter.configs")
-
-				configs.setup({
-					ensure_installed = {
-						"bash",
-						"css",
-						"dockerfile",
-						"go",
-						"gomod",
-						"gotmpl",
-						"gowork",
-						"helm",
-						"html",
-						"javascript",
-						"json",
-						"lua",
-						"make",
-						"markdown",
-						"python",
-						"query",
-						"terraform",
-						"vim",
-						"vimdoc",
-						"yaml",
-					},
-					sync_install = false,
-					highlight = { enable = true },
-					indent = { enable = true },
-				})
+				require("jk.plugins.treesitter").setup()
 			end
 		},
 		-- MARK: DAP

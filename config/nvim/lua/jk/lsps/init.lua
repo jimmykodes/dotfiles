@@ -1,5 +1,4 @@
 local lspconfig = require('lspconfig')
-local wk = require("which-key")
 
 local M = {
 	servers = {
@@ -9,6 +8,7 @@ local M = {
 		"gopls",
 		"golangci_lint_ls",
 		"yamlls",
+		"html",
 	},
 	opts = {}
 }

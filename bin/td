@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# vim:ft=zsh
 
 TD_FILE="${HOME}/.todo"
 
@@ -17,35 +16,14 @@ list() {
 }
 
 open() {
-  $EDITOR "${TD_FILE}"
+  exec $EDITOR "${TD_FILE}"
 }
 
 add() {
   echo "$@" >> "${TD_FILE}"
 }
 
-complete() {
-  section=$(grep -Eo '[[:lower:]]{1}' <<< "$1")
-  offset=$(grep -Eo '[[:digit:]]+' <<< "$1")
-  case "$section" in
-    t)
-      # add one to offset to account for [Today] header
-      offset=$((offset + 1))
-      ;;
-    l)
-      # find the line number for [Later] and add offset to that
-      laterOffset=$(grep -n "\[Later\]" "${TD_FILE}" | grep -o "[[:digit:]]*")
-      offset=$((laterOffset + offset))
-      ;;
-    *)
-      exit_err
-      ;;
-  esac
-  sed -in "${offset}s/^- \[ ]/- \[x]/;" "${TD_FILE}"
-  list
-}
-
-while getopts "lhac:" options; do
+while getopts "lha" options; do
   case "${options}" in
     l)
       list
@@ -57,12 +35,8 @@ while getopts "lhac:" options; do
       ;;
     a)
       shift
-      add "- [ ] $*"
+      add "- $*"
       list
-      exit
-      ;;
-    c)
-      complete "$OPTARG"
       exit
       ;;
     *)
