@@ -5,6 +5,7 @@ local M = {}
 M.conditions = {
 	treesitter = function()
 		local ignore_bufs = {
+			"lspinfo",
 			"toggleterm",
 			"NvimTree",
 		}
@@ -18,6 +19,7 @@ M.conditions = {
 	end,
 	lsp = function()
 		local ignore_bufs = {
+			"lspinfo",
 			"toggleterm",
 			"NvimTree",
 		}

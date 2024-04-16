@@ -2,13 +2,15 @@ local lspconfig = require('lspconfig')
 
 local M = {
 	servers = {
-		"pyright",
-		"tsserver",
-		"lua_ls",
+		"docker_compose_language_service",
+		"dockerls",
 		"gopls",
 		"golangci_lint_ls",
-		"yamlls",
 		"html",
+		"lua_ls",
+		"pyright",
+		"tsserver",
+		"yamlls",
 	},
 	opts = {}
 }
