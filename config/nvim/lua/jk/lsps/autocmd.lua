@@ -33,6 +33,8 @@ local M = {
 			opts = {
 				group = "UserLspConfig",
 				callback = function(ev)
+					local client = vim.lsp.get_client_by_id(ev.data.client_id)
+					client.server_capabilities.semanticTokensProvider = nil
 					-- Enable completion triggered by <c-x><c-o>
 					vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 

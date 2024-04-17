@@ -19,6 +19,7 @@ local M = {
 M.opts = {
 	sources = {
 		null_ls.builtins.formatting.goimports,
+		null_ls.builtins.formatting.gofumpt,
 		M.autopep8,
 	}
 }

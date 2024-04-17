@@ -54,6 +54,7 @@ function M.setup()
 			"lua",
 			"make",
 			"markdown",
+			"markdown_inline",
 			"python",
 			"query",
 			"terraform",
