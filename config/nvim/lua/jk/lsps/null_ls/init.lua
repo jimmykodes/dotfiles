@@ -13,6 +13,28 @@ local M = {
 			to_stdin = true,
 		},
 		factory = h.formatter_factory,
+	}),
+	flake8 = h.make_builtin({
+		name = "flake8",
+		method = null_ls.methods.DIAGNOSTICS,
+		filetypes = { "python" },
+		generator_opts = {
+			command = "flake8",
+			args = { "-" },
+			to_stdin = true,
+			format = "line",
+			check_exit_code = function(code)
+				return code <= 1
+			end,
+			on_output = h.diagnostics.from_patterns({
+				{
+					-- thing.py:2:1: E302 expected 2 blank lines, found 0
+					pattern = [[stdin:(%d+):(%d+): (%w+) (.+)]],
+					groups = { "row", "col", "code", "message" }
+				}
+			})
+		},
+		factory = h.generator_factory,
 	})
 }
 
@@ -21,6 +43,7 @@ M.opts = {
 		null_ls.builtins.formatting.goimports,
 		null_ls.builtins.formatting.gofumpt,
 		M.autopep8,
+		M.flake8,
 	}
 }
 
