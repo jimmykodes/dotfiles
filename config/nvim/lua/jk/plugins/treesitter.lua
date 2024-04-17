@@ -1,23 +1,18 @@
 local M = {
 	filetypes = {
-		{
-			extension = {
-				jk = "joker"
-			}
+		extension = {
+			jk = "joker",
+			td = "todo",
+			yaml = function(path, _)
+				local s = vim.split(path, "/")
+				s = s[#s]
+				local match = string.match(s, "^docker%-compose[%a.]*%.ya?ml$") or string.match(s, "^compose[%a.]*%.ya?ml$")
+				if match ~= nil then
+					return "yaml.docker-compose"
+				end
+				return "yaml"
+			end
 		},
-		{
-			extension = {
-				td = "todo"
-			}
-		},
-		{
-			filename = {
-				['docker-compose.yml'] = 'yaml.docker-compose',
-				['docker-compose.yaml'] = 'yaml.docker-compose',
-				['compose.yml'] = 'yaml.docker-compose',
-				['compose.yaml'] = 'yaml.docker-compose',
-			},
-		}
 	},
 	parsers = {
 		joker = {
@@ -73,9 +68,7 @@ function M.setup()
 end
 
 function M.initFT()
-	for _, ft in ipairs(M.filetypes) do
-		vim.filetype.add(ft)
-	end
+	vim.filetype.add(M.filetypes)
 end
 
 function M.initParsers()
