@@ -92,6 +92,15 @@ local M = {
 				vim.cmd("colorscheme system76")
 			end
 		},
+		-- {
+		-- 	"jimmykodes/colorschemes",
+		-- 	priority = 1000,
+		-- 	lazy = false,
+		-- 	config = function()
+		-- 		vim.g.colors_name = "system76"
+		-- 		vim.cmd("colorscheme system76")
+		-- 	end
+		-- },
 		{
 			'akinsho/bufferline.nvim',
 			dependencies = 'nvim-tree/nvim-web-devicons',

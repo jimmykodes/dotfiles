@@ -29,6 +29,14 @@ local M = {
 				branch = "main",
 			}
 		},
+		gotmpl = {
+			install_info = {
+				url = "https://github.com/ngalaiko/tree-sitter-go-template",
+				files = { "src/parser.c" }
+			},
+			filetype = "gotmpl",
+			used_by = { "gohtmltmpl", "gotexttmpl", "gotmpl", "yaml" }
+		}
 	}
 }
 
@@ -47,7 +55,6 @@ function M.setup()
 			"gomod",
 			"gotmpl",
 			"gowork",
-			"helm",
 			"html",
 			"javascript",
 			"json",
