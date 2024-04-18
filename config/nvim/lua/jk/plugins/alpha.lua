@@ -3,7 +3,6 @@ local icons = require("jk.icons")
 
 local function withIcon(str, icon)
 	return icon .. "  " .. str
-
 end
 
 local M = {
@@ -18,7 +17,7 @@ local M = {
 		},
 		opts = {
 			position = "center",
-			hl = "Type",
+			hl = "DashboardHeader",
 		},
 	},
 	buttons = {
@@ -32,6 +31,7 @@ local M = {
 		},
 		opts = {
 			spacing = 1,
+			hl = "DashboardCenter"
 		},
 	},
 	footer = {
@@ -39,7 +39,7 @@ local M = {
 		val = "",
 		opts = {
 			position = "center",
-			hl = "Number"
+			hl = "DashboardFooter"
 		},
 	},
 }
