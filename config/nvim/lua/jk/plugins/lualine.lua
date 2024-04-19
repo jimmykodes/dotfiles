@@ -2,13 +2,14 @@ local icons = require("jk.icons")
 
 local M = {}
 
+local ignore_bufs = {
+	"lspinfo",
+	"toggleterm",
+	"NvimTree",
+	"qf",
+}
 M.conditions = {
 	treesitter = function()
-		local ignore_bufs = {
-			"lspinfo",
-			"toggleterm",
-			"NvimTree",
-		}
 		local buf_ft = vim.bo.filetype
 		for _, i in ipairs(ignore_bufs) do
 			if i == buf_ft then
@@ -18,11 +19,6 @@ M.conditions = {
 		return true
 	end,
 	lsp = function()
-		local ignore_bufs = {
-			"lspinfo",
-			"toggleterm",
-			"NvimTree",
-		}
 		local buf_ft = vim.bo.filetype
 		for _, i in ipairs(ignore_bufs) do
 			if i == buf_ft then
@@ -95,9 +91,9 @@ M.components = {
 			local buf = vim.api.nvim_get_current_buf()
 			local ts = vim.treesitter.highlighter.active[buf]
 			if ts and not vim.tbl_isempty(ts) then
-				return { fg = 'green' }
+				return "TSInstalled"
 			end
-			return { fg = 'red' }
+			return "TSMissing"
 		end,
 		cond = M.conditions.treesitter,
 	},
@@ -143,7 +139,7 @@ M.opts = {
 		lualine_a = {},
 		lualine_b = {},
 		lualine_c = {},
-		lualine_x = { 'location' },
+		lualine_x = {},
 		lualine_y = {},
 		lualine_z = {}
 	},

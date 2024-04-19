@@ -28,7 +28,8 @@ M.config = {
 			-- Navigate buffers
 			["<S-l>"] = ":bnext<CR>",
 			["<S-h>"] = ":bprevious<CR>",
-			["<S-TAB>"] = "<C-o>"
+			["<S-TAB>"] = "<C-o>",
+			["<C-q>"] = ":call QuickFixToggle()<CR>",
 		},
 	},
 	whichkey = {

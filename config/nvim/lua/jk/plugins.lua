@@ -75,6 +75,11 @@ local M = {
 			"sourcegraph/sg.nvim",
 			opts = {},
 		},
+		{
+			"lunarvim/bigfile.nvim",
+			event = { "FileReadPre", "BufReadPre", "User FileOpened" },
+			opts = {},
+		},
 		-- MARK: UI
 		{
 			"goolord/alpha-nvim",
@@ -106,8 +111,7 @@ local M = {
 			dependencies = 'nvim-tree/nvim-web-devicons',
 			event = { "BufRead", "BufWinEnter", "BufNewFile" },
 			config = function()
-				vim.opt.showtabline = 2
-				require("bufferline").setup()
+				require("jk.plugins.bufferline").setup()
 			end
 		},
 		{
