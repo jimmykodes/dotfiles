@@ -48,7 +48,7 @@ header() {
   line "$1"
 }
 
-homebrew() {
+homebrew_init() {
   header "Checking Homebrew"
   if [ "$(uname)" != "Darwin" ]; then
     # todo: detect if we can install linux brew
@@ -64,24 +64,6 @@ homebrew() {
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
   brew bundle --file "$BASE_DIR/Brewfile"
-}
-
-lunarVim() {
-  header "Checking LunarVim"
-  if  ! command -v nvim > /dev/null ; then
-    warn "Neovim not installed. Skipping LunarVim"
-    return 0
-  fi
-  if [ "$(nvim --version | head -n 1 | grep -o "[0-9].[0-9]")" != "0.9" ]; then
-    warn "Invalid version of neovim installed. Skipping LunarVim"
-    return 0
-  fi
-  if command -v lvim > /dev/null; then
-    info "LunarVim already installed"
-  else
-    info "Installing LunarVim"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/LunarVim/LunarVim/HEAD/utils/installer/install.sh)"
-  fi
 }
 
 k9sConf() {
@@ -118,8 +100,10 @@ create_link() {
       mv "$HOME/$dst" "$HOME/$dst.bk"
     fi
   fi
-  ln -s "$BASE_DIR/$src" "$HOME/$dst"
-  success "$HOME/$dst linked to $BASE_DIR/$src"
+	src="$(realpath "$BASE_DIR/$src")"
+	dst="$HOME/$dst"
+	ln -s "${src}" "${dst}"
+  success "$dst linked to $src"
 }
 
 symlinks() {
@@ -139,7 +123,6 @@ symlinks() {
   done
   local config_dir=(
     "wezterm/colors"
-    "lvim/config.lua"
     "k9s"
   )
   for d in "${config_dir[@]}"
@@ -149,32 +132,47 @@ symlinks() {
   done
 }
 
-git() {
+git_init() {
   # todo: figure out how to handle the git config stuff, like creating signing key, ssh key, etc
   header "Checking git"
   warn "Unfortunately, git setup is still manual. This is a placeholder"
 }
 
+nvim_init() {
+	header "Installing nvim"
+	if [ -d "$HOME/.config/nvim" ]; then
+		info "nvim already installed - skipping"
+	else
+		if [ -d "../neojim" ]; then
+			info "neojim already cloned - skipping to link"
+		else
+			git clone https://github.com/jimmykodes/neojim ../neojim
+		fi
+		info "Linking neojim to nvim"
+    create_link "../neojim" ".config/nvim"
+	fi
+}
+
 all() {
-  homebrew
-  lunarVim
+  homebrew_init
+	nvim_init
   symlinks
-  git
+  git_init
 }
 
 main() {
   case $1 in
     brew | homebrew )
-      homebrew
+      homebrew_init
       ;;
-    lvim | vim )
-      lunarVim
+    vim )
+			nvim_init
       ;;
     sym | symlinks | links )
       symlinks
       ;;
     git )
-      git
+      git_init
       ;;
     help | h )
       usage
