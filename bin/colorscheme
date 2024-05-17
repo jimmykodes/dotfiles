@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import subprocess
+
+
+VALID_SCHEMES = {
+    "deep_purple",
+    "system76",
+    "onedark",
+}
+
+
+def color_file() -> str:
+    return os.getenv("XDG_CONFIG_HOME", "~/.config")+"/color"
+
+
+def get_scheme() -> str:
+    with open(color_file()) as f:
+        return f.read()
+
+
+def bg(scheme: str):
+    # run a bash command using subprocess
+    home = os.getenv("HOME")
+    subprocess.run([
+        "osascript",
+        "-e",
+        f'tell application "Finder"\nset desktop picture to POSIX file "{
+            home}/Library/Mobile Documents/com~apple~CloudDocs/Images/bg/{scheme}.png"\nend tell'
+    ])
+
+
+def main(scheme: str):
+    if scheme not in VALID_SCHEMES:
+        print(f"invalid scheme '{scheme}'. options are {VALID_SCHEMES}")
+    with open(color_file(), "w") as f:
+        f.write(scheme)
+    bg(scheme)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--all", action="store_true")
+    parser.add_argument("--show", action="store_true")
+    parser.add_argument("set", nargs='?', default=None)
+
+    args = parser.parse_args()
+
+    if args.all:
+        for s in VALID_SCHEMES:
+            print(s)
+    elif args.show or not args.set:
+        print(get_scheme())
+    else:
+        main(args.set)

@@ -12,6 +12,8 @@ export XDG_CONFIG_HOME="$HOME/.config"
 [[ -d "$gosrc" ]] || mkdir -p "$gosrc"
 [[ -d "$venv" ]] || mkdir -p "$venv"
 
+[[ -f "$XDG_CONFIG_HOME/color" ]] && export TERM_COLOR=$(cat $XDG_CONFIG_HOME/color)
+
 fpath=(
   /opt/homebrew/share/zsh/site-functions
   $DOTFILES/zsh/functions

@@ -49,7 +49,20 @@ config.keys = {
 	},
 }
 
-config.color_scheme = 'System76'
+local function get_scheme()
+	local home = os.getenv("HOME")
+	local f = io.open(home .. "/.config/color", "r")
+	if f == nil then
+		return "system76"
+	end
+
+	local color = f:read("*a")
+	f:close()
+
+	return color
+end
+
+config.color_scheme = get_scheme()
 config.font = wezterm.font 'Monaspace Neon'
 -- config.font = wezterm.font 'JetBrainsMonoNL Nerd Font'
 config.font_size = 16
