@@ -21,6 +21,7 @@ def get_scheme() -> str:
         return f.read()
 
 
+# TODO: this is gross... remove hard coding path and make the osascript more legible
 def bg(scheme: str):
     # run a bash command using subprocess
     home = os.getenv("HOME")

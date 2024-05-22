@@ -1,18 +1,16 @@
-export gosrc=$HOME/go/src
-export venv=$HOME/.venv
-export CODE_DIR=$gosrc/github.com/jimmykodes
+export GOSRC=$HOME/go/src
+export VENV=$HOME/.venv
+export CODE_DIR=$GOSRC/github.com/jimmykodes
 export DOTFILES=$CODE_DIR/dotfiles
-
-[ -d $gosrc/github.com/Khan ] && export KHAN=$gosrc/github.com/Khan
-
 export XDG_CONFIG_HOME="$HOME/.config"
 
 [[ -d "$HOME/.cargo" ]] && . "$HOME/.cargo/env"
+[[ -d "$GOSRC" ]] || mkdir -p "$GOSRC"
+[[ -d "$VENV" ]] || mkdir -p "$VENV"
 
-[[ -d "$gosrc" ]] || mkdir -p "$gosrc"
-[[ -d "$venv" ]] || mkdir -p "$venv"
-
-[[ -f "$XDG_CONFIG_HOME/color" ]] && export TERM_COLOR=$(cat $XDG_CONFIG_HOME/color)
+if [[ -e ~/.zshenv.local ]]; then
+    . ~/.zshenv.local
+fi
 
 fpath=(
   /opt/homebrew/share/zsh/site-functions

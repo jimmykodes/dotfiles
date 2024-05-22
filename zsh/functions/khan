@@ -1,7 +1,0 @@
-# vim:ft=zsh
-if [ -z $KHAN ]; then
-  echo "KHAN not found"
-  return 1
-else
-  cd $KHAN/$1
-fi
