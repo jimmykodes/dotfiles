@@ -12,13 +12,27 @@ VALID_SCHEMES = {
 }
 
 
+def config_dir() -> str:
+    return os.getenv("XDG_CONFIG_HOME", "~/.config")
+
+
 def color_file() -> str:
-    return os.getenv("XDG_CONFIG_HOME", "~/.config")+"/color"
+    return config_dir()+"/color"
 
 
 def get_scheme() -> str:
     with open(color_file()) as f:
         return f.read()
+
+
+def k9s(scheme: str):
+    cmd = [
+        'yq',
+        f'.k9s.ui.skin="{scheme}"',
+        config_dir()+'/k9s/config.yaml',
+        '-i',
+    ]
+    subprocess.run(cmd)
 
 
 # TODO: this is gross... remove hard coding path and make the osascript more legible
@@ -39,6 +53,7 @@ def main(scheme: str):
     with open(color_file(), "w") as f:
         f.write(scheme)
     bg(scheme)
+    k9s(scheme)
 
 
 if __name__ == "__main__":
