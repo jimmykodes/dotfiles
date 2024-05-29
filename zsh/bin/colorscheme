@@ -26,13 +26,12 @@ def get_scheme() -> str:
 
 
 def k9s(scheme: str):
-    cmd = [
+    subprocess.run([
         'yq',
         f'.k9s.ui.skin="{scheme}"',
         config_dir()+'/k9s/config.yaml',
         '-i',
-    ]
-    subprocess.run(cmd)
+    ])
 
 
 # TODO: this is gross... remove hard coding path and make the osascript more legible
