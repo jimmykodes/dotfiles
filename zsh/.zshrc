@@ -56,7 +56,7 @@ compinit
 # prepend_path will only add to path if the dir exists
 prepend_path $HOME/go/bin
 prepend_path $HOME/.local/bin
-prepend_path $DOTFILES/bin
+prepend_path $DOTFILES/zsh/bin
 prepend_path /usr/local/opt/openjdk@8/bin
 prepend_path $HOME/.rd/bin
 

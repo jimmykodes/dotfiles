@@ -14,6 +14,7 @@ fi
 
 fpath=(
   /opt/homebrew/share/zsh/site-functions
+  $DOTFILES/zsh/completions
   $DOTFILES/zsh/functions
   $fpath
 )
