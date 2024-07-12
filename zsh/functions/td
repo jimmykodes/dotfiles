@@ -16,7 +16,7 @@ list() {
 }
 
 open() {
-  exec $EDITOR "${TD_FILE}"
+  eval "$EDITOR \"${TD_FILE}\""
 }
 
 add() {

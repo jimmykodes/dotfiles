@@ -17,6 +17,9 @@ plugins=(
   "gh;zsh-users/zsh-autosuggestions;zsh-autosuggestions.zsh"
 )
 
+zlugin_path="$HOME/.local/share/zsh/zlugin"
+if [ ! -d $zlugin_path ]; then mkdir -p "$zlugin_path"; fi
+
 for plugin in "${plugins[@]}"; do
   if [[ -f $DOTFILES/zsh/plugins/$plugin/init.zsh ]]; then
     source "$DOTFILES/zsh/plugins/$plugin/init.zsh"
@@ -31,10 +34,10 @@ for plugin in "${plugins[@]}"; do
       if [[ -z "$init" ]]; then init="init.zsh"; fi
       case $src in
         gh)
-          if [ ! -d "$HOME/.zlug/$repo" ]; then
-            git clone --depth=1 "git@github.com:$repo" "$HOME/.zlug/$repo"
+          if [ ! -d "$zlugin_path/$repo" ]; then
+            git clone --depth=1 "git@github.com:$repo" "$zlugin_path/$repo"
           fi
-          source "$HOME/.zlug/$repo/$init"
+          source "$zlugin_path/$repo/$init"
           ;;
         *)
           echo "invalid source - $src not supported"
