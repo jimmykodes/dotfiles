@@ -8,41 +8,21 @@ if [[ -d $DOTFILES/zsh/functions ]]; then
 fi
 
 plugins=(
+	zlugin # must be first
   docker
   git
   go
   colorize
   py_venv
-  "gh;zsh-users/zsh-syntax-highlighting;zsh-syntax-highlighting.zsh"
-  "gh;zsh-users/zsh-autosuggestions;zsh-autosuggestions.zsh"
+	syntax_highlight
+	auto_suggestions
 )
-
-zlugin_path="$HOME/.local/share/zsh/zlugin"
-if [ ! -d $zlugin_path ]; then mkdir -p "$zlugin_path"; fi
 
 for plugin in "${plugins[@]}"; do
   if [[ -f $DOTFILES/zsh/plugins/$plugin/init.zsh ]]; then
     source "$DOTFILES/zsh/plugins/$plugin/init.zsh"
   else
-    IFS=";" read -Ar parts <<< "$plugin"
-    if [ ${#parts[@]} -eq 1 ]; then
-      echo "$plugin not found"
-    else
-      src=${parts[1]}
-      repo=${parts[2]}
-      init=${parts[3]}
-      if [[ -z "$init" ]]; then init="init.zsh"; fi
-      case $src in
-        gh)
-          if [ ! -d "$zlugin_path/$repo" ]; then
-            git clone --depth=1 "git@github.com:$repo" "$zlugin_path/$repo"
-          fi
-          source "$zlugin_path/$repo/$init"
-          ;;
-        *)
-          echo "invalid source - $src not supported"
-          ;;
-      esac fi
+		echo "invalid plugin: $plugin"
   fi
   if [[ -d $DOTFILES/zsh/plugins/$plugin/completions ]]; then
     fpath=(
@@ -87,12 +67,5 @@ if [[ -d $DOTFILES/zsh ]]; then
   done
 fi
 
-# up/down arrows search based on current line buffer
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey "^[[A" up-line-or-beginning-search # Up
-bindkey "^[[B" down-line-or-beginning-search # Down
 
 source $HOME/go/src/github.com/jimmykodes/dotfiles/zsh/themes/jimple/init.zsh
