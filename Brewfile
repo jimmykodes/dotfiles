@@ -13,8 +13,8 @@ cask 'font-monaspace'
 
 # tools
 brew 'bash'
+brew 'bat'
 brew 'coreutils'
-brew 'chroma'
 brew 'curl'
 brew 'docker'
 brew 'eza'

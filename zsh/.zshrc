@@ -12,7 +12,6 @@ plugins=(
 	docker
 	git
 	go
-	colorize
 	py_venv
 	syntax_highlight
 	auto_suggestions
