@@ -8,18 +8,18 @@ zlugin_clone() {
 	repo=$repo[2]
 
 	case $src[2] in
-		gh)
-			local dest=$ZLUGIN_PATH/$repo
-			if [[ ! -d $dest ]]; then
-				if [[ ! -d $ZLUGIN_PATH ]]; then
-					mkdir -p $ZLUGIN_PATH
-				fi
-				git clone git@github.com:$repo $dest
+	gh)
+		local dest=$ZLUGIN_PATH/$repo
+		if [[ ! -d $dest ]]; then
+			if [[ ! -d $ZLUGIN_PATH ]]; then
+				mkdir -p $ZLUGIN_PATH
 			fi
-			;;
-		*)
-			echo "unsupported source $src"
-			;;
+			git clone git@github.com:$repo $dest
+		fi
+		;;
+	*)
+		echo "unsupported source $src"
+		;;
 	esac
 
 }

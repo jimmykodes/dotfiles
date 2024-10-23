@@ -1,7 +1,7 @@
 # vim:ft=zsh
 if [ -z $WORK ]; then
-  echo '$WORK not found'
-  return 1
+	echo '$WORK not found'
+	return 1
 else
-  cd $WORK/$1
+	cd $WORK/$1
 fi

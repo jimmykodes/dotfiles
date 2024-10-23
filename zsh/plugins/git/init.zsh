@@ -17,52 +17,52 @@ alias gbD="git branch -D"
 alias gbda="git bleach"
 alias grs="git restore --staged"
 
-git-current-branch(){
-  git rev-parse --abbrev-ref HEAD
+git-current-branch() {
+	git rev-parse --abbrev-ref HEAD
 }
 
 gcd() {
-  local branch
-  local current
+	local branch
+	local current
 
-  branch=$(git dev-branch)
-  current=$(git current-branch)
+	branch=$(git dev-branch)
+	current=$(git current-branch)
 
-  if [[ -z $branch ]]; then
-    echo "Could not find a develop branch to checkout"
-    return 1
-  elif [[ "$branch" == "$current" ]]; then
-    echo "Develop branch is already checked out"
-    return
-  fi
-  git checkout "$branch"
+	if [[ -z $branch ]]; then
+		echo "Could not find a develop branch to checkout"
+		return 1
+	elif [[ "$branch" == "$current" ]]; then
+		echo "Develop branch is already checked out"
+		return
+	fi
+	git checkout "$branch"
 }
 
 gcm() {
-  local branch
-  local current
+	local branch
+	local current
 
-  branch=$(git main-branch)
-  current=$(git current-branch)
+	branch=$(git main-branch)
+	current=$(git current-branch)
 
-  if [[ -z $branch ]]; then
-    echo "Could not find a main branch to checkout"
-    return 1
-  elif [[ "$branch" == "$current" ]]; then
-    echo "Main branch is already checked out"
-    return
-  fi
-  git checkout "$branch"
+	if [[ -z $branch ]]; then
+		echo "Could not find a main branch to checkout"
+		return 1
+	elif [[ "$branch" == "$current" ]]; then
+		echo "Main branch is already checked out"
+		return
+	fi
+	git checkout "$branch"
 }
 
 gmom() {
-  local branch
-  branch=$(git main-branch)
-  # if somehow a main branch doesn't exist locally, assume `main` is going
-  # to be present on the remote, which I'm assuming is going to be `origin`
-  # for simplicity. Will update this if I ever need a different remote.
-  [[ -z $branch ]] && branch="main"
-  git merge "origin/$branch"
+	local branch
+	branch=$(git main-branch)
+	# if somehow a main branch doesn't exist locally, assume `main` is going
+	# to be present on the remote, which I'm assuming is going to be `origin`
+	# for simplicity. Will update this if I ever need a different remote.
+	[[ -z $branch ]] && branch="main"
+	git merge "origin/$branch"
 }
 
 gcl() {
@@ -110,88 +110,87 @@ kcln() {
 }
 
 gcb() {
-  local branch=$1
-  local issue=$2
-  if [[ -z $branch ]]; then
-    echo "branch required"
-    return 1
-  fi
-  git config --replace-all branch.lastcreated $branch
-  git checkout -b $branch
-  if [[ -n $issue ]]; then
-    git config --add branch.$branch.issue $issue
-  fi
+	local branch=$1
+	local issue=$2
+	if [[ -z $branch ]]; then
+		echo "branch required"
+		return 1
+	fi
+	git config --replace-all branch.lastcreated $branch
+	git checkout -b $branch
+	if [[ -n $issue ]]; then
+		git config --add branch.$branch.issue $issue
+	fi
 }
 
 gcol() {
-  local branch=$(git config --get branch.lastcreated)
-  if [[ -z $branch ]]; then
-    echo "no previously created branch to checkout"
-    return 1
-  fi
-  if [[ $branch == $(git rev-parse --abbrev-ref HEAD) ]]; then
-    echo "last created branch already checked out"
-    return
-  fi
-  git checkout $branch
+	local branch=$(git config --get branch.lastcreated)
+	if [[ -z $branch ]]; then
+		echo "no previously created branch to checkout"
+		return 1
+	fi
+	if [[ $branch == $(git rev-parse --abbrev-ref HEAD) ]]; then
+		echo "last created branch already checked out"
+		return
+	fi
+	git checkout $branch
 }
 
 gcmsg() {
-  local message=$1
-  if [[ -z $message ]]; then
-    echo "message required"
-    return 1
-  fi
-  git commit --message $message
-  local project=$(basename $(project-root))
-  local messageStore=$(git config --get commit.messageStore)
-  if [[ -n "$messageStore" ]]; then
-      echo "$(date +%Y-%m-%d): $project: $message" >> "$messageStore"
-  fi
+	local message=$1
+	if [[ -z $message ]]; then
+		echo "message required"
+		return 1
+	fi
+	git commit --message $message
+	local project=$(basename $(project-root))
+	local messageStore=$(git config --get commit.messageStore)
+	if [[ -n "$messageStore" ]]; then
+		echo "$(date +%Y-%m-%d): $project: $message" >>"$messageStore"
+	fi
 }
 
 ## GitHub Functions
 
 ghrc() {
-  local git_cb=$(git current-branch)
-  gh release create $1 --target ${2:-"$git_cb"} --prerelease --generate-notes
+	local git_cb=$(git current-branch)
+	gh release create $1 --target ${2:-"$git_cb"} --prerelease --generate-notes
 }
 
 escape() {
-  sed 's/\//\\\//g' <<< "$1"
+	sed 's/\//\\\//g' <<<"$1"
 }
 
 ghpr() {
-  tmpl() {
-    for location in "." "docs" ".github" "$HOME/.config/git-templates"; do
-      for ft in md txt; do
-        local file="$location/pull_request_template.${ft}"
-        if [[ -e "$file" ]]; then
-          echo "$file"
-          return
-        fi
-      done
-    done
-  }
+	tmpl() {
+		for location in "." "docs" ".github" "$HOME/.config/git-templates"; do
+			for ft in md txt; do
+				local file="$location/pull_request_template.${ft}"
+				if [[ -e "$file" ]]; then
+					echo "$file"
+					return
+				fi
+			done
+		done
+	}
 
-  local t
-  local body_file
-  local issue
-  local args='--assignee=@me'
+	local t
+	local body_file
+	local issue
+	local args='--assignee=@me'
 
-  t=$(tmpl)
-  if [[ -n $t ]]; then
-    body_file="$(mktemp -d)/body.md"
-    issue=$(git current-issue)
-    if [[ -n $issue ]]; then
-      issue="Issue: [$issue]($JIRA_ADDRESS/browse/$issue)"
-    fi
-    sed "s/{{issue}}/$(escape "$issue")/" "$t" > "$body_file"
-    eval "$EDITOR \"$body_file\""
-    args="$args -F=$body_file"
-    echo "Body file saved to $body_file"
-  fi
+	t=$(tmpl)
+	if [[ -n $t ]]; then
+		body_file="$(mktemp -d)/body.md"
+		issue=$(git current-issue)
+		if [[ -n $issue ]]; then
+			issue="Issue: [$issue]($JIRA_ADDRESS/browse/$issue)"
+		fi
+		sed "s/{{issue}}/$(escape "$issue")/" "$t" >"$body_file"
+		eval "$EDITOR \"$body_file\""
+		args="$args -F=$body_file"
+		echo "Body file saved to $body_file"
+	fi
 
-  eval "gh pr create $args $*"
+	eval "gh pr create $args $*"
 }
-

@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
-start=`pbpaste | head -c 3`
+start=$(pbpaste | head -c 3)
 
-if [ $start == "{\\\"" ]; then 
-       pbpaste | sed 's/\\\"/\"/g' | jq "$@"
+if [ $start == "{\\\"" ]; then
+	pbpaste | sed 's/\\\"/\"/g' | jq "$@"
 else
-       pbpaste | jq "$@" 
+	pbpaste | jq "$@"
 fi

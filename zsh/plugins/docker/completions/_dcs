@@ -1,7 +1,7 @@
 #compdef dcs
 
 _dcs() {
-    _arguments "*: :($(docker_services))"
+	_arguments "*: :($(docker_services))"
 }
 
 _dcs

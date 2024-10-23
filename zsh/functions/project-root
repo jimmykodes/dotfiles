@@ -2,15 +2,15 @@
 local i=0
 local wd=$(pwd)
 while true; do
-  i=$((i+1))
-  if [ $i -gt 15 ]; then
-    echo "max recursion depth reached"
-    exit 1
-  fi
-  if stat -q "$wd"/.git > /dev/null; then
-    echo "$wd"
-    break
-  else
-    wd=$(dirname "$wd")
-  fi
+	i=$((i + 1))
+	if [ $i -gt 15 ]; then
+		echo "max recursion depth reached"
+		exit 1
+	fi
+	if stat -q "$wd"/.git >/dev/null; then
+		echo "$wd"
+		break
+	else
+		wd=$(dirname "$wd")
+	fi
 done

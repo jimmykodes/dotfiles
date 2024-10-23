@@ -2,8 +2,8 @@
 
 f=${1:-".env"}
 if [[ ! -e $f ]]; then
-  echo "${f} could not be found"
-  return
+	echo "${f} could not be found"
+	return
 fi
 set -a
 source $f

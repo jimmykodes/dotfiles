@@ -40,7 +40,7 @@ dcudb() {
 }
 
 dcl() {
-  dc logs "$@"
+	dc logs "$@"
 }
 
 dclf() {
@@ -86,62 +86,62 @@ dccs() {
 
 temp_mysql() {
 	docker run \
-        --rm \
-        -d \
-        -p ${1:-3306}:3306 \
-        --env MARIADB_ALLOW_EMPTY_ROOT_PASSWORD="yes" \
-        --name temp_mysql \
-        mariadb:10.5
+		--rm \
+		-d \
+		-p ${1:-3306}:3306 \
+		--env MARIADB_ALLOW_EMPTY_ROOT_PASSWORD="yes" \
+		--name temp_mysql \
+		mariadb:10.5
 }
 
 temp_mysql_init() {
-    docker run \
-        --rm \
-        -d \
-        -p ${1}:3306 \
-        -v ${2}:/docker-entrypoint-initdb.d \
-        --env MARIADB_ROOT_PASSWORD="password" \
-        --name temp_mysql \
-        mariadb:10.5
+	docker run \
+		--rm \
+		-d \
+		-p ${1}:3306 \
+		-v ${2}:/docker-entrypoint-initdb.d \
+		--env MARIADB_ROOT_PASSWORD="password" \
+		--name temp_mysql \
+		mariadb:10.5
 }
 
 temp_psql_init() {
 	docker run \
-        --rm \
-        -d \
-        -p 5432:5432 \
-        -v ${1}:/docker-entrypoint-initdb.d \
-        --env POSTGRES_PASSWORD=password \
-        --name temp_psql \
-        postgres:14
+		--rm \
+		-d \
+		-p 5432:5432 \
+		-v ${1}:/docker-entrypoint-initdb.d \
+		--env POSTGRES_PASSWORD=password \
+		--name temp_psql \
+		postgres:14
 }
 
 temp_psql() {
 	docker run \
-        --rm \
-        -d \
-        -p ${1:-5432}:5432 \
-        --env POSTGRES_PASSWORD=password \
-        --name temp_psql \
-        postgres:14
+		--rm \
+		-d \
+		-p ${1:-5432}:5432 \
+		--env POSTGRES_PASSWORD=password \
+		--name temp_psql \
+		postgres:14
 }
 
 temp_datastore() {
-  docker run \
-    --rm \
-    -d \
-    -p ${1:-8081}:8081 \
-    --name temp_datastore \
-    gcr.io/google.com/cloudsdktool/google-cloud-cli:latest \
-    gcloud beta emulators datastore start --project local-test --host-port 0.0.0.0:8081
+	docker run \
+		--rm \
+		-d \
+		-p ${1:-8081}:8081 \
+		--name temp_datastore \
+		gcr.io/google.com/cloudsdktool/google-cloud-cli:latest \
+		gcloud beta emulators datastore start --project local-test --host-port 0.0.0.0:8081
 }
 
 temp_pubsub() {
-  docker run \
-    --rm \
-    -d \
-    -p ${1:-8085}:8085 \
-    --name temp_pubsub \
-    gcr.io/google.com/cloudsdktool/google-cloud-cli:latest \
-    gcloud beta emulators pubsub start --project local-test --host-port 0.0.0.0:8085
+	docker run \
+		--rm \
+		-d \
+		-p ${1:-8085}:8085 \
+		--name temp_pubsub \
+		gcr.io/google.com/cloudsdktool/google-cloud-cli:latest \
+		gcloud beta emulators pubsub start --project local-test --host-port 0.0.0.0:8085
 }

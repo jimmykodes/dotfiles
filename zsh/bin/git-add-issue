@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
 main() {
-  local ci
-  ci=$(git current-issue)
-  if [[ -n $ci ]]; then
-    echo "current branch already has issue set: $ci"
-    read -r -p "overwrite? (y/N): " overwrite
-    overwrite=$(tr '[:upper:]' '[:lower:]' <<< "$overwrite")
-    if [[ $overwrite != "y" ]]; then
-      return
-    fi
-  fi
-  git config --replace-all "branch.$(git current-branch).issue" "$1"
+	local ci
+	ci=$(git current-issue)
+	if [[ -n $ci ]]; then
+		echo "current branch already has issue set: $ci"
+		read -r -p "overwrite? (y/N): " overwrite
+		overwrite=$(tr '[:upper:]' '[:lower:]' <<<"$overwrite")
+		if [[ $overwrite != "y" ]]; then
+			return
+		fi
+	fi
+	git config --replace-all "branch.$(git current-branch).issue" "$1"
 }
 
 main "$@"

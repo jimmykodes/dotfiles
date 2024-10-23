@@ -9,12 +9,12 @@ export XDG_CONFIG_HOME="$HOME/.config"
 [[ -d "$VENV" ]] || mkdir -p "$VENV"
 
 if [[ -e ~/.zshenv.local ]]; then
-    . ~/.zshenv.local
+	. ~/.zshenv.local
 fi
 
 fpath=(
-  /opt/homebrew/share/zsh/site-functions
-  $DOTFILES/zsh/completions
-  $DOTFILES/zsh/functions
-  $fpath
+	/opt/homebrew/share/zsh/site-functions
+	$DOTFILES/zsh/completions
+	$DOTFILES/zsh/functions
+	$fpath
 )

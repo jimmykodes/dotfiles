@@ -1,3 +1,3 @@
 if [[ -e ~/.profile.local ]]; then
-  . ~/.profile.local
+	. ~/.profile.local
 fi

@@ -21,17 +21,17 @@ esac
 
 alias ls="ls ${colorflag}"
 if [[ -x "$(command -v eza)" ]]; then
-  iconflag=""
-  if exa --icons > /dev/null 2>&1; then
-    iconsflag="--icons"
-  fi
-  commonflags="--git --long --group-directories-first --no-user --no-time --no-filesize"
-  alias l="eza ${iconsflag} ${commonflags}"
-  alias la="eza ${iconsflag} ${commonflags} --all"
-  alias tree="eza --tree --classify --group-directories-first"
+	iconflag=""
+	if exa --icons >/dev/null 2>&1; then
+		iconsflag="--icons"
+	fi
+	commonflags="--git --long --group-directories-first --no-user --no-time --no-filesize"
+	alias l="eza ${iconsflag} ${commonflags}"
+	alias la="eza ${iconsflag} ${commonflags} --all"
+	alias tree="eza --tree --classify --group-directories-first"
 else
-  alias l='ls -lFh'
-  alias la='ls -alFh'
+	alias l='ls -lFh'
+	alias la='ls -alFh'
 fi
 
 # Arch Aliases
@@ -56,9 +56,9 @@ alias G="| grep"
 alias unexport='unset'
 
 if [[ -x "$(command -v kubectl)" ]]; then
-  alias k="kubectl"
+	alias k="kubectl"
 fi
 
 if [[ -x "$(command -v k9s)" ]]; then
-  alias ks="k9s"
+	alias ks="k9s"
 fi

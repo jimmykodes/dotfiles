@@ -3,46 +3,46 @@
 TD_FILE="${HOME}/.tasks.td"
 
 usage() {
-  echo "Usage: $(basename "$0") [-lh]" 1>&2
+	echo "Usage: $(basename "$0") [-lh]" 1>&2
 }
 
 exit_err() {
-  usage
-  exit 1
+	usage
+	exit 1
 }
 
 list() {
-  cat "${TD_FILE}"
+	cat "${TD_FILE}"
 }
 
 open() {
-  eval "$EDITOR \"${TD_FILE}\""
+	eval "$EDITOR \"${TD_FILE}\""
 }
 
 add() {
-  echo "$@" >> "${TD_FILE}"
+	echo "$@" >>"${TD_FILE}"
 }
 
 while getopts "lha" options; do
-  case "${options}" in
-    l)
-      list
-      exit
-      ;;
-    h)
-      usage
-      exit
-      ;;
-    a)
-      shift
-      add "- $*"
-      list
-      exit
-      ;;
-    *)
-      exit_err
-      ;;
-  esac
+	case "${options}" in
+	l)
+		list
+		exit
+		;;
+	h)
+		usage
+		exit
+		;;
+	a)
+		shift
+		add "- $*"
+		list
+		exit
+		;;
+	*)
+		exit_err
+		;;
+	esac
 done
 
 open
