@@ -23,10 +23,8 @@ icons=(
 	HOME_ICON '\uF015'     # 
 	HOME_SUB_ICON '\uF07C' # 
 
+	VCS_DIRTY_ICON ''
 	VCS_BRANCH_ICON '\uF126'           # 
-	VCS_UNTRACKED_ICON '\uF059'        # 
-	VCS_UNSTAGED_ICON '\uF06A'         # 
-	VCS_STAGED_ICON '\uF055'           # 
 	VCS_STASH_ICON '\uF01C'            # 
 	VCS_INCOMING_CHANGES_ICON '\u2193' # ↓
 	VCS_OUTGOING_CHANGES_ICON '\u2191' # ↑
@@ -96,9 +94,6 @@ _jimple_venv() {
 
 declare -A git_strings
 git_strings=(
-	STAGED "%F{cyan}${icons[VCS_STAGED_ICON]}%f"
-	UNSTAGED "%F{yellow}${icons[VCS_UNSTAGED_ICON]}%f"
-	UNTRACKED "%F{blue}${icons[VCS_UNTRACKED_ICON]}%f"
 	STASH "%F{white}${icons[VCS_STASH_ICON]}%f"
 	AHEAD "%F{magenta}${icons[VCS_OUTGOING_CHANGES_ICON]}%f"
 	BEHIND "%F{magenta}${icons[VCS_INCOMING_CHANGES_ICON]}%f"
@@ -113,7 +108,7 @@ _jimple_git() {
 	# if fetching branch name failed, assume not a git repo
 	[ $? -eq 0 ] || return
 
-	git_status=$(git status --porcelain --show-stash --branch)
+	git_status=$(git status --porcelain --branch)
 	num_stash=$(git stash list | wc -l)
 
 	out=""
@@ -121,13 +116,16 @@ _jimple_git() {
 	if [ $num_stash -gt 0 ]; then out+=${git_strings[STASH]}; fi
 	if rg -q "\[ahead [\d]+\]" <<<$git_status; then out+=${git_strings[AHEAD]}; fi
 	if rg -q "\[behind [\d]+\]" <<<$git_status; then out+=${git_strings[BEHIND]}; fi
-	if rg -q "^\?{2}" <<<$git_status; then out+=${git_strings[UNTRACKED]}; fi
-	if rg -q "^[AMD]" <<<$git_status; then out+=${git_strings[STAGED]}; fi
-	if rg -q "^.[AMD]" <<<$git_status; then out+=${git_strings[UNSTAGED]}; fi
+
+	branch_color="green"
+	if rg -q "^([AMD]|.[AMD]|\?{2})" <<<$git_status; then
+		branch_color="yellow"
+		git_branch="${git_branch}${icons[VCS_DIRTY_ICON]}"
+	fi
 
 	[[ $out == "" ]] || out=" ${out}"
 
-	echo "${DELIM}%F{green}${icons[VCS_BRANCH_ICON]} ${git_branch}%f${out}"
+	echo "${DELIM}%F{cyan}${icons[VCS_BRANCH_ICON]}%f %F{$branch_color}${git_branch}%f${out}"
 }
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
