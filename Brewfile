@@ -4,12 +4,10 @@ tap 'homebrew/cask-fonts'
 
 # Applications
 cask 'wezterm'
-cask '1password/tap/1password-cli'
 cask 'hammerspoon'
 
 # font
 cask 'font-jetbrains-mono-nerd-font'
-cask 'font-monaspace'
 
 # tools
 brew 'bash'
