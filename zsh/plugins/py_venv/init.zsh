@@ -23,7 +23,7 @@ lsvenv() {
 		fi
 	done
 	for i in $venv/*; do
-		if [ -e $i/bin/python ]; then
+		if [ -e "$i/bin/python" ]; then
 			version=$($i/bin/python -V | sed 's/Python //')
 		else
 			version="N/A"

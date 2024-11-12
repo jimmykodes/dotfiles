@@ -48,8 +48,8 @@ prepend_path /usr/local/go/bin
 
 # gcloud
 if [[ -n "$(command -v gcloud)" ]]; then
-	if [[ -n "$(command -v python3.8)" ]]; then
-		export CLOUDSDK_PYTHON="$(which python3.8)"
+	if [[ -n "$(command -v python3.11)" ]]; then
+		export CLOUDSDK_PYTHON="$(which python3.11)"
 	elif [[ -n "$(command -v python3.9)" ]]; then
 		export CLOUDSDK_PYTHON="$(which python3.9)"
 	fi

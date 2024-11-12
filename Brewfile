@@ -1,7 +1,5 @@
 # vim:ft=ruby
 
-tap 'homebrew/cask-fonts'
-
 # Applications
 cask 'wezterm'
 cask 'hammerspoon'
