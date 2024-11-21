@@ -7,3 +7,5 @@ Brewfile.lock.json
 lazy-lock.json
 .luarc.json
 config/k9s/config.yaml
+config/k9s/skins
+

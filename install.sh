@@ -121,12 +121,31 @@ symlinks() {
 		create_link "$f" "$(basename "$f")"
 	done
 	local config_dir=(
-		"wezterm/colors"
 		"k9s"
 	)
 	for d in "${config_dir[@]}"; do
 		mkdir -p "$HOME/.config/$(dirname "$d")"
 		create_link "config/$d" ".config/$d"
+	done
+	local cloned_dirs=(
+		"k9s/skins;;jimmykodes/colorschemes.k9s"
+		"wezterm/colors;;jimmykodes/colorschemes.wezterm"
+	)
+	for item in "${cloned_dirs[@]}"; do
+		# Split the item into path and repo using ';' as delimiter
+		path="${item%%;;*}"
+		repo="${item##*;;}"
+
+		# Construct full path
+		full_path="$HOME/.config/$path"
+
+		# Check if directory doesn't exist
+		if [ ! -d "$full_path" ]; then
+			# Create parent directory if it doesn't exist
+			mkdir -p "$(dirname "$full_path")"
+			# Clone the repository
+			git clone "https://github.com/$repo" "$full_path"
+		fi
 	done
 }
 
