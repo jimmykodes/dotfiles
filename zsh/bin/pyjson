@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+import sys
+import json
+
+py_obj = sys.stdin.read()
+x = eval(py_obj)
+json.dump(x, sys.stdout)

@@ -1,12 +1,14 @@
 [user]
   name = jimmykodes
   email = james.keith.92@gmail.com
-  signingKey = <signing key here>
-
-[commit]
-  gpgsign = true
-  messageStore = <add path to obsidian commits file here>
-
+	signingkey = <path to ssh pub key>
 [url "git@github.com:"]
   insteadOf = https://github.com/
-
+[core]
+  excludesfile = <path to global gitignore>
+[init]
+	defaultBranch = main
+[commit]
+  gpgsign = true
+[gpg]
+  format = ssh

@@ -8,7 +8,7 @@ venv/
 .source
 .terraform
 .tf-version
-
+*.td
 *.swp
 cspell.json
 *.jkb
