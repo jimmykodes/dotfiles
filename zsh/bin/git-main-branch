@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
 
 main() {
+	# make sure this is in a git project first
 	command git rev-parse --git-dir &>/dev/null || return 1
+
+	# check to see if branch.main has been set in the config
+	local from_config
+	from_config=$(git config --get branch.main)
+	if [ -n "$from_config" ]; then
+		echo "$from_config"
+		return
+	fi
+
+	# check if `main` or `master` are valid branches
 	local branch
 	for branch in main master; do
 		if command git show-ref -q --verify refs/heads/$branch; then
@@ -9,6 +20,8 @@ main() {
 			return
 		fi
 	done
+
+	# no valid main branch found
 	return 1
 }
 
