@@ -12,3 +12,4 @@ venv/
 *.swp
 cspell.json
 *.jkb
+.llm/
