@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+main() {
+	local branch
+	branch=$(git main-branch)
+	# if somehow a main branch doesn't exist locally, assume `main` is going
+	# to be present on the remote, which I'm assuming is going to be `origin`
+	# for simplicity. Will update this if I ever need a different remote.
+	[[ -z $branch ]] && branch="main"
+	git merge "origin/$branch"
+}
+
+main

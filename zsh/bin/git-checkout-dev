@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+main() {
+	local branch
+	local current
+
+	branch=$(git dev-branch)
+	current=$(git current-branch)
+
+	if [[ -z $branch ]]; then
+		echo "Could not find a develop branch to checkout"
+		return 1
+	elif [[ "$branch" == "$current" ]]; then
+		echo "Develop branch is already checked out"
+		return
+	fi
+	git checkout "$branch"
+}
+
+main

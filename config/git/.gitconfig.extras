@@ -1,0 +1,13 @@
+[url "git@github.com:"]
+  insteadOf = https://github.com/
+[init]
+	defaultBranch = main
+[commit]
+  gpgsign = true
+[gpg]
+  format = ssh
+[color]
+	ui = true
+[alias]
+	mb = main-branch
+	cm = checkout-main

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+alias g="git"
 alias gdb='git diff $(git main-branch)...$(git current-branch)'
 alias gcnvm='git commit --no-verify -m'
 alias gp='git push'
@@ -16,54 +17,9 @@ alias gbd="git branch -d"
 alias gbD="git branch -D"
 alias gbda="git bleach"
 alias grs="git restore --staged"
-
-git-current-branch() {
-	git rev-parse --abbrev-ref HEAD
-}
-
-gcd() {
-	local branch
-	local current
-
-	branch=$(git dev-branch)
-	current=$(git current-branch)
-
-	if [[ -z $branch ]]; then
-		echo "Could not find a develop branch to checkout"
-		return 1
-	elif [[ "$branch" == "$current" ]]; then
-		echo "Develop branch is already checked out"
-		return
-	fi
-	git checkout "$branch"
-}
-
-gcm() {
-	local branch
-	local current
-
-	branch=$(git main-branch)
-	current=$(git current-branch)
-
-	if [[ -z $branch ]]; then
-		echo "Could not find a main branch to checkout"
-		return 1
-	elif [[ "$branch" == "$current" ]]; then
-		echo "Main branch is already checked out"
-		return
-	fi
-	git checkout "$branch"
-}
-
-gmom() {
-	local branch
-	branch=$(git main-branch)
-	# if somehow a main branch doesn't exist locally, assume `main` is going
-	# to be present on the remote, which I'm assuming is going to be `origin`
-	# for simplicity. Will update this if I ever need a different remote.
-	[[ -z $branch ]] && branch="main"
-	git merge "origin/$branch"
-}
+alias gcd="git checkout-dev"
+alias gcm="git checkout-main"
+alias gmom="git merge-origin-main"
 
 gcl() {
 	follow=
