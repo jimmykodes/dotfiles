@@ -1,24 +1,33 @@
 #!/usr/bin/env bash
 
 alias g="git"
-alias gdb='git diff $(git main-branch)...$(git current-branch)'
+alias gdb='git diff @{upstream}...$(git current-branch)'
 alias gcnvm='git commit --no-verify -m'
-alias gp='git push'
-alias "gp!"="git push --force"
+
+alias gp='git push origin $(git current-branch)'
+alias "gp!"="gp --force"
 alias gpsup='git push --set-upstream origin $(git current-branch)'
-alias gl="git pull"
+
+alias gl='git pull origin $(git current-branch)'
+
 alias gst='git status'
+
 alias gapa='git add --patch'
 alias ga='git add'
 alias gaa='git add .'
+
 alias gco="git checkout"
+
 alias gb="git branch"
 alias gbd="git branch -d"
 alias gbD="git branch -D"
 alias gbda="git bleach"
+
 alias grs="git restore --staged"
+
 alias gcd="git checkout-dev"
 alias gcm="git checkout-main"
+
 alias gmom="git merge-origin-main"
 
 gcl() {
