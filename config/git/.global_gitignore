@@ -13,3 +13,5 @@ venv/
 cspell.json
 *.jkb
 .llm/
+.groul
+*.bak
