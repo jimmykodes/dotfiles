@@ -9,6 +9,7 @@ alias "gp!"="gp --force"
 alias gpsup='git push --set-upstream origin $(git current-branch)'
 
 alias gl='git pull origin $(git current-branch)'
+alias gf='git fetch'
 
 alias gst='git status'
 
