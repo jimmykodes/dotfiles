@@ -15,3 +15,5 @@ cspell.json
 .llm/
 .groul
 *.bak
+.rules/
+*.patch

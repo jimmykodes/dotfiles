@@ -57,7 +57,7 @@ if [[ -n "$(command -v gcloud)" ]]; then
 	source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 fi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
 # Load all zsh files in $DOTFILES dir
 if [[ -d $DOTFILES/zsh ]]; then
@@ -65,5 +65,7 @@ if [[ -d $DOTFILES/zsh ]]; then
 		source $file
 	done
 fi
+
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
 
 source $HOME/go/src/github.com/jimmykodes/dotfiles/zsh/themes/jimple/init.zsh
