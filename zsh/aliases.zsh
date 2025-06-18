@@ -46,8 +46,8 @@ alias rmpc='find . -name *.pyc -delete && echo pycache files removed'
 
 # Common Aliases
 ######################################
-alias fd="find . -type d -name"
-alias ff="find . -type f -name"
+# alias fd="find . -type d -name"
+# alias ff="find . -type f -name"
 alias grep="grep --color"
 alias h="history"
 alias help="man"
