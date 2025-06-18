@@ -1,16 +1,41 @@
 #!/usr/bin/env bash
 
-# List out the pid for the process that is currently listening on the provided port
+# Report the PID and name of the process listening on the provided port
 
-line="$(lsof -i -P -n | grep LISTEN | grep ":$1")"
-pid=$(echo "$line" | awk '{print $2}')
-pid_name=$(echo "$line" | awk '{print $1}')
+if [[ -z "$1" ]]; then
+	echo >&2 "Report the PID and name of process using a port"
+	echo >&2 ""
+	echo >&2 "Usage: wtfport <port>"
+	echo >&2 "       wtfport ls # Show all listening processes"
+	return 1
+fi
 
-# If there's nothing running, exit
-[[ -z "$pid" ]] && exit 0
+# Special case for listing all listening processes
+if [[ "$1" == "ls" ]]; then
+	lsof -i -Pn | rg LISTEN
+	return 0
+fi
 
-# output the process name to stderr so it won't be piped along
-echo >&2 -e "$pid_name"
+# Validate port number
+if ! [[ "$1" =~ ^[0-9]+$ ]] || [[ "$1" -lt 1 || "$1" -gt 65535 ]]; then
+	echo >&2 "Error: Invalid port number '$1'. Must be between 1-65535."
+	return 1
+fi
 
-# print the process id. It can be piped, for example to pbcopy
-echo -e "$pid"
+# Find the process listening on the specified port
+line="$(lsof -i -P -n | rg ":$1 \(LISTEN\)")"
+
+if [[ -z "$line" ]]; then
+	echo >&2 "No process found listening on port $1"
+	return 1
+fi
+
+# Extract PID and process name
+pid=$(awk '{print $2}' <<<"$line")
+pid_name=$(awk '{print $1}' <<<"$line")
+
+# Output process information to stderr (won't interfere with piping PID)
+echo >&2 "Port $1: $pid_name (PID: $pid)"
+
+# Output PID to stdout (can be piped)
+echo "$pid"

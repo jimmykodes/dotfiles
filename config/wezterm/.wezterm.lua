@@ -49,7 +49,7 @@ config.keys = {
 	},
 }
 
-config.color_scheme = "pokemon"
+config.color_scheme = "system76"
 -- NL == No Ligatures
 -- NFM == No Font Mono (meaning the icons are monospaced, too)
 config.font = wezterm.font 'JetBrainsMonoNL NFM'

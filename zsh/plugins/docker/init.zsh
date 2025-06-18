@@ -15,7 +15,8 @@ alias dp='docker pull'
 
 alias dst='docker stats'
 alias dps='docker ps'
-alias dpsa='docker ps -a'
+alias dpsa='docker ps -a --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
+alias dpsA='docker ps -a'
 alias dk='docker kill'
 alias drm='docker rm'
 
