@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Remove all .bak files in the current directory and subdirectories
+# Prefers fd if available, falls back to find
+
+if command -v fd >/dev/null 2>&1; then
+	fd -I '\.bak$' -t f -x rm -v
+else
+	find . -name "*.bak" -type f -exec rm -v {} \;
+fi
