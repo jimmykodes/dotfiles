@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+
+import random
+
+# Standard Lorem Ipsum words
+LOREM_WORDS = [
+    "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
+    "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore",
+    "magna", "aliqua", "enim", "ad", "minim", "veniam", "quis", "nostrud",
+    "exercitation", "ullamco", "laboris", "nisi", "aliquip", "ex", "ea", "commodo",
+    "consequat", "duis", "aute", "irure", "in", "reprehenderit", "voluptate",
+    "velit", "esse", "cillum", "fugiat", "nulla", "pariatur", "excepteur", "sint",
+    "occaecat", "cupidatat", "non", "proident", "sunt", "culpa", "qui", "officia",
+    "deserunt", "mollit", "anim", "id", "est", "laborum", "at", "vero", "eos",
+    "accusamus", "accusantium", "doloremque", "laudantium", "totam", "rem",
+    "aperiam", "eaque", "ipsa", "quae", "ab", "illo", "inventore", "veritatis",
+    "et", "quasi", "architecto", "beatae", "vitae", "dicta", "sunt", "explicabo",
+    "nemo", "ipsam", "voluptatem", "quia", "voluptas", "aspernatur", "aut",
+    "odit", "aut", "fugit", "sed", "quia", "consequuntur", "magni", "dolores",
+    "eos", "qui", "ratione", "sequi", "nesciunt", "neque", "porro", "quisquam",
+    "est", "qui", "dolorem", "ipsum", "quia", "dolor", "sit", "amet"
+]
+
+
+def generate_sentence(min_words=5, max_words=15):
+    """Generate a single sentence with random words."""
+    num_words = random.randint(min_words, max_words)
+    words = random.choices(LOREM_WORDS, k=num_words)
+
+    # Capitalize first word
+    words[0] = words[0].capitalize()
+
+    return ' '.join(words) + '.'
+
+
+def generate_paragraph(min_sentences=3, max_sentences=8):
+    """Generate a paragraph with multiple sentences."""
+    num_sentences = random.randint(min_sentences, max_sentences)
+    sentences = [generate_sentence() for _ in range(num_sentences)]
+    return ' '.join(sentences)
+
+
+def generate_lorem_ipsum(num_paragraphs=5):
+    """Generate multiple paragraphs of Lorem Ipsum text."""
+    paragraphs = []
+
+    for _ in range(num_paragraphs):
+        paragraph = generate_paragraph()
+        paragraphs.append(paragraph)
+
+    return '\n\n'.join(paragraphs)
+
+
+def main(num_paragraphs: int | None = None):
+    # Generate and display lorem ipsum
+    lorem_text = generate_lorem_ipsum(num_paragraphs=num_paragraphs or 7)
+    print(lorem_text)
+
+
+if __name__ == "__main__":
+    import sys
+    count: int | None = None
+    if len(sys.argv) > 1:
+        try:
+            count = int(sys.argv[1])
+        except ValueError as e:
+            raise ValueError("Invalid arg - must be a valid integer.") from e
+    main(count)
