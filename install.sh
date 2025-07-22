@@ -122,6 +122,7 @@ symlinks() {
 		create_link "$f" "$(basename "$f")"
 	done
 	local config_dir=(
+		"git-hooks"
 		"k9s"
 	)
 	for d in "${config_dir[@]}"; do

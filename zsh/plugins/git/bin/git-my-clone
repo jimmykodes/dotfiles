@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+main() {
+	local repo
+	local dir
+	local bare=0
+
+	# Parse options
+	while getopts ":r:d:b" opt; do
+		case $opt in
+		r)
+			repo=$OPTARG
+			;;
+		d)
+			dir=$OPTARG
+			;;
+		b)
+			bare=1
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			return 1
+			;;
+		:)
+			echo "Option -$OPTARG requires an argument." >&2
+			usage
+			;;
+		esac
+	done
+
+	# Shift off the options and optional --
+	shift $((OPTIND - 1))
+
+	if [[ -z "$repo" ]]; then
+		echo "repo required"
+		return
+	fi
+
+	local flags="--recurse-submodules"
+
+	if [[ "$bare" -gt 0 ]]; then
+		flags="$flags --bare"
+	fi
+
+	local cmd="git clone $flags git@github.com:$repo"
+	if [[ -n $dir ]]; then
+		cmd="$cmd $dir"
+	else
+		dir=$(basename "$repo")
+	fi
+
+	echo "running cmd: $cmd" >&2
+	eval "$cmd" || return 1
+
+	local git_dir
+	git_dir=$(cd "$dir" && realpath "$(git rev-parse --git-common-dir)")
+	for hook in "$HOME"/.config/git-hooks/*; do
+		ln -s "$hook" "$git_dir/hooks/"
+	done
+
+	echo "$dir"
+}
+
+main "$@"

@@ -20,14 +20,15 @@ plugins=(
 for plugin in "${plugins[@]}"; do
 	if [[ -f $DOTFILES/zsh/plugins/$plugin/init.zsh ]]; then
 		source "$DOTFILES/zsh/plugins/$plugin/init.zsh"
-	else
-		echo "invalid plugin: $plugin"
 	fi
 	if [[ -d $DOTFILES/zsh/plugins/$plugin/completions ]]; then
 		fpath=(
 			"$DOTFILES/zsh/plugins/$plugin/completions"
 			$fpath
 		)
+	fi
+	if [[ -d "$DOTFILES/zsh/plugins/$plugin/bin" ]]; then
+		prepend_path "$DOTFILES/zsh/plugins/$plugin/bin"
 	fi
 done
 

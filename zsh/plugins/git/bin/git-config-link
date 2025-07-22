@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+main() {
+	if ! command git rev-parse --git-dir &>/dev/null; then
+		echo "Not a git repo"
+		exit 1
+	fi
+
+	local git_dir
+	local repo
+
+	git_dir=$(realpath "$(git rev-parse --git-common-dir)")
+	repo=$(basename "$git_dir")
+
+	local config_dir
+	config_dir="$HOME/.config/local_repo_configs/$repo"
+
+	if [[ ! -d "$config_dir" ]]; then
+		echo "No local configs to link"
+		return 0
+	fi
+
+	shopt -s dotglob
+	for file in "$config_dir"/*; do
+		echo "linking $file"
+		ln -s "$file" .
+	done
+	shopt -u dotglob
+}
+
+main
