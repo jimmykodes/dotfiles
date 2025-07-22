@@ -31,6 +31,8 @@ alias gcm="git checkout-main"
 
 alias gmom="git merge-origin-main"
 
+alias gw="git worktree"
+
 gcl() {
 	follow=
 	repo=

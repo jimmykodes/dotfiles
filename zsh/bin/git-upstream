@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+main() {
+	git for-each-ref --format='%(refname:short) %(upstream:short)' refs/heads | column -t
+}
+
+main
