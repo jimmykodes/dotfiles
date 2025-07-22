@@ -99,7 +99,11 @@ git_strings=(
 	BEHIND "%F{magenta}${icons[VCS_INCOMING_CHANGES_ICON]}%f"
 )
 
-_jimple_git() {
+_jimple_git_bare() {
+	echo "${DELIM}%F{magenta}${icons[VCS_BRANCH_ICON]} root%f"
+}
+
+_jimple_git_branch() {
 	local git_branch
 	local git_status
 	local num_stash
@@ -128,6 +132,20 @@ _jimple_git() {
 	echo "${DELIM}%F{cyan}${icons[VCS_BRANCH_ICON]}%f %F{$branch_color}${git_branch}%f${out}"
 }
 
+_jimple_git() {
+	local bare
+	bare=$(git rev-parse --is-bare-repository 2>/dev/null)
+
+	[ $? -eq 0 ] || return $?
+
+	if [ "$bare" = "true" ]; then
+		_jimple_git_bare
+	else
+		_jimple_git_branch
+	fi
+
+}
+
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
 P=""
@@ -136,7 +154,7 @@ P+='$(_jimple_ssh)'
 P+='$(_jimple_wd)'
 P+='$(_jimple_git)'
 P+='$(_jimple_venv)'
-P+='$(_jimple_arch)'
+# P+='$(_jimple_arch)'
 P+="${NEWLINE}"
 P+='$(_jimple_end)'
 P+="%{$reset_color%}"
