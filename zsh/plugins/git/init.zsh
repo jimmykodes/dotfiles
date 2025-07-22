@@ -46,24 +46,10 @@ gcb() {
 		echo "branch required"
 		return 1
 	fi
-	git config --replace-all branch.lastcreated $branch
 	git checkout -b $branch
 	if [[ -n $issue ]]; then
 		git config --add branch.$branch.issue $issue
 	fi
-}
-
-gcol() {
-	local branch=$(git config --get branch.lastcreated)
-	if [[ -z $branch ]]; then
-		echo "no previously created branch to checkout"
-		return 1
-	fi
-	if [[ $branch == $(git rev-parse --abbrev-ref HEAD) ]]; then
-		echo "last created branch already checked out"
-		return
-	fi
-	git checkout $branch
 }
 
 gcmsg() {
@@ -78,49 +64,4 @@ gcmsg() {
 	if [[ -n "$messageStore" ]]; then
 		echo "$(date +%Y-%m-%d): $project: $message" >>"$messageStore"
 	fi
-}
-
-## GitHub Functions
-
-ghrc() {
-	local git_cb=$(git current-branch)
-	gh release create $1 --target ${2:-"$git_cb"} --prerelease --generate-notes
-}
-
-escape() {
-	sed 's/\//\\\//g' <<<"$1"
-}
-
-ghpr() {
-	tmpl() {
-		for location in "." "docs" ".github" "$HOME/.config/git-templates"; do
-			for ft in md txt; do
-				local file="$location/pull_request_template.${ft}"
-				if [[ -e "$file" ]]; then
-					echo "$file"
-					return
-				fi
-			done
-		done
-	}
-
-	local t
-	local body_file
-	local issue
-	local args='--assignee=@me'
-
-	t=$(tmpl)
-	if [[ -n $t ]]; then
-		body_file="$(mktemp -d)/body.md"
-		issue=$(git current-issue)
-		if [[ -n $issue ]]; then
-			issue="Issue: [$issue]($JIRA_ADDRESS/browse/$issue)"
-		fi
-		sed "s/{{issue}}/$(escape "$issue")/" "$t" >"$body_file"
-		eval "$EDITOR \"$body_file\""
-		args="$args -F=$body_file"
-		echo "Body file saved to $body_file"
-	fi
-
-	eval "gh pr create $args $*"
 }
