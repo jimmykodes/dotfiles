@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+main() {
+	local git_dir
+	git_dir=$(git rev-parse --git-common-dir) || return 1
+	for item in "$@"; do
+		echo "$item" >>"$git_dir/info/exclude"
+	done
+}
+
+main "$@"
