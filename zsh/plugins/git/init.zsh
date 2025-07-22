@@ -33,6 +33,17 @@ alias gmom="git merge-origin-main"
 
 alias gw="git worktree"
 
+gws() {
+	local branch="$1"
+	if [[ -z $branch ]]; then
+		echo "branch required"
+		return 1
+	fi
+	local dir
+	dir=$(git worktree list --porcelain | rg "refs/heads/$branch" -B2 | head -n 1 | awk '{print $2}')
+	cd "$dir" || return 1
+}
+
 jkcln() {
 	local repo="$1"
 	shift 1

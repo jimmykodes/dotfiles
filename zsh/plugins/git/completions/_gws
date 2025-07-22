@@ -1,0 +1,7 @@
+#compdef gws
+
+_gws() {
+	_arguments "*: :($(git worktree-branches))"
+}
+
+_gws

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+main() {
+	git worktree list --porcelain | rg "^branch" | awk '{$2; sub(/^branch refs\/heads\//, ""); print}'
+}
+
+main
