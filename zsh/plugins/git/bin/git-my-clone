@@ -4,9 +4,10 @@ main() {
 	local repo
 	local dir
 	local bare=0
+	local extra_flags
 
 	# Parse options
-	while getopts ":r:d:b" opt; do
+	while getopts ":r:d:bf:" opt; do
 		case $opt in
 		r)
 			repo=$OPTARG
@@ -16,6 +17,9 @@ main() {
 			;;
 		b)
 			bare=1
+			;;
+		f)
+			extra_flags=$OPTARG
 			;;
 		\?)
 			echo "Invalid option: -$OPTARG" >&2
@@ -40,6 +44,9 @@ main() {
 
 	if [[ "$bare" -gt 0 ]]; then
 		flags="$flags --bare"
+	fi
+	if [[ -n "$extra_flags" ]]; then
+		flags="$flags $extra_flags"
 	fi
 
 	local cmd="git clone $flags git@github.com:$repo"

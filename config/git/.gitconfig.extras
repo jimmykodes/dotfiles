@@ -12,3 +12,4 @@
 	mb = main-branch
 	cm = checkout-main
 	cl = my-clone
+	wt = worktree
