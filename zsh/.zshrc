@@ -1,5 +1,8 @@
 unsetopt beep
 
+# enable vim mode
+bindkey -v
+
 # Functions
 if [[ -d $DOTFILES/zsh/functions ]]; then
 	for func in $DOTFILES/zsh/functions/*; do
