@@ -71,4 +71,5 @@
 	; diff
 	diff-branch = !git diff @{upstream}...$(git current-branch)
 	db = diff-branch
+	ds = diff --staged
 	dt = difftool -y
