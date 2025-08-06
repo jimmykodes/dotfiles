@@ -1,5 +1,42 @@
 #!/usr/bin/env bash
 
+log() {
+	echo "$1" >&2
+}
+
+create_link() {
+	local src=$1
+	local dst=$2
+
+	if [ -L "$dst" ]; then
+		# destination is already a symlink
+		if [ -e "$dst" ]; then
+			# link points to a valid file, lets see if it is the same file we are trying to link
+			target=$(readlink "$dst")
+			if [ "$target" -ef "$src" ]; then
+				log "$dst already linked"
+				return 0
+			else
+				log "$dst already linked to $target - could not link"
+				return 1
+			fi
+		else
+			# link points to nothing, unlink it
+			log "$dst is a symlink to a non-existent file, removing before linking"
+			unlink "$HOME/$dst"
+		fi
+	else
+		# not a link
+		if [ -f "$dst" ]; then
+			# file is an actual file move file before creating symlink
+			log "$dst already exists, moving to $dst.bk before symlinking"
+			mv "$dst" "$dst.bk"
+		fi
+	fi
+	ln -s "${src}" "${dst}"
+	log "$dst linked to $src"
+}
+
 main() {
 	if ! command git rev-parse --git-dir &>/dev/null; then
 		echo "Not a git repo"
@@ -16,14 +53,14 @@ main() {
 	config_dir="$HOME/.config/local_repo_configs/$repo"
 
 	if [[ ! -d "$config_dir" ]]; then
-		echo "No local configs to link"
+		log "No local configs to link"
 		return 0
 	fi
 
 	shopt -s dotglob
 	for file in "$config_dir"/*; do
-		echo "linking $file"
-		ln -s "$file" .
+		log "linking $file"
+		create_link "$file" "./$(basename "$file")"
 	done
 	shopt -u dotglob
 }

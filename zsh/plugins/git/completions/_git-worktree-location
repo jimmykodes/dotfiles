@@ -1,0 +1,7 @@
+#compdef git-worktree-location
+
+_git-worktree-location() {
+	_arguments "*: :($(git worktree-branches))"
+}
+
+_git-worktree-location

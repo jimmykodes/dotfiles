@@ -1,3 +1,4 @@
+# vim:ft=gitignore
 .idea/
 .fleet/
 node_modules/

@@ -1,14 +1,9 @@
+; vim:ft=gitconfig
 [user]
   name = jimmykodes
   email = james.keith.92@gmail.com
-	signingkey = <path to ssh pub key>
-[url "git@github.com:"]
-  insteadOf = https://github.com/
+	signingkey = ~/.ssh/id_rsa.pub
 [core]
   excludesfile = <path to global gitignore>
-[init]
-	defaultBranch = main
-[commit]
-  gpgsign = true
-[gpg]
-  format = ssh
+[include]
+	path = ~/.gitconfig.extras

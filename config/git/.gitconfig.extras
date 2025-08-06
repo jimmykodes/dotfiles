@@ -1,3 +1,4 @@
+; vim:ft=gitconfig
 [url "git@github.com:"]
   insteadOf = https://github.com/
 [init]
@@ -6,10 +7,68 @@
   gpgsign = true
 [gpg]
   format = ssh
+[diff]
+	tool = nvimdiff
+[merge]
+	tool = nvimdiff
 [color]
 	ui = true
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
 [alias]
+	; mine
 	mb = main-branch
 	cm = checkout-main
 	cl = my-clone
+
+	; fetch
+	f = fetch
+
+	; stash
+	sta = stash --all
+
+	; branch
+	b = branch
+	bd = branch -d
+	bD = branch -D
+	bda = bleach
+
+	; checkout
+	cb = checkout -b
+	co = checkout
+
+	; add
+	a = add
+	aa = add .
+	apa = add --patch
+
+	; status
+	st = status
+
+	; commit
+	c = commit
+	ca = commit --amend
+	cmnv = commit --no-verify -m
+	cmsg = commit -m
+
+	; push
+	p = !git push origin $(git current-branch)
+	pf = !git p --force-with-lease
+	psup = !git push --set-upstream origin $(git current-branch)
+
+	; pull
+	lc = !git pull origin $(git current-branch) ; pull current
+	lu = !git pull                              ; pull upstream
+
+	; worktree
 	wt = worktree
+	wta = worktree add
+	wtb = worktree-branches
+	wtl = worktree-location
+
+	; diff
+	diff-branch = !git diff @{upstream}...$(git current-branch)
+	db = diff-branch
+	dt = difftool -y
