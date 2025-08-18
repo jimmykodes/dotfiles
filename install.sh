@@ -117,6 +117,7 @@ symlinks() {
 		"config/wezterm/.wezterm.lua"
 		"config/git/.global_gitignore"
 		"config/git/.gitconfig.extras"
+		"config/tmux/.tmux.conf"
 	)
 	for f in "${files[@]}"; do
 		create_link "$f" "$(basename "$f")"
