@@ -23,12 +23,6 @@
 	cm = checkout-main
 	cl = my-clone
 
-	; fetch
-	f = fetch
-
-	; stash
-	sta = stash --all
-
 	; branch
 	b = branch
 	bd = branch -d
@@ -64,9 +58,8 @@
 
 	; worktree
 	wt = worktree
-	wta = worktree add
-	wtb = worktree-branches
-	wtl = worktree-location
+	wtco = "!f() { git worktree add --checkout -b $1 $1 origin/$1; }; f"
+	wtb = "!f() { git worktree add -b  \"$1\" \"$1\" \"$2\"; }; f"
 
 	; diff
 	diff-branch = !git diff @{upstream}...$(git current-branch)
