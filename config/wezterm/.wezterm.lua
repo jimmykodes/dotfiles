@@ -108,6 +108,17 @@ local function tab_title(tab_info)
 	return bn
 end
 
-wezterm.on('format-tab-title', tab_title)
+---@class Handler
+---@field event string
+---@field handler function
+
+---@type Handler[]
+local eventHandlers = {
+	{ event = 'format-tab-title', handler = tab_title },
+}
+
+for _, h in ipairs(eventHandlers) do
+	wezterm.on(h.event, h.handler)
+end
 
 return config
