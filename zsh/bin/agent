@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+is_new=0
+interactive=0
+daemon=0
+while getopts "hnid" opt; do
+	case $opt in
+	n) is_new=1 ;;
+	i) interactive=1 ;;
+	d) daemon=1 ;;
+	h)
+		echo "Usage: $(basename "$0") [-h] [-n] [-i|-d] name [message]"
+		echo "Options:"
+		echo "  -h  Show this help message and exit"
+		echo "  -n  Start a new conversation"
+		echo "  -i  Run in interactive mode"
+		echo "  -d  Run as a daemon (background)"
+		echo ""
+		echo "Arguments:"
+		echo "  name     The name of the conversation/thread"
+		echo "  message  Optional initial message to start the conversation"
+		exit 0
+		;;
+	?)
+		echo "Invalid option: -$OPTARG"
+		exit 1
+		;;
+	esac
+done
+shift $((OPTIND - 1))
+
+# Check for mutually exclusive options
+if [[ $interactive -eq 1 && $daemon -eq 1 ]]; then
+	echo "Error: -i and -d are mutually exclusive options"
+	exit 1
+fi
+
+cmd="docker run"
+
+if [[ $interactive -eq 1 ]]; then
+	cmd="${cmd} \
+		 -it"
+elif [[ $daemon -eq 1 ]]; then
+	cmd="${cmd} \
+		 -d"
+fi
+
+cmd="${cmd} \
+		--rm \
+    --env LLM_ANTHROPIC=\"$(llm anthropic key get)\" \
+    --workdir /app \
+    -v "${PWD}:/app" \
+    -v "${HOME}/.agent/:/agent" \
+    --name \"$1\" \
+    llm:local \
+    chat"
+
+if [[ is_new -gt 0 ]]; then
+	cmd="${cmd} \
+		new"
+else
+	cmd="${cmd} \
+		resume"
+fi
+
+cmd="${cmd} \
+		--yolo \
+		--data-dir /agent"
+
+if [[ -n "$2" ]]; then
+	cmd="${cmd} \
+    --msg \"$2\""
+fi
+
+if [[ is_new -gt 0 ]]; then
+	cmd="${cmd} \
+		'$1'"
+else
+	cmd="${cmd} \
+		--thread '$1'"
+fi
+
+eval "${cmd}"
