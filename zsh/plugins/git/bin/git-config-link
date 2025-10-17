@@ -23,7 +23,7 @@ create_link() {
 		else
 			# link points to nothing, unlink it
 			log "$dst is a symlink to a non-existent file, removing before linking"
-			unlink "$HOME/$dst"
+			unlink "$dst"
 		fi
 	else
 		# not a link
@@ -57,12 +57,47 @@ main() {
 		return 0
 	fi
 
-	shopt -s dotglob
-	for file in "$config_dir"/*; do
-		log "linking $file"
-		create_link "$file" "./$(basename "$file")"
-	done
-	shopt -u dotglob
+	# Check if a .manifest file exists
+	local manifest_file="$config_dir/.manifest"
+	if [[ -f "$manifest_file" ]]; then
+		log "Using manifest file at $manifest_file"
+		while IFS= read -r line || [[ -n "$line" ]]; do
+			# Skip empty lines and comments
+			[[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+
+			local src=""
+			local dst=""
+
+			# Check if line contains "=>"
+			if [[ "$line" == *"=>"* ]]; then
+				# Extract source and destination
+				src=$(echo "$line" | awk -F'=>' '{print $1}' | xargs)
+				dst=$(echo "$line" | awk -F'=>' '{print $2}' | xargs)
+				src="$config_dir/$src"
+				dst="./$dst"
+			else
+				# Simple case, no "=>" present
+				src="$config_dir/$(echo "$line" | xargs)"
+				dst="./$(basename "$src")"
+			fi
+
+			if [[ -e "$src" ]]; then
+				log "linking $src to $dst (from manifest)"
+				create_link "$src" "$dst"
+			else
+				log "Warning: $src listed in manifest but not found"
+			fi
+		done <"$manifest_file"
+	else
+		# Original behavior: link all files
+		log "No manifest file, linking all files in $config_dir"
+		shopt -s dotglob
+		for file in "$config_dir"/*; do
+			log "linking $file"
+			create_link "$file" "./$(basename "$file")"
+		done
+		shopt -u dotglob
+	fi
 }
 
 main
