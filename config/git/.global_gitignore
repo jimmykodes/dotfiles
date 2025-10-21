@@ -19,3 +19,4 @@ cspell.json
 .rules/
 *.patch
 *.ignore
+.llmrc
