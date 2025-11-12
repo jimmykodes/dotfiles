@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# main runs the brew outdated-leaves function
+#
+# This function gets the `brew outdated` output
+# as well as the `brew leaves` output and prints
+# the leaves that are currently outdated
+#
+# Example:
+# $ brew outdate
+#   bat (0.25.0_1) < 0.26.0
+#   brotli (1.1.0) < 1.2.0
+#   ca-certificates (2025-09-09) < 2025-11-04
+#   coreutils (9.8) < 9.9
+#   curl (8.16.0) < 8.17.0
+# $ brew leaves
+#   arduino-cli
+#   bash
+#   bat
+#   blueutil
+#   cobra-cli
+#   coreutils
+#   curl
+# $ brew outdated-leaves
+#   bat (0.25.0_1) < 0.26.0
+#   coreutils (9.8) < 9.9
+#   curl (8.16.0) < 8.17.0
+main() {
+	local outdated_output
+	local leaves_output
+
+	# Get outdated packages with their version info
+	outdated_output=$(brew outdated -v)
+
+	# Get leaf packages (packages that are not dependencies of other packages)
+	leaves_output=$(brew leaves)
+
+	# Filter outdated packages to only show leaves
+	while IFS= read -r line; do
+		if [[ -n "$line" ]]; then
+			# Extract package name (first word before space or parenthesis)
+			package_name=$(echo "$line" | awk '{print $1}')
+
+			# Check if this package is in the leaves list
+			if echo "$leaves_output" | grep -q "^${package_name}$"; then
+				echo "$line"
+			fi
+		fi
+	done <<<"$outdated_output"
+}
+
+main

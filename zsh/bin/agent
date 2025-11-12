@@ -51,6 +51,8 @@ cmd="${cmd} \
     --workdir /app \
     -v "${PWD}:/app" \
     -v "${HOME}/.agent/:/agent" \
+		-v "${HOME}/.config/llm_agent:/config:ro" \
+		-v "${HOME}/.cache/llm/agent_log:/log.txt" \
     --name \"$1\" \
     llm:local \
     chat"
@@ -65,6 +67,9 @@ fi
 
 cmd="${cmd} \
 		--yolo \
+		--config-dir /config \
+		--log-level debug \
+		--log-file /log.txt \
 		--data-dir /agent"
 
 if [[ -n "$2" ]]; then
