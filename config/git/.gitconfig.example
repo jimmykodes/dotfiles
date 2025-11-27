@@ -1,9 +1,9 @@
 ; vim:ft=gitconfig
 [user]
-  name = jimmykodes
-  email = james.keith.92@gmail.com
+	name = jimmykodes
+	email = james.keith.92@gmail.com
 	signingkey = ~/.ssh/id_rsa.pub
 [core]
-  excludesfile = <path to global gitignore>
+	excludesfile = ~/.global_gitignore
 [include]
 	path = ~/.gitconfig.extras

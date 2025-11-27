@@ -155,7 +155,19 @@ symlinks() {
 git_init() {
 	# todo: figure out how to handle the git config stuff, like creating signing key, ssh key, etc
 	header "Checking git"
-	warn "Unfortunately, git setup is still manual. This is a placeholder"
+	# ssh keygen
+	if [[ ! -e "$HOME/.ssh/id_rsa" ]]; then
+		warn "no ssh key found, generating"
+		ssh-keygen -t rsa
+	else
+		success "id-rsa already exists, skipping keygen"
+	fi
+	if [[ ! -e "$HOME/.gitconfig" ]]; then
+		warn "no git config found, copying the default"
+		cp config/git/.gitconfig.example $HOME/.gitconfig
+	else
+		success "~/.gitconfig already exists"
+	fi
 }
 
 nvim_init() {
@@ -180,8 +192,27 @@ all() {
 	git_init
 }
 
+packages() {
+	sudo apt-get update
+	sudo apt-get install \
+		bash \
+		bat \
+		curl \
+		eza \
+		fzf \
+		gh \
+		htop \
+		jq \
+		neovim \
+		ripgrep \
+		yq
+}
+
 main() {
 	case $1 in
+	packages )
+		packages
+		;;
 	brew | homebrew)
 		homebrew_init
 		;;
