@@ -168,6 +168,14 @@ git_init() {
 	else
 		success "~/.gitconfig already exists"
 	fi
+
+	# GitHub authentication
+	if gh auth status > /dev/null 2>&1; then
+		success "gh cli already authenticated"
+	else
+		warn "gh not authenticated. Proceed with login"
+		gh auth login
+	fi
 }
 
 nvim_init() {
