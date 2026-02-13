@@ -12,3 +12,6 @@ setopt hist_ignore_space      # ignore commands that start with space
 setopt hist_verify            # show command with history expansion to user before running it
 setopt share_history          # share command history dataetopt APPEND_HISTORY
 setopt inc_append_history     # Save history after every command
+setopt hist_reduce_blanks     # remove extra whitespace from history
+setopt hist_ignore_all_dups   # remove older duplicates from history
+setopt bang_hist              # enable ! history expansion
