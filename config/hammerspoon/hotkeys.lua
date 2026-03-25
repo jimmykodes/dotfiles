@@ -74,6 +74,14 @@ local hotkeys = {
 		func = function() hs.window.focusedWindow():maximize(0) end
 	},
 	{
+		-- move to next monitor
+		mod = keys.hyper,
+		key = "n",
+		func = window.next_screen
+
+
+	},
+	{
 		-- toggle window full screen
 		mod = keys.hyper,
 		key = "f",

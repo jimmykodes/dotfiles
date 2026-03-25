@@ -19,6 +19,12 @@ local function resize(funcs)
 	win:setFrame(f, 0)
 end
 
+function M.next_screen()
+	local win = hs.window.focusedWindow()
+	local nextScreen = win:screen():next()
+	win:moveToScreen(nextScreen)
+end
+
 function M.left_half()
 	resize({ w = function(m) return m.w / 2 end })
 end
