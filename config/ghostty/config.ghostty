@@ -1,0 +1,14 @@
+# theme = system76
+font-family = JetBrainsMonoNL NFM
+font-size = 16
+
+# split horizontal (new pane to the right)
+keybind = super+d=new_split:right
+# split vertical (new pane below)
+keybind = super+shift+d=new_split:down
+
+# pane navigation
+keybind = super+shift+j=goto_split:bottom
+keybind = super+shift+k=goto_split:top
+keybind = super+shift+h=goto_split:left
+keybind = super+shift+l=goto_split:right

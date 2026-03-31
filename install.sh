@@ -125,6 +125,7 @@ symlinks() {
 	local config_dir=(
 		"git-hooks"
 		"k9s"
+		"ghostty"
 	)
 	for d in "${config_dir[@]}"; do
 		mkdir -p "$HOME/.config/$(dirname "$d")"
@@ -133,6 +134,7 @@ symlinks() {
 	local cloned_dirs=(
 		"k9s/skins;;jimmykodes/colorschemes.k9s"
 		"wezterm/colors;;jimmykodes/colorschemes.wezterm"
+		"ghostty/themes;;jimmykodes/colorschemes.ghostty"
 	)
 	for item in "${cloned_dirs[@]}"; do
 		# Split the item into path and repo using ';' as delimiter
@@ -170,7 +172,7 @@ git_init() {
 	fi
 
 	# GitHub authentication
-	if gh auth status > /dev/null 2>&1; then
+	if gh auth status >/dev/null 2>&1; then
 		success "gh cli already authenticated"
 	else
 		warn "gh not authenticated. Proceed with login"
@@ -218,7 +220,7 @@ packages() {
 
 main() {
 	case $1 in
-	packages )
+	packages)
 		packages
 		;;
 	brew | homebrew)
