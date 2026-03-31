@@ -1,4 +1,4 @@
-# theme = system76
+theme = light:system67,dark:system76
 font-family = JetBrainsMonoNL NFM
 font-size = 16
 
