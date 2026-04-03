@@ -75,33 +75,32 @@ create_link() {
 	local src=$1
 	local dst=$2
 
-	if [ -L "$HOME/$dst" ]; then
+	if [ -L "$dst" ]; then
 		# file is symlink
-		if [ -e "$HOME/$dst" ]; then
+		if [ -e "$dst" ]; then
 			# link points to a valid file, lets see if it is the same file we are trying to link
-			target=$(readlink "$HOME/$dst")
+			target=$(readlink "$dst")
 			if [ "$target" -ef "$BASE_DIR/$src" ]; then
-				info "$HOME/$dst already linked"
+				info "$dst already linked"
 				return 0
 			else
-				error "$HOME/$dst already linked to $target could not link"
+				error "$dst already linked to $target could not link"
 				return 1
 			fi
 		else
 			# link points to nothing, unlink it
-			warn "$HOME/$dst is a symlink to a non-existent file, removing before linking"
-			unlink "$HOME/$dst"
+			warn "$dst is a symlink to a non-existent file, removing before linking"
+			unlink "$dst"
 		fi
 	else
 		# not a link
-		if [ -f "$HOME/$dst" ]; then
+		if [ -f "$dst" ]; then
 			# file is an actual file move file before creating symlink
-			warn "$HOME/$dst already exists, moving to $HOME/$dst.bk before symlinking"
-			mv "$HOME/$dst" "$HOME/$dst.bk"
+			warn "$dst already exists, moving to $HOME/$dst.bk before symlinking"
+			mv "$dst" "$HOME/$dst.bk"
 		fi
 	fi
 	src="$(realpath "$BASE_DIR/$src")"
-	dst="$HOME/$dst"
 	ln -s "${src}" "${dst}"
 	success "$dst linked to $src"
 }
@@ -120,7 +119,7 @@ symlinks() {
 		"config/tmux/.tmux.conf"
 	)
 	for f in "${files[@]}"; do
-		create_link "$f" "$(basename "$f")"
+		create_link "$f" "$HOME/$(basename "$f")"
 	done
 	local config_dir=(
 		"git-hooks"
@@ -129,12 +128,10 @@ symlinks() {
 	)
 	for d in "${config_dir[@]}"; do
 		mkdir -p "$HOME/.config/$(dirname "$d")"
-		create_link "config/$d" ".config/$d"
+		create_link "config/$d" "$HOME/.config/$d"
 	done
 	local cloned_dirs=(
-		"k9s/skins;;jimmykodes/colorschemes.k9s"
-		"wezterm/colors;;jimmykodes/colorschemes.wezterm"
-		"ghostty/themes;;jimmykodes/colorschemes.ghostty"
+		"colorschemes;;jimmykodes/colorschemes"
 	)
 	for item in "${cloned_dirs[@]}"; do
 		# Split the item into path and repo using ';' as delimiter
@@ -142,15 +139,26 @@ symlinks() {
 		repo="${item##*;;}"
 
 		# Construct full path
-		full_path="$HOME/.config/$path"
+		full_path="clones/$path"
 
 		# Check if directory doesn't exist
 		if [ ! -d "$full_path" ]; then
 			# Create parent directory if it doesn't exist
 			mkdir -p "$(dirname "$full_path")"
 			# Clone the repository
-			git clone "https://github.com/$repo" "$full_path"
+			git clone "https://github.com/$repo" "$full_path" --depth 1
 		fi
+	done
+	local colorscheme_dirs=(
+		"config/k9s/skins;;clones/colorschemes/extras/k9s"
+		"config/ghostty/themes;;clones/colorschemes/extras/ghostty"
+	)
+	for item in "${colorscheme_dirs[@]}"; do
+		# Split the item into path and repo using ';' as delimiter
+		target="${item%%;;*}"
+		src="${item##*;;}"
+
+		create_link "$src" "$target"
 	done
 }
 
@@ -191,7 +199,7 @@ nvim_init() {
 			git clone https://github.com/jimmykodes/neojim ../neojim
 		fi
 		info "Linking neojim to nvim"
-		create_link "../neojim" ".config/nvim"
+		create_link "../neojim" "$HOME/.config/nvim"
 	fi
 }
 
