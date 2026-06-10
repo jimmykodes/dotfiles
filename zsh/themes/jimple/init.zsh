@@ -29,6 +29,7 @@ icons=(
 	VCS_INCOMING_CHANGES_ICON '\u2193' # ↓
 	VCS_OUTGOING_CHANGES_ICON '\u2191' # ↑
 
+	DOCKER_ICON '\uf21f' # 
 	PYTHON_ICON '\UE73C' # 
 	NODE_ICON '\u2B22'   # ⬢
 
@@ -90,6 +91,21 @@ _jimple_venv() {
 	[[ -z $version ]] && version=$(python -V 2>&1 | awk '{ print $2 }')
 	local machine=$(python -c "import platform; print(platform.machine())")
 	echo "${DELIM}%F{magenta}${icons[PYTHON_ICON]} $venv($version)[$machine]%f"
+}
+
+_jimple_docker() {
+	if docker version >/dev/null 2>&1; then
+		local running
+		local all
+		running=$(docker ps -q | wc -l | sed 's/ //g')
+		all=$(docker ps -aq | wc -l | sed 's/ //g')
+
+		local out="${DELIM}%F{blue}${icons[DOCKER_ICON]}"
+		if [ $all -gt 0 ]; then
+			out="${out}  ${running}/${all}"
+		fi
+		echo "${out}%f"
+	fi
 }
 
 declare -A git_strings
@@ -154,6 +170,7 @@ P+='$(_jimple_ssh)'
 P+='$(_jimple_wd)'
 P+='$(_jimple_git)'
 P+='$(_jimple_venv)'
+P+='$(_jimple_docker)'
 # P+='$(_jimple_arch)'
 P+="${NEWLINE}"
 P+='$(_jimple_end)'
