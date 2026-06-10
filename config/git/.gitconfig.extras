@@ -28,6 +28,8 @@
 	bd = branch -d
 	bD = branch -D
 	bda = bleach
+	bsu = !git branch --set-upstream-to=$(git current-branch)
+	bsum = !git branch --set-upstream-to=$(git main-branch)
 
 	; checkout
 	cb = checkout -b
@@ -49,7 +51,7 @@
 
 	; push
 	p = !git push origin $(git current-branch)
-	pf = !git p --force-with-lease
+	pf = !git push origin $(git current-branch) --force-with-lease
 	psup = !git push --set-upstream origin $(git current-branch)
 
 	; pull
@@ -60,6 +62,8 @@
 	wt = worktree
 	wtco = "!f() { git worktree add --checkout -b $1 $1 origin/$1; }; f"
 	wtb = "!f() { git worktree add -b  \"$1\" \"$1\" \"$2\"; }; f"
+	wtd = "!f() { git worktree list | awk '{ print $1 }' | rg -v \"($(basename $PWD)|main)$\" | xargs -n 1 git worktree remove; }; f"
+	wtdf = "!f() { git worktree list | awk '{ print $1 }' | rg -v \"($(basename $PWD)|main)$\" | xargs -n 1 git worktree remove --force; }; f"
 
 	; diff
 	diff-branch = !git diff @{upstream}...$(git current-branch)
