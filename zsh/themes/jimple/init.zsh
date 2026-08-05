@@ -28,6 +28,7 @@ icons=(
 	VCS_STASH_ICON '\uF01C'            # 
 	VCS_INCOMING_CHANGES_ICON '\u2193' # ↓
 	VCS_OUTGOING_CHANGES_ICON '\u2191' # ↑
+	VCS_PR '\uf407'                    # 
 
 	DOCKER_ICON '\uf21f' # 
 	PYTHON_ICON '\UE73C' # 
@@ -128,14 +129,18 @@ _jimple_git_branch() {
 	# if fetching branch name failed, assume not a git repo
 	[ $? -eq 0 ] || return
 
+	local pr_num
+	pr_num=$(gh pr view --json number --jq .number 2>/dev/null)
+	[ $? -eq 0 ] && pr_num="${DELIM}%F{cyan}${icons[VCS_PR]} ${pr_num}%f" || pr_num=""
+
 	git_status=$(git status --porcelain --branch)
 	num_stash=$(git stash list | wc -l)
 
-	out=""
+	stash=""
 
-	if [ $num_stash -gt 0 ]; then out+=${git_strings[STASH]}; fi
-	if rg -q "\[ahead [\d]+\]" <<<$git_status; then out+=${git_strings[AHEAD]}; fi
-	if rg -q "\[behind [\d]+\]" <<<$git_status; then out+=${git_strings[BEHIND]}; fi
+	if [ $num_stash -gt 0 ]; then stash+=${git_strings[STASH]}; fi
+	if rg -q "\[ahead [\d]+\]" <<<$git_status; then stash+=${git_strings[AHEAD]}; fi
+	if rg -q "\[behind [\d]+\]" <<<$git_status; then stash+=${git_strings[BEHIND]}; fi
 
 	branch_color="green"
 	if rg -q "^([AMD]|.[AMD]|\?{2})" <<<$git_status; then
@@ -143,9 +148,9 @@ _jimple_git_branch() {
 		git_branch="${git_branch}${icons[VCS_DIRTY_ICON]}"
 	fi
 
-	[[ $out == "" ]] || out=" ${out}"
+	[[ $stash == "" ]] || stash=" ${stash}"
 
-	echo "${DELIM}%F{cyan}${icons[VCS_BRANCH_ICON]}%f %F{$branch_color}${git_branch}%f${out}"
+	echo "${DELIM}%F{cyan}${icons[VCS_BRANCH_ICON]}%f %F{$branch_color}${git_branch}%f${stash}${pr_num}"
 }
 
 _jimple_git() {
