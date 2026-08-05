@@ -129,9 +129,23 @@ _jimple_git_branch() {
 	# if fetching branch name failed, assume not a git repo
 	[ $? -eq 0 ] || return
 
-	local pr_num
-	pr_num=$(gh pr view --json number --jq .number 2>/dev/null)
-	[ $? -eq 0 ] && pr_num="${DELIM}%F{cyan}${icons[VCS_PR]} ${pr_num}%f" || pr_num=""
+	local pr
+	pr=$(gh pr view --json isDraft,number 2>/dev/null)
+
+	if [ $? -eq 0 ]; then
+		local pr_color="cyan"
+		local isDraft
+		isDraft=$(jq -r '.isDraft' <<<$pr)
+		if [ "$isDraft" = "true" ]; then
+			pr_color="yellow"
+		fi
+		local num
+		num=$(jq -r '.number' <<<$pr)
+
+		pr_num="${DELIM}%F{cyan}${icons[VCS_PR]} %F{$pr_color}${num}%f"
+	else
+		pr_num=""
+	fi
 
 	git_status=$(git status --porcelain --branch)
 	num_stash=$(git stash list | wc -l)
