@@ -117,9 +117,17 @@ symlinks() {
 		"config/git/.global_gitignore"
 		"config/git/.gitconfig.extras"
 		"config/tmux/.tmux.conf"
+		"config/hammerspoon;;.hammerspoon"
 	)
 	for f in "${files[@]}"; do
-		create_link "$f" "$HOME/$(basename "$f")"
+		if [[ "$f" == *";;"* ]]; then
+			local src="${f%%;;*}"
+			local dest="${f##*;;}"
+		else
+			local src="$f"
+			local dest="$(basename "$f")"
+		fi
+		create_link "$src" "$HOME/$dest"
 	done
 	local config_dir=(
 		"git-hooks"
