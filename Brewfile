@@ -1,8 +1,9 @@
 # vim:ft=ruby
 
 # Applications
-cask 'wezterm'
+cask 'ghostty'
 cask 'hammerspoon'
+cask 'openlogi'
 
 # font
 cask 'font-jetbrains-mono-nerd-font'
@@ -24,8 +25,6 @@ brew 'htop'
 brew 'jq'
 brew 'k9s'
 brew 'kubernetes-cli'
-brew 'lazydocker'
-brew 'lazygit'
 brew 'lua'
 brew 'luajit'
 brew 'neovim'

@@ -58,10 +58,14 @@ homebrew_init() {
 	if command -v brew >/dev/null; then
 		info "Homebrew already installed - updating"
 		brew update
+	elif [[ -f /opt/homebrew/bin/brew ]]; then
+		info "Brew installed but not linked"
+		eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 	else
 		info "Installing Homebrew"
 		# todo: maybe detect os and install linuxbrew, too?
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+		eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 	fi
 	brew bundle --file "$BASE_DIR/Brewfile"
 }
@@ -74,6 +78,7 @@ k9sConf() {
 create_link() {
 	local src=$1
 	local dst=$2
+	mkdir -p "$(dirname $dst)"
 
 	if [ -L "$dst" ]; then
 		# file is symlink
