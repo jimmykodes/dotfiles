@@ -1,5 +1,4 @@
 theme = light:system67,dark:system76
-font-family = JetBrainsMonoNL NFM
 font-size = 16
 
 # split horizontal (new pane to the right)

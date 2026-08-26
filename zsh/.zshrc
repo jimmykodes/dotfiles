@@ -45,6 +45,7 @@ prepend_path $HOME/.local/bin
 prepend_path $DOTFILES/zsh/bin
 prepend_path /usr/local/opt/openjdk@8/bin
 prepend_path $HOME/.rd/bin
+prepend_path $HOME/.docker/bin
 
 # raspberry pi
 prepend_path /snap/bin
