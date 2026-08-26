@@ -118,6 +118,7 @@ symlinks() {
 		"zsh/.zprofile"
 		"zsh/.zshenv"
 		"zsh/.zshrc"
+		"zsh/.hushlogin"
 		"config/wezterm/.wezterm.lua"
 		"config/git/.global_gitignore"
 		"config/git/.gitconfig.extras"
