@@ -1,2 +1,0 @@
-#compdef wk
-_files -W $WORK -/
