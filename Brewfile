@@ -6,7 +6,7 @@ cask 'hammerspoon'
 cask 'openlogi'
 
 # font
-cask 'font-jetbrains-mono-nerd-font'
+cask 'font-jetbrains-mono'
 
 # tools
 brew 'bash'
