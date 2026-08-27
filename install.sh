@@ -139,6 +139,7 @@ symlinks() {
 		"git-hooks"
 		"k9s"
 		"ghostty"
+		"aerospace"
 	)
 	for d in "${config_dir[@]}"; do
 		mkdir -p "$HOME/.config/$(dirname "$d")"
