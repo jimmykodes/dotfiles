@@ -51,17 +51,6 @@ prepend_path $HOME/.docker/bin
 prepend_path /snap/bin
 prepend_path /usr/local/go/bin
 
-# gcloud
-if [[ -n "$(command -v gcloud)" ]]; then
-	if [[ -n "$(command -v python3.11)" ]]; then
-		export CLOUDSDK_PYTHON="$(which python3.11)"
-	elif [[ -n "$(command -v python3.9)" ]]; then
-		export CLOUDSDK_PYTHON="$(which python3.9)"
-	fi
-	source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-	source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
-fi
-
 [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
 
 # Load all zsh files in $DOTFILES dir

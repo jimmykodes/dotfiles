@@ -1,5 +1,0 @@
-# vim:ft=zsh
-projectRoot=$(project-root)
-relativePath=$(relpath "$PWD" "$projectRoot")
-cmd="docker run -it --rm -v $projectRoot:/app -v $HOME/.config/gcloud/:/root/.config/gcloud"
-eval "${cmd} --platform linux/amd64 -w /app/${relativePath} --entrypoint sh hashicorp/terraform:$(tf-version)"

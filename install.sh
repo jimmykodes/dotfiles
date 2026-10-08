@@ -68,6 +68,14 @@ homebrew_init() {
 		eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 	fi
 	brew bundle --file "$BASE_DIR/Brewfile"
+	if command -v fzf; then
+		if [[ -f ~/.fzf.zsh ]]; then
+			success "fzf init already set up"
+		else
+			info "creating fzf init"
+			fzf --zsh >~/.fzf.zsh
+		fi
+	fi
 }
 
 k9sConf() {
