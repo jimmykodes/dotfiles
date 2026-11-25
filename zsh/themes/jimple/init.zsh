@@ -10,7 +10,8 @@ autoload -Uz colors
 colors
 
 autoload -Uz add-zsh-hook
-zmodload zsh/datetime zsh/stat
+zmodload zsh/datetime
+zmodload -F zsh/stat b:zstat
 
 NEWLINE=$'\n'
 DELIM=" %{$fg_bold[grey]%}|%{$reset_color%} "
@@ -80,10 +81,12 @@ _jimple_arch() {
 }
 
 _jimple_wd() {
-	local wd="${PWD/$HOME/~}"
+	# %~ only abbreviates $HOME at a path boundary at the start of the path
+	local wd="${(%):-%~}"
 	local icon="HOME_SUB_ICON"
 
 	[[ $wd == "~" ]] && icon="HOME_ICON"
+	wd="${wd//\%/%%}" # escape % so the prompt doesn't treat it as a code
 	echo "%{$fg[blue]%}${icons[$icon]} ${wd}%{$reset_color%}"
 }
 
@@ -124,37 +127,53 @@ _jimple_git_bare() {
 }
 
 _jimple_git_branch() {
-	local git_branch
-	local git_status
-	local num_stash
-	git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+	local -a lines
+	lines=( ${(f)"$(command git status --porcelain=v2 --branch --show-stash 2>/dev/null)"} )
 
-	# if fetching branch name failed, assume not a git repo
-	[ $? -eq 0 ] || return
+	# no output means not a work tree (or not a git repo at all)
+	(( $#lines )) || return
 
-	git_status=$(git status --porcelain --branch)
-	num_stash=$(git stash list | wc -l)
+	local line git_branch oid ahead=0 behind=0 stash=0 dirty=0
+	for line in $lines; do
+		case $line in
+			'# branch.oid '*)  oid=${line#\# branch.oid } ;;
+			'# branch.head '*) git_branch=${line#\# branch.head } ;;
+			'# branch.ab '*)   [[ $line =~ '\+([0-9]+) -([0-9]+)' ]] && { ahead=$match[1]; behind=$match[2] } ;;
+			'# stash '*)       stash=${line#\# stash } ;;
+			'#'*) ;;
+			*) dirty=1 ;;
+		esac
+	done
 
-	stash=""
+	# detached HEAD: show the short commit hash instead of "(detached)"
+	[[ $git_branch == '(detached)' ]] && git_branch=${oid[1,7]}
+	# escape % so it isn't read as a prompt code
+	git_branch=${git_branch//\%/%%}
 
-	if [ $num_stash -gt 0 ]; then stash+=${git_strings[STASH]}; fi
-	if rg -q "\[ahead [\d]+\]" <<<$git_status; then stash+=${git_strings[AHEAD]}; fi
-	if rg -q "\[behind [\d]+\]" <<<$git_status; then stash+=${git_strings[BEHIND]}; fi
+	local indicators=""
+	(( stash > 0 ))  && indicators+=${git_strings[STASH]}
+	(( ahead > 0 ))  && indicators+=${git_strings[AHEAD]}
+	(( behind > 0 )) && indicators+=${git_strings[BEHIND]}
 
-	branch_color="green"
-	if rg -q "^([AMD]|.[AMD]|\?{2})" <<<$git_status; then
+	local branch_color="green"
+	if (( dirty )); then
 		branch_color="yellow"
 		git_branch="${git_branch}${icons[VCS_DIRTY_ICON]}"
 	fi
 
-	[[ $stash == "" ]] || stash=" ${stash}"
+	[[ $indicators == "" ]] || indicators=" ${indicators}"
 
-	echo "${DELIM}%F{cyan}${icons[VCS_BRANCH_ICON]}%f %F{$branch_color}${git_branch}%f${stash}"
+	echo "${DELIM}%F{cyan}${icons[VCS_BRANCH_ICON]}%f %F{$branch_color}${git_branch}%f${indicators}"
 }
 
 _get_pr_num() {
 	local cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/pr-status
-	local key=${PWD//\//%}            # /a/b -> %a%b, filesystem-safe
+	# key on repo root + branch, so subdirectories share an entry and
+	# switching branches invalidates it
+	local -a info
+	info=("${(@f)$(git rev-parse --show-toplevel --abbrev-ref HEAD 2>/dev/null)}")
+	[[ -n ${info[2]} ]] || return     # not a git repo (or no commits)
+	local key=${info[1]//\//%}%%${info[2]//\//%}   # /a/b + feat/x -> %a%b%%feat%x
 	local cache_file=$cache_dir/$key
 	local ttl=120 mtime # 2 minutes cache for PR status
 
@@ -172,8 +191,11 @@ _get_pr_num() {
 	fi
 
 	if [[ -z "$pr" ]]; then
-		local tmp=$cache_file.$$
-		if gh pr view --json number,state,statusCheckRollup > "$tmp" 2>/dev/null; then
+		# $$ is the parent shell's PID even inside <(...), so use mktemp
+		# (same dir as the cache file, so the mv stays an atomic rename).
+		local tmp
+		tmp=$(mktemp "$cache_file.XXXXXX") || return
+		if gh pr view --json number,state,isDraft,reviewDecision > "$tmp" 2>/dev/null; then
 			mv "$tmp" "$cache_file"   # atomic rename
 			pr=$(cat "$cache_file")
 		else
@@ -226,6 +248,7 @@ _get_pr_num() {
 }
 
 declare -g pr_num=""
+declare -g _jimple_pr_fd=
 
 _prompt_callback() {
   local fd=$1
@@ -243,13 +266,16 @@ _prompt_callback() {
   # clean up
   zle -F $fd
   exec {fd}<&-
+  [[ $_jimple_pr_fd == $fd ]] && _jimple_pr_fd=
 }
 
 _jimple_gh_pr() {
 	pr_num=""
+  # Cancel the previous job so a stale result can't land in this prompt
+  if [[ -n $_jimple_pr_fd ]]; then zle -F $_jimple_pr_fd; exec {_jimple_pr_fd}<&-; _jimple_pr_fd=; fi
   # Open a fd reading from the background command
-  exec {PROMPT_FD}< <(_get_pr_num)
-  zle -F $PROMPT_FD _prompt_callback
+  exec {_jimple_pr_fd}< <(_get_pr_num)
+  zle -F $_jimple_pr_fd _prompt_callback
 }
 
 _prompt_async_start() {
