@@ -90,29 +90,48 @@ _jimple_wd() {
 	echo "%{$fg[blue]%}${icons[$icon]} ${wd}%{$reset_color%}"
 }
 
+typeset -gA _jimple_py_cache
+
+# Runs in the parent shell (precmd) so the cache assignment persists.
+# One interpreter start per venv; empty results are not cached so a broken
+# or half-built venv is retried on the next prompt.
+_jimple_venv_cache() {
+	[[ -z $VIRTUAL_ENV ]] && return
+	[[ -n ${_jimple_py_cache[$VIRTUAL_ENV]} ]] && return
+	local info
+	info=$("$VIRTUAL_ENV/bin/python" -c 'import platform; print(platform.python_version(), platform.machine())' 2>/dev/null)
+	[[ -n $info ]] && _jimple_py_cache[$VIRTUAL_ENV]=$info
+}
+
+add-zsh-hook precmd _jimple_venv_cache
+
+# Called via $(...): only reads the cache, never starts a process.
 _jimple_venv() {
-	local venv="$VIRTUAL_ENV"
-	[[ -z $venv ]] && return
-	venv=$(basename $venv)
-	local version=$(python -V 2>/dev/null | awk '{ print $2 }')
-	[[ -z $version ]] && version=$(python -V 2>&1 | awk '{ print $2 }')
-	local machine=$(python -c "import platform; print(platform.machine())")
-	echo "${DELIM}%F{magenta}${icons[PYTHON_ICON]} $venv($version)[$machine]%f"
+	[[ -z $VIRTUAL_ENV ]] && return
+	local info=${_jimple_py_cache[$VIRTUAL_ENV]}
+	local version=${info%% *} machine=${info##* }
+	echo "${DELIM}%F{magenta}${icons[PYTHON_ICON]} ${VIRTUAL_ENV:t}($version)[$machine]%f"
 }
 
 _jimple_docker() {
-	if docker version >/dev/null 2>&1; then
-		local running
-		local all
-		running=$(docker ps -q | wc -l | sed 's/ //g')
-		all=$(docker ps -aq | wc -l | sed 's/ //g')
+	(( $+commands[docker] )) || return
 
-		local out="${DELIM}%F{blue}${icons[DOCKER_ICON]}"
-		if [ $all -gt 0 ]; then
-			out="${out}  ${running}/${all}"
-		fi
-		echo "${out}%f"
+	# One daemon round trip, bounded so a hung daemon can't hang the prompt.
+	local -a tmo
+	if (( $+commands[timeout] )); then
+		tmo=(timeout 1)
+	elif (( $+commands[gtimeout] )); then
+		tmo=(gtimeout 1)
 	fi
+
+	local counts
+	counts=$($tmo docker info --format '{{.ContainersRunning}}/{{.Containers}}' 2>/dev/null) || return
+
+	local out="${DELIM}%F{blue}${icons[DOCKER_ICON]}"
+	if [[ -n $counts && $counts != 0/0 ]]; then
+		out="${out}  ${counts}"
+	fi
+	echo "${out}%f"
 }
 
 declare -A git_strings
@@ -167,7 +186,7 @@ _jimple_git_branch() {
 }
 
 _get_pr_num() {
-	local cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/pr-status
+	local cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/pr-status-v2
 	# key on repo root + branch, so subdirectories share an entry and
 	# switching branches invalidates it
 	local -a info
@@ -181,26 +200,34 @@ _get_pr_num() {
 
 	mkdir -p "$cache_dir"
 
+	local fresh=0
 	if [[ -f $cache_file ]]; then
 		zstat -A mtime +mtime "$cache_file"
-		if (( EPOCHSECONDS - mtime < ttl )); then
-			pr=$(cat "$cache_file")
-		else
-			rm -f $cache_file
-		fi
+		(( EPOCHSECONDS - mtime < ttl )) && fresh=1
 	fi
 
-	if [[ -z "$pr" ]]; then
+	if (( fresh )); then
+		pr=$(<"$cache_file")   # may be empty: that's a valid cached "no PR"
+	else
 		# $$ is the parent shell's PID even inside <(...), so use mktemp
 		# (same dir as the cache file, so the mv stays an atomic rename).
-		local tmp
+		local tmp err
 		tmp=$(mktemp "$cache_file.XXXXXX") || return
-		if gh pr view --json number,state,isDraft,reviewDecision > "$tmp" 2>/dev/null; then
+		# cache one line: "STATE isDraft REVIEW number", e.g. "OPEN false APPROVED 123"
+		# (reviewDecision is "" when no review yet; "//" doesn't catch that)
+		err=$(gh pr view --json number,state,isDraft,reviewDecision \
+			--jq '[.state, (.isDraft|tostring), (.reviewDecision | if . == null or . == "" then "NONE" else . end), (.number|tostring)] | join(" ")' \
+			2>&1 >"$tmp")
+		if (( $? == 0 )) || [[ $err == *"no pull requests found"* ]]; then
+			# success, or a definite "no PR" (tmp is empty): cache for full TTL
 			mv "$tmp" "$cache_file"   # atomic rename
-			pr=$(cat "$cache_file")
 		else
+			# network/auth error: keep any previous entry, retry in ~20s
 			rm -f "$tmp"
+			[[ -f $cache_file ]] || : > "$cache_file"
+			touch -t "$(strftime %Y%m%d%H%M.%S $(( EPOCHSECONDS - ttl + 20 )))" "$cache_file"
 		fi
+		pr=$(<"$cache_file")
 	fi
 
 	if [[ -z "$pr" ]]; then
@@ -208,10 +235,8 @@ _get_pr_num() {
 	else
 		local pr_color=""
 		local pr_icon=""
-		local pr_number=$(jq -r .number <<< "$pr")
-		local pr_state=$(jq -r .state <<< "$pr")
-		local pr_review=$(jq -r .reviewDecision <<< "$pr")
-		local pr_draft=$(jq -r .isDraft <<< "$pr")
+		local pr_state pr_draft pr_review pr_number
+		read -r pr_state pr_draft pr_review pr_number <<< "$pr"
 
     case $pr_state in
       OPEN)
@@ -250,18 +275,25 @@ _get_pr_num() {
 declare -g pr_num=""
 declare -g _jimple_pr_fd=
 
+typeset -g _jimple_pr_ctx=""   # repo+branch the current pr_num belongs to
+
 _prompt_callback() {
   local fd=$1
-  local line
+  local line jctx
   # read the result; the second arg may contain an error/hup indicator
   if [[ -z $2 || $2 == hup ]]; then
+    # first line: the context the job ran for; second: the PR segment
+    read -r -u $fd jctx
     read -r -u $fd line
-		if [[ -z $line ]]; then
-			pr_num=""
-		else
-			pr_num="${DELIM}${line}"
-		fi
-    zle && zle reset-prompt
+    # ignore a late result that belongs to a different repo/branch
+    if [[ $jctx == $_jimple_pr_ctx ]]; then
+      local new=""
+      [[ -n $line ]] && new="${DELIM}${line}"
+      if [[ $new != $pr_num ]]; then
+        pr_num=$new
+        zle && zle reset-prompt   # only redraw when something changed
+      fi
+    fi
   fi
   # clean up
   zle -F $fd
@@ -270,48 +302,62 @@ _prompt_callback() {
 }
 
 _jimple_gh_pr() {
-	pr_num=""
+  local ctx
+  ctx=${(j:%:)${(f)"$(command git rev-parse --show-toplevel --abbrev-ref HEAD 2>/dev/null)"}}
+  # keep the old value while the job runs; clear only on context change
+  if [[ $ctx != $_jimple_pr_ctx ]]; then
+    pr_num=""
+    _jimple_pr_ctx=$ctx
+  fi
   # Cancel the previous job so a stale result can't land in this prompt
   if [[ -n $_jimple_pr_fd ]]; then zle -F $_jimple_pr_fd; exec {_jimple_pr_fd}<&-; _jimple_pr_fd=; fi
-  # Open a fd reading from the background command
-  exec {_jimple_pr_fd}< <(_get_pr_num)
+  # Open a fd reading from the background command (ctx first, then result)
+  exec {_jimple_pr_fd}< <(print -r -- "$ctx"; _get_pr_num)
   zle -F $_jimple_pr_fd _prompt_callback
 }
 
-_prompt_async_start() {
-	_jimple_gh_pr
-}
-
-add-zsh-hook precmd _prompt_async_start
-
-
 _jimple_git() {
-	local bare
-	bare=$(git rev-parse --is-bare-repository 2>/dev/null)
-
-	[ $? -eq 0 ] || return $?
-
-	if [ "$bare" = "true" ]; then
-		_jimple_git_bare
-	else
-		_jimple_git_branch
+	# one git call in the common case: status fails outside a work tree,
+	# so only then ask whether this is a bare repo
+	local out
+	out=$(_jimple_git_branch)
+	if [[ -n $out ]]; then
+		print -r -- "$out"
+		return
 	fi
-
+	local bare
+	bare=$(git rev-parse --is-bare-repository 2>/dev/null) || return
+	[[ $bare == true ]] && _jimple_git_bare
 }
 
 VIRTUAL_ENV_DISABLE_PROMPT=1
 
+# Sections are computed once per command in precmd. PROMPT itself holds no
+# $(...), so zle reset-prompt (PR callback, window resize) starts no processes.
+_jimple_s_start=$(_jimple_start)
+_jimple_s_end=$(_jimple_end)   # keeps %(?...) so $? is read at draw time
+_jimple_s_ssh= _jimple_s_wd= _jimple_s_git= _jimple_s_venv= _jimple_s_docker=
+
+_jimple_precmd() {
+	_jimple_s_ssh=$(_jimple_ssh)
+	_jimple_s_wd=$(_jimple_wd)
+	_jimple_s_git=$(_jimple_git)
+	_jimple_s_venv=$(_jimple_venv)
+	_jimple_s_docker=$(_jimple_docker)
+	_jimple_gh_pr   # starts the async PR job
+}
+add-zsh-hook precmd _jimple_precmd
+
 P=""
-P+='$(_jimple_start)'
-P+='$(_jimple_ssh)'
-P+='$(_jimple_wd)'
-P+='$(_jimple_git)'
+P+='${_jimple_s_start}'
+P+='${_jimple_s_ssh}'
+P+='${_jimple_s_wd}'
+P+='${_jimple_s_git}'
 P+='${pr_num}'
-P+='$(_jimple_venv)'
-P+='$(_jimple_docker)'
-# P+='$(_jimple_arch)'
+P+='${_jimple_s_venv}'
+P+='${_jimple_s_docker}'
 P+="${NEWLINE}"
-P+='$(_jimple_end)'
+P+='${_jimple_s_end}'
 P+="%{$reset_color%}"
 
 PROMPT=$P
