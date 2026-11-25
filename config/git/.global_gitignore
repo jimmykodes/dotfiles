@@ -20,3 +20,5 @@ cspell.json
 *.patch
 *.ignore
 .llmrc
+
+**/.claude/.cc-writes/
