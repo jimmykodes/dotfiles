@@ -1,83 +1,55 @@
-# !/usr/bin/env zsh
 # This allows expansion of the prompt.
 # without it
 # `$USER >>` stays the same,
 # but when set this become `jimmykeith >>`
 setopt prompt_subst
 
-# this allows the color expansions like `%{$fg[green]%}`
-autoload -Uz colors
-colors
-
 autoload -Uz add-zsh-hook
 zmodload zsh/datetime
 zmodload -F zsh/stat b:zstat
 
-NEWLINE=$'\n'
-DELIM=" %{$fg_bold[grey]%}|%{$reset_color%} "
+_jimple_newline=$'\n'
+_jimple_delim=" %B%F{black}|%f%b "
 
-declare -gA icons
-icons=(
-	APPLE_ICON '\uF179'          # 
-	LINUX_RASPBIAN_ICON '\uF315' # 
-	LINUX_UBUNTU_ICON '\uF31b'   # 
-	ARCH_ICON '\uE266'           # 
-	SSH_ICON '\uF489'            # 
+typeset -gA _jimple_icons
+_jimple_icons=(
+	SSH_ICON $'\uF489' # 
 
-	HOME_ICON '\uF015'     # 
-	HOME_SUB_ICON '\uF07C' # 
+	HOME_ICON     $'\uF015' # 
+	HOME_SUB_ICON $'\uF07C' # 
 
-	VCS_DIRTY_ICON ''
-	VCS_BRANCH_ICON '\uF126'           # 
-	VCS_STASH_ICON '\uF01C'            # 
-	VCS_INCOMING_CHANGES_ICON '\u2193' # ↓
-	VCS_OUTGOING_CHANGES_ICON '\u2191' # ↑
-	VCS_PR '\uf407'                    # 
+	VCS_BRANCH_ICON           $'\uF126' # 
+	VCS_DIRTY_ICON            $'\uF444' # 
+	VCS_STASH_ICON            $'\uF01C' # 
+	VCS_INCOMING_CHANGES_ICON $'\u2193' # ↓
+	VCS_OUTGOING_CHANGES_ICON $'\u2191' # ↑
 
-	DOCKER_ICON '\uf21f' # 
-	PYTHON_ICON '\UE73C' # 
-	NODE_ICON '\u2B22'   # ⬢
+	PR_DRAFT_ICON    $'\uF4DD' # 
+	PR_OPEN_ICON     $'\uF407' # 
+	PR_CHANGES_ICON  $'\uF071' # 
+	PR_APPROVED_ICON $'\uF00C' # 
+	PR_MERGED_ICON   $'\uF419' # 
+	PR_CLOSED_ICON   $'\uF4DC' # 
 
-	MULTILINE_FIRST_PROMPT_PREFIX '\u256D\U2500' # ╭─
-	MULTILINE_LAST_PROMPT_PREFIX '\u2570\U2500'  # ╰─
+	PYTHON_ICON $'\uE73C' # 
+	DOCKER_ICON $'\uF21F' # 
+
+	MULTILINE_FIRST_PROMPT_PREFIX $'\u256D\u2500' # ╭─
+	MULTILINE_LAST_PROMPT_PREFIX  $'\u2570\u2500' # ╰─
 )
 
-icon() {
-	print $icons[$1]
-}
-
 _jimple_start() {
-	echo "%{$fg_bold[grey]%}$icons[MULTILINE_FIRST_PROMPT_PREFIX]%{$reset_color%} "
+	print -r -- "%B%F{black}${_jimple_icons[MULTILINE_FIRST_PROMPT_PREFIX]}%f%b "
 }
 
 _jimple_end() {
-	echo "%{$fg_bold[grey]%}$icons[MULTILINE_LAST_PROMPT_PREFIX]%{$reset_color%}%(?:%{$fg[green]%}❯:%{$fg[red]%}❯) "
+	print -r -- "%B%F{black}${_jimple_icons[MULTILINE_LAST_PROMPT_PREFIX]}%f%b%(?:%F{green}❯%f:%F{red}❯%f) "
 }
 
 _jimple_ssh() {
 	if [[ -n $SSH_CLIENT ]]; then
-		echo "%{$fg[yellow]%}$icons[SSH_ICON] $USER@%m%{$reset_color%}${DELIM}"
+		print -r -- "%F{yellow}${_jimple_icons[SSH_ICON]} $USER@%m%f${_jimple_delim}"
 	fi
-}
-
-_jimple_arch() {
-	if [[ $(tput cols) -lt 100 ]]; then
-		## don't show on terminals < 100 cols
-		return
-	fi
-	local ret
-	ret=$(uname -m)
-
-	case $ret in
-	arm64 | armv7l)
-		ret="arm"
-		;;
-	x86_64)
-		ret="x86"
-		;;
-	esac
-
-	echo "${DELIM}${icons[ARCH_ICON]} $ret"
 }
 
 _jimple_wd() {
@@ -87,7 +59,7 @@ _jimple_wd() {
 
 	[[ $wd == "~" ]] && icon="HOME_ICON"
 	wd="${wd//\%/%%}" # escape % so the prompt doesn't treat it as a code
-	echo "%{$fg[blue]%}${icons[$icon]} ${wd}%{$reset_color%}"
+	print -r -- "%F{blue}${_jimple_icons[$icon]} ${wd}%f"
 }
 
 typeset -gA _jimple_py_cache
@@ -110,7 +82,13 @@ _jimple_venv() {
 	[[ -z $VIRTUAL_ENV ]] && return
 	local info=${_jimple_py_cache[$VIRTUAL_ENV]}
 	local version=${info%% *} machine=${info##* }
-	echo "${DELIM}%F{magenta}${icons[PYTHON_ICON]} ${VIRTUAL_ENV:t}($version)[$machine]%f"
+	# VIRTUAL_ENV_PROMPT is the venv's display name (a .venv dir is not "/.venv")
+	setopt local_options extended_glob
+	local name=${VIRTUAL_ENV_PROMPT:-${VIRTUAL_ENV:t}}
+	name=${name## #}; name=${name%% #}   # trim surrounding spaces
+	name=${name#[(]}; name=${name%[)]}     # and the parens older venvs add
+	name=${name//\%/%%}                  # escape % for the prompt
+	print -r -- "${_jimple_delim}%F{magenta}${_jimple_icons[PYTHON_ICON]} ${name}($version)[$machine]%f"
 }
 
 _jimple_docker() {
@@ -127,22 +105,22 @@ _jimple_docker() {
 	local counts
 	counts=$($tmo docker info --format '{{.ContainersRunning}}/{{.Containers}}' 2>/dev/null) || return
 
-	local out="${DELIM}%F{blue}${icons[DOCKER_ICON]}"
+	local out="${_jimple_delim}%F{blue}${_jimple_icons[DOCKER_ICON]}"
 	if [[ -n $counts && $counts != 0/0 ]]; then
 		out="${out}  ${counts}"
 	fi
-	echo "${out}%f"
+	print -r -- "${out}%f"
 }
 
-declare -A git_strings
-git_strings=(
-	STASH "%F{white}${icons[VCS_STASH_ICON]}%f"
-	AHEAD "%F{magenta}${icons[VCS_OUTGOING_CHANGES_ICON]}%f"
-	BEHIND "%F{magenta}${icons[VCS_INCOMING_CHANGES_ICON]}%f"
+typeset -gA _jimple_git_strings
+_jimple_git_strings=(
+	STASH "%F{white}${_jimple_icons[VCS_STASH_ICON]}%f"
+	AHEAD "%F{magenta}${_jimple_icons[VCS_OUTGOING_CHANGES_ICON]}%f"
+	BEHIND "%F{magenta}${_jimple_icons[VCS_INCOMING_CHANGES_ICON]}%f"
 )
 
 _jimple_git_bare() {
-	echo "${DELIM}%F{magenta}${icons[VCS_BRANCH_ICON]} root%f"
+	print -r -- "${_jimple_delim}%F{magenta}${_jimple_icons[VCS_BRANCH_ICON]} root%f"
 }
 
 _jimple_git_branch() {
@@ -170,22 +148,22 @@ _jimple_git_branch() {
 	git_branch=${git_branch//\%/%%}
 
 	local indicators=""
-	(( stash > 0 ))  && indicators+=${git_strings[STASH]}
-	(( ahead > 0 ))  && indicators+=${git_strings[AHEAD]}
-	(( behind > 0 )) && indicators+=${git_strings[BEHIND]}
+	(( stash > 0 ))  && indicators+=${_jimple_git_strings[STASH]}
+	(( ahead > 0 ))  && indicators+=${_jimple_git_strings[AHEAD]}
+	(( behind > 0 )) && indicators+=${_jimple_git_strings[BEHIND]}
 
 	local branch_color="green"
 	if (( dirty )); then
 		branch_color="yellow"
-		git_branch="${git_branch}${icons[VCS_DIRTY_ICON]}"
+		git_branch="${git_branch}${_jimple_icons[VCS_DIRTY_ICON]}"
 	fi
 
 	[[ $indicators == "" ]] || indicators=" ${indicators}"
 
-	echo "${DELIM}%F{cyan}${icons[VCS_BRANCH_ICON]}%f %F{$branch_color}${git_branch}%f${indicators}"
+	print -r -- "${_jimple_delim}%F{cyan}${_jimple_icons[VCS_BRANCH_ICON]}%f %F{$branch_color}${git_branch}%f${indicators}"
 }
 
-_get_pr_num() {
+_jimple_get_pr_num() {
 	local cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/pr-status-v2
 	# key on repo root + branch, so subdirectories share an entry and
 	# switching branches invalidates it
@@ -231,89 +209,89 @@ _get_pr_num() {
 	fi
 
 	if [[ -z "$pr" ]]; then
-		echo ""
+		print -r -- ""
 	else
 		local pr_color=""
 		local pr_icon=""
 		local pr_state pr_draft pr_review pr_number
 		read -r pr_state pr_draft pr_review pr_number <<< "$pr"
 
-    case $pr_state in
-      OPEN)
-        if [[ $pr_draft == true ]]; then
-          pr_color=8                # dull: bright black
-          pr_icon=$'\uf4dd'         # nf-oct-git_pull_request_draft
-        elif [[ $pr_review == CHANGES_REQUESTED ]]; then
-          pr_color=yellow           # warning
-          pr_icon=$'\uf071'         # nf-fa-warning
-        elif [[ $pr_review == APPROVED ]]; then
-          pr_color=green            # success
-          pr_icon=$'\uf00c'         # nf-fa-check
-        else
-          pr_color=blue             # info
-					pr_icon=$'\uf407'         # nf-oct-git_pull_request
-        fi
-        ;;
-      MERGED)
-        pr_color=magenta            # visual
-        pr_icon=$'\uf419'           # nf-oct-git_merge
-        ;;
-      CLOSED)
-        pr_color=red                # failure
-        pr_icon=$'\uf4dc'           # nf-oct-git_pull_request_closed
-        ;;
-      *)
-        pr_color=default            # plain StatusLine
-        pr_icon=
-        ;;
-    esac
+		case $pr_state in
+		OPEN)
+			if [[ $pr_draft == true ]]; then
+				pr_color=8 # dull: bright black
+				pr_icon=${_jimple_icons[PR_DRAFT_ICON]}
+			elif [[ $pr_review == CHANGES_REQUESTED ]]; then
+				pr_color=yellow # warning
+				pr_icon=${_jimple_icons[PR_CHANGES_ICON]}
+			elif [[ $pr_review == APPROVED ]]; then
+				pr_color=green # success
+				pr_icon=${_jimple_icons[PR_APPROVED_ICON]}
+			else
+				pr_color=blue # info
+				pr_icon=${_jimple_icons[PR_OPEN_ICON]}
+			fi
+			;;
+		MERGED)
+			pr_color=magenta # visual
+			pr_icon=${_jimple_icons[PR_MERGED_ICON]}
+			;;
+		CLOSED)
+			pr_color=red # failure
+			pr_icon=${_jimple_icons[PR_CLOSED_ICON]}
+			;;
+		*)
+			pr_color=default # plain StatusLine
+			pr_icon=
+			;;
+		esac
 
-		echo "%F{$pr_color}${pr_icon} ${pr_number}%f"
+		print -r -- "%F{$pr_color}${pr_icon} ${pr_number}%f"
 	fi
 }
 
-declare -g pr_num=""
-declare -g _jimple_pr_fd=
+typeset -g _jimple_pr_num=""
+typeset -g _jimple_pr_fd=
 
-typeset -g _jimple_pr_ctx=""   # repo+branch the current pr_num belongs to
+typeset -g _jimple_pr_ctx=""   # repo+branch the current _jimple_pr_num belongs to
 
-_prompt_callback() {
-  local fd=$1
-  local line jctx
-  # read the result; the second arg may contain an error/hup indicator
-  if [[ -z $2 || $2 == hup ]]; then
-    # first line: the context the job ran for; second: the PR segment
-    read -r -u $fd jctx
-    read -r -u $fd line
-    # ignore a late result that belongs to a different repo/branch
-    if [[ $jctx == $_jimple_pr_ctx ]]; then
-      local new=""
-      [[ -n $line ]] && new="${DELIM}${line}"
-      if [[ $new != $pr_num ]]; then
-        pr_num=$new
-        zle && zle reset-prompt   # only redraw when something changed
-      fi
-    fi
-  fi
-  # clean up
-  zle -F $fd
-  exec {fd}<&-
-  [[ $_jimple_pr_fd == $fd ]] && _jimple_pr_fd=
+_jimple_pr_callback() {
+	local fd=$1
+	local line jctx
+	# read the result; the second arg may contain an error/hup indicator
+	if [[ -z $2 || $2 == hup ]]; then
+		# first line: the context the job ran for; second: the PR segment
+		read -r -u $fd jctx
+		read -r -u $fd line
+		# ignore a late result that belongs to a different repo/branch
+		if [[ $jctx == $_jimple_pr_ctx ]]; then
+			local new=""
+			[[ -n $line ]] && new="${_jimple_delim}${line}"
+			if [[ $new != $_jimple_pr_num ]]; then
+				_jimple_pr_num=$new
+				zle && zle reset-prompt   # only redraw when something changed
+			fi
+		fi
+	fi
+	# clean up
+	zle -F $fd
+	exec {fd}<&-
+	[[ $_jimple_pr_fd == $fd ]] && _jimple_pr_fd=
 }
 
 _jimple_gh_pr() {
-  local ctx
-  ctx=${(j:%:)${(f)"$(command git rev-parse --show-toplevel --abbrev-ref HEAD 2>/dev/null)"}}
-  # keep the old value while the job runs; clear only on context change
-  if [[ $ctx != $_jimple_pr_ctx ]]; then
-    pr_num=""
-    _jimple_pr_ctx=$ctx
-  fi
-  # Cancel the previous job so a stale result can't land in this prompt
-  if [[ -n $_jimple_pr_fd ]]; then zle -F $_jimple_pr_fd; exec {_jimple_pr_fd}<&-; _jimple_pr_fd=; fi
-  # Open a fd reading from the background command (ctx first, then result)
-  exec {_jimple_pr_fd}< <(print -r -- "$ctx"; _get_pr_num)
-  zle -F $_jimple_pr_fd _prompt_callback
+	local ctx
+	ctx=${(j:%:)${(f)"$(command git rev-parse --show-toplevel --abbrev-ref HEAD 2>/dev/null)"}}
+	# keep the old value while the job runs; clear only on context change
+	if [[ $ctx != $_jimple_pr_ctx ]]; then
+		_jimple_pr_num=""
+		_jimple_pr_ctx=$ctx
+	fi
+	# Cancel the previous job so a stale result can't land in this prompt
+	if [[ -n $_jimple_pr_fd ]]; then zle -F $_jimple_pr_fd; exec {_jimple_pr_fd}<&-; _jimple_pr_fd=; fi
+	# Open a fd reading from the background command (ctx first, then result)
+	exec {_jimple_pr_fd}< <(print -r -- "$ctx"; _jimple_get_pr_num)
+	zle -F $_jimple_pr_fd _jimple_pr_callback
 }
 
 _jimple_git() {
@@ -348,16 +326,16 @@ _jimple_precmd() {
 }
 add-zsh-hook precmd _jimple_precmd
 
-P=""
-P+='${_jimple_s_start}'
-P+='${_jimple_s_ssh}'
-P+='${_jimple_s_wd}'
-P+='${_jimple_s_git}'
-P+='${pr_num}'
-P+='${_jimple_s_venv}'
-P+='${_jimple_s_docker}'
-P+="${NEWLINE}"
-P+='${_jimple_s_end}'
-P+="%{$reset_color%}"
+_jimple_prompt=""
+_jimple_prompt+='${_jimple_s_start}'
+_jimple_prompt+='${_jimple_s_ssh}'
+_jimple_prompt+='${_jimple_s_wd}'
+_jimple_prompt+='${_jimple_s_git}'
+_jimple_prompt+='${_jimple_pr_num}'
+_jimple_prompt+='${_jimple_s_venv}'
+_jimple_prompt+='${_jimple_s_docker}'
+_jimple_prompt+="${_jimple_newline}"
+_jimple_prompt+='${_jimple_s_end}'
+_jimple_prompt+="%f"
 
-PROMPT=$P
+PROMPT=$_jimple_prompt
